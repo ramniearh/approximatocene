@@ -44,10 +44,16 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - Three groups shown on the Human time tab are not on the Smithsonian list and have no sourced dates yet: Denisovans, *H. antecessor* and *H. luzonensis*. A second source would be needed for them.
 - `world_population_owid.csv`: world population from Our World in Data's long-run series (`population_historical`, last updated by OWID 2024-07-15, read 2026-11-20). There are 261 rows, from 10,000 BCE to 2023. Years are as OWID gives them: negative means BCE, and there is a year 0. OWID stitches three sources together, and the `underlying_source` column says which applies to each row: HYDE 3.3 before 1800, Gapminder v7 summed over countries for 1800–1949, and UN WPP 2024 from 1950. OWID warns of possible breaks where the sources meet. Citation: HYDE (2023); Gapminder (2022); UN WPP (2024), with major processing by Our World in Data.
 - The OWID series is a single central estimate with **no range**. Before 10,000 BCE it has nothing. The haze on the Human time tab can't come from this file. A range would need a second source, such as rival reconstructions (open question).
+- `polities_cliopatria.csv` and `largest_polity_by_century_cliopatria.csv` are made from Cliopatria v0.2.1 (Seshat Global History Databank, CC BY 4.0, released 2026-10-03; github.com/Seshat-Global-History-Databank/cliopatria). The source is a 46 MB zipped map file. It is not in the repo; the CSVs are tables computed from it.
+  - The polity list has one row per polity (1,587 in all) with its first and last year, its largest mapped area in km² and when that was, and its Wikipedia, Wikidata and Seshat links. The 50 "relations" (alliances and similar) are left out.
+  - Names in brackets, such as "(British Empire)", are Cliopatria's composites, made up of member polities that are also listed on their own. They are marked `composite`.
+  - `gaps_in_coverage` means Cliopatria has no rows for some years between a polity's first and last year.
+  - The largest-polity table checks every 100th year from 3400 BCE to 2000 CE, plus 2024 (there is no year 0). It gives the polity with the largest mapped area and how many polities Cliopatria maps that year. **It can miss short peaks:** the Mongol Empire (about 27 million km² around 1280, ending 1293 in Cliopatria) falls between samples. Checking every year would fix that if it matters.
+  - Areas are the area of the drawn borders, rounded to whole km². Cliopatria itself says borders, names and dates are one version among disputed ones. "Polities present" counts what Cliopatria maps, which is far from every polity, especially in early periods.
 
 ## Open questions (Eduardo's call)
 
-- Should the political-forms lane stay? Nobody has these numbers. The options are to keep it as a clearly labelled impression, to replace it with something countable (such as the size of the largest polity over time), or to drop it.
+- Should the political-forms lane stay? Nobody has these numbers. The options are to keep it as a clearly labelled impression, to replace it with something countable (such as the size of the largest polity over time), or to drop it. A sourced "largest polity over time" now exists in `data/reference/` (from Cliopatria), so the countable option is ready if wanted.
 - Population: Our World in Data chosen as the first source (Nov 2026). Still open: whether to add rival reconstructions to show where they disagree and to give the line a range.
 
 ## Ideas, not yet done
