@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Time Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm and exact, museum-label register; uncertainty stated plainly, never hidden.
+   IDEA: a geological wall chart you can walk along: one long horizontal strip of time.
+   PICTURE: the chart itself; in the first tab a single population ribbon crossed by threshold markers.
+   COLOUR and TYPE: paper white, slate blue for people, sienna for thresholds; IBM Plex Sans, Plex Mono for figures.
+   LAYOUT: compact title and tabs, then the working chart full width; readout and notes beneath. */
+:root{color-scheme:light dark;
+  --paper:light-dark(#fbfbf9,#121516);--card:light-dark(#ffffff,#181c1e);
+  --ink:light-dark(#16181a,#e8ebea);--ink-2:light-dark(#4c5457,#b7bfc1);--ink-3:light-dark(#626b6e,#97a0a3);--ink-4:light-dark(#9aa1a4,#5f686b);
+  --rule:light-dark(#e4e6e3,#2a3133);--rule-2:light-dark(#f1f2ef,#1f2426);
+  --accent:light-dark(#35576e,#8fb6d0);--on-accent:light-dark(#ffffff,#0f1416);--accent-soft:light-dark(#e8eef2,#1d2a32);
+  --mark:light-dark(#a0522d,#e39a72);--mark-soft:light-dark(#f7ece5,#2e221c);
+  --bar:light-dark(#66737c,#8d99a1);--bar-ink:light-dark(#ffffff,#0f1416);
+  --disp:light-dark(#c9ced1,#454d51);--disp-ink:light-dark(#1e2224,#e8ebea);
+}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 "IBM Plex Sans",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+.wrap{max-width:1180px;margin:0 auto;padding:0 max(3vw,14px) 64px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{padding:26px 0 0}
+.pilot{margin:0;font-size:13px;color:var(--ink-3)}
+.pilot b{color:var(--mark);font-weight:500}
+h1{font-weight:300;font-size:clamp(32px,5.6vw,48px);line-height:1.05;letter-spacing:-.022em;margin:.2em 0 .5em;text-wrap:balance}
+h1 b{font-weight:600}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);overflow-x:auto;scrollbar-width:none}
+.tabs a{flex:none;display:block;padding:12px 16px 11px;color:var(--ink-3);text-decoration:none;font-size:15px;border-bottom:2px solid transparent;margin-bottom:-1px;min-height:44px}
+.tabs a:hover{color:var(--ink)}
+.tabs a[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent);font-weight:500}
+
+.ph{padding:20px 0 6px}
+.ph h2{font-size:24px;font-weight:500;letter-spacing:-.01em;margin:0 0 4px;line-height:1.2}
+.ph p{margin:0;color:var(--ink-2);max-width:70ch}
+
+.bar-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 10px}
+.chip{background:transparent;color:var(--ink-2);border:1px solid var(--rule);border-radius:999px;padding:7px 13px;cursor:pointer;font-size:14px;min-height:36px;transition:border-color .12s,color .12s}
+.chip:hover{border-color:var(--ink-4);color:var(--ink)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.chip.mk.on{background:var(--mark);border-color:var(--mark);color:var(--card)}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:7px 13px;cursor:pointer;color:var(--ink-3);font-size:14px;min-height:36px}
+.seg button.on{background:var(--accent-soft);color:var(--ink);font-weight:500}
+.sp{flex:1}
+
+.stage{position:relative}
+canvas.chart{display:block;width:100%;background:var(--card);border:1px solid var(--rule);border-radius:6px;cursor:grab;touch-action:none}
+canvas.chart:active{cursor:grabbing}
+canvas.chart.pany{touch-action:pan-y}
+.zoombtns{position:absolute;right:10px;bottom:46px;display:flex;flex-direction:column;gap:6px;z-index:3}
+#p-atlas .zoombtns,#p-stories .zoombtns{top:10px;bottom:auto}
+.zoombtns button{width:36px;height:36px;border-radius:6px;border:1px solid var(--rule);background:color-mix(in srgb,var(--card) 88%,transparent);color:var(--ink-2);font-size:18px;line-height:1;cursor:pointer}
+.zoombtns button:hover{color:var(--ink);border-color:var(--ink-4)}
+.legend-line{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink-3);margin:2px 0 8px}
+.legend-line span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:26px;height:10px;border-radius:2px;flex:none}
+
+.readout{margin-top:10px;border-top:1px solid var(--rule);padding-top:12px;min-height:92px}
+.readout .rname{font-size:18px;font-weight:500;line-height:1.25}
+.readout .rdate{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--accent);margin-top:3px}
+.readout .rnote{font-size:15px;color:var(--ink-2);margin-top:7px;max-width:72ch}
+.readout .tags{margin-top:9px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:12.5px;padding:2px 8px;border:1px solid var(--rule);border-radius:3px;color:var(--ink-3)}
+.tag.bad{border-color:color-mix(in srgb,var(--mark) 40%,transparent);color:var(--mark)}
+.empty{color:var(--ink-3);font-size:15px;margin:0}
+.dataline{font-size:13px;color:var(--ink-3);margin:12px 0 0;max-width:80ch}
+.dataline b{color:var(--mark);font-weight:500}
+
+/* full atlas */
+.sticky{position:sticky;top:0;z-index:20;background:var(--paper);padding:10px 0 8px;border-bottom:1px solid var(--rule)}
+.mmlabel{font-size:12.5px;color:var(--ink-3);margin-bottom:3px}
+canvas.mm{display:block;width:100%;height:52px;cursor:pointer;touch-action:none}
+.rb{display:flex;justify-content:space-between;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);margin-top:4px}
+.rb .mid{color:var(--accent);font-weight:500}
+details.ctrl{border-bottom:1px solid var(--rule);margin-bottom:12px}
+details.ctrl>summary{list-style:none;cursor:pointer;padding:11px 0;font-size:14px;color:var(--ink-2);display:flex;justify-content:space-between;min-height:44px;align-items:center}
+details.ctrl>summary::-webkit-details-marker{display:none}
+details.ctrl>summary::after{content:"+";font-size:18px}
+details.ctrl[open]>summary::after{content:"–"}
+.grp{margin-bottom:12px}
+.grp-label{font-size:12.5px;color:var(--ink-3);margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.toggles{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:2px 14px}
+label.tog{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink-2);cursor:pointer;min-height:32px}
+label.tog input{accent-color:var(--accent);width:16px;height:16px;flex:none}
+label.tog.off{color:var(--ink-4)}
+
+/* stories */
+.st-grid{display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;padding-top:20px}
+.st-list{display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--rule);padding-right:16px}
+.st-item{text-align:left;background:transparent;border:0;border-radius:6px;padding:10px 12px;cursor:pointer;display:grid;gap:2px;min-height:44px}
+.st-item b{font-weight:500;font-size:15px;line-height:1.3;color:var(--ink)}
+.st-item span{font-size:13px;color:var(--ink-3);line-height:1.4}
+.st-item:hover{background:var(--rule-2)}
+.st-item[aria-current=true]{background:var(--accent-soft)}
+.st-item[aria-current=true] b{color:var(--accent)}
+.st-main h2{font-size:26px;font-weight:500;margin:0;line-height:1.2;letter-spacing:-.01em}
+.st-dek{margin:4px 0 0;color:var(--ink-3)}
+.st-text{font-size:18px;line-height:1.55;margin:14px 0 12px;max-width:68ch;min-height:5.6em}
+.st-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.btn{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:8px 14px;cursor:pointer;min-height:40px;font-size:14px;color:var(--ink-2)}
+.btn:hover:not(:disabled){border-color:var(--ink-4);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.dots{display:flex;gap:4px}
+.dots button{width:30px;height:30px;border-radius:50%;border:1px solid var(--rule);background:transparent;cursor:pointer;font-size:12px;color:var(--ink-3);padding:0}
+.dots button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.ai-note{font-size:13px;color:var(--ink-3);margin:22px 0 0;padding-top:10px;border-top:1px solid var(--rule)}
+#p-stories:fullscreen{background:var(--paper);padding:24px 4vw;overflow:auto}
+#p-stories:fullscreen .st-grid{grid-template-columns:minmax(0,1fr)}
+#p-stories:fullscreen .st-list,#p-stories:fullscreen .ai-note{display:none}
+#p-stories:fullscreen .st-text{font-size:22px}
+
+/* about */
+.about{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:26px 40px;padding-top:22px}
+.about h3{font-size:17px;font-weight:500;margin:0 0 8px}
+.about p{margin:0 0 10px;color:var(--ink-2);font-size:15px}
+.lgrow{display:flex;gap:10px;align-items:center;font-size:14.5px;color:var(--ink-2);margin-bottom:7px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:7px 10px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:500;color:var(--ink-3);font-size:13px}
+td a{color:var(--accent)}
+.status{color:var(--mark);white-space:nowrap}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-3)}
+
+@media(max-width:860px){
+  .st-grid{grid-template-columns:minmax(0,1fr);gap:14px}
+  .st-list{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--rule);padding:0 0 10px;scrollbar-width:thin}
+  .st-item{flex:none;width:220px}
+  .st-text{font-size:17px;min-height:0}
+}
+@media(max-width:600px){
+  .tabs a{padding:12px 11px 11px;font-size:14.5px}
+  table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--rule)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:6.5em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:6em;margin-inline-start:-6.5em;color:var(--ink-3)}.stack td:empty{display:none}
+  .zoombtns{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>placeholder data, not yet researched</b></p>
+  <h1>Deep time, <b>to scale</b></h1>
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
+    <a role="tab" id="t-atlas" href="#atlas" aria-controls="p-atlas">Full atlas</a>
+    <a role="tab" id="t-stories" href="#stories" aria-controls="p-stories">Stories</a>
+    <a role="tab" id="t-about" href="#about" aria-controls="p-about">About</a>
+  </nav>
+</header>
+
+<!-- ============ HUMAN TIME ============ -->
+<section id="p-human" role="tabpanel" aria-labelledby="t-human">
+  <div class="ph">
+    <h2>The last million years</h2>
+    <p>Drag to move. Scroll, pinch or use + and − to zoom in. Click a marker to see from that point to the present. Hover or tap for population at any moment; click a period or species for details.</p>
+  </div>
+  <div class="bar-row" id="h-chips"></div>
+  <div class="bar-row">
+    <div class="seg" role="group" aria-label="Time axis">
+      <button id="h-log" class="on">Time: logarithmic</button><button id="h-lin">Linear</button>
+    </div>
+    <div class="seg" role="group" aria-label="Population axis">
+      <button id="h-ylog" class="on">Population: logarithmic</button><button id="h-ylin">Linear</button>
+    </div>
+    <div class="seg" role="group" aria-label="Zoom">
+      <button id="h-zin" aria-label="Zoom in">+</button><button id="h-zout" aria-label="Zoom out">−</button>
+    </div>
+  </div>
+  <div class="legend-line">
+    <span><i class="sw" style="height:3px;background:var(--accent)"></i>Population, middle of the range</span>
+    <span><i class="sw" style="background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--accent) 30%,transparent),transparent)"></i>Range</span>
+    <span><i class="sw" style="height:2px;background:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 7px)"></i>Not estimated</span>
+    <span><i class="sw" style="background:color-mix(in srgb,var(--mark) 22%,transparent);border-left:2px solid var(--mark)"></i>Threshold and its plausible range</span>
+  </div>
+  <div class="stage">
+    <canvas class="chart" id="h-cv" role="img" aria-label="World population over the last million years, with markers for fire, language, dispersal out of Africa, the end of the last ice age, farming, writing and industrialisation, and strips for geological time and hominin species"></canvas>
+  </div>
+  <div class="readout" id="h-readout" aria-live="polite"><p class="empty">Hover or tap the chart to read the population estimate at that moment. Tap a marker name, a geological period or a species for its dates and how firm they are.</p></div>
+  <p class="dataline"><b>Placeholder data.</b> No figure here has been checked against a source yet. The population line is the midpoint of a rough range, and the shading is that range. Before 300,000 years ago there is no estimate at all.</p>
+</section>
+
+<!-- ============ FULL ATLAS ============ -->
+<section id="p-atlas" role="tabpanel" aria-labelledby="t-atlas" hidden>
+  <div class="ph">
+    <h2>Every lane, all of time</h2>
+    <p>Every lane, from the formation of the Earth to now. Drag to move, scroll or pinch to zoom. Lanes appear and disappear with scale, because most of them mean nothing outside their own era.</p>
+  </div>
+  <div class="sticky">
+    <div class="mmlabel">Whole of time, logarithmic. Drag the bracket to move.</div>
+    <canvas class="mm" id="a-mm"></canvas>
+    <div class="rb"><span id="a-rbl">—</span><span class="mid" id="a-rbs">—</span><span id="a-rbr">—</span></div>
+  </div>
+  <details class="ctrl">
+    <summary>Controls</summary>
+    <div class="grp"><div class="grp-label">Jump to</div><div class="chips" id="a-presets"></div></div>
+    <div class="grp"><div class="grp-label">Main axis</div><div class="chips"><button class="chip" id="a-lin">Linear · true durations</button><button class="chip" id="a-log">Logarithmic</button></div></div>
+    <div class="grp"><div class="grp-label">Periodisation scheme</div><div class="chips" id="a-schemes"></div></div>
+    <div class="grp"><div class="grp-label">Highlight</div><div class="chips" id="a-hl"></div></div>
+    <div class="grp"><div class="grp-label">Lanes</div><div class="toggles" id="a-lanes"></div></div>
+  </details>
+  <div class="stage">
+    <div class="zoombtns"><button id="a-zin" aria-label="Zoom in">+</button><button id="a-zout" aria-label="Zoom out">−</button></div>
+    <canvas class="chart" id="a-cv" role="img" aria-label="Deep time atlas chart with geological, climate, hominin, population, energy, political, regional, periodisation and evidence lanes"></canvas>
+  </div>
+  <div class="readout" id="a-readout" aria-live="polite"><p class="empty">Tap anything on the chart for its dates, how firm they are, and where the real figure would come from.</p></div>
+  <p class="dataline" id="a-status"></p>
+</section>
+
+<!-- ============ STORIES ============ -->
+<section id="p-stories" role="tabpanel" aria-labelledby="t-stories" hidden>
+  <div class="st-grid">
+    <nav class="st-list" id="s-list" aria-label="Stories"></nav>
+    <div class="st-main">
+      <h2 id="s-title"></h2>
+      <p class="st-dek" id="s-dek"></p>
+      <p class="st-text" id="s-text" aria-live="polite"></p>
+      <div class="st-nav">
+        <button class="btn" id="s-prev">← Back</button>
+        <div class="dots" id="s-dots"></div>
+        <button class="btn primary" id="s-next">Next →</button>
+        <span class="sp"></span>
+        <button class="btn" id="s-open">Open in full atlas</button>
+        <button class="btn" id="s-full">Full screen</button>
+      </div>
+      <canvas class="mm" id="s-mm"></canvas>
+      <div class="rb"><span id="s-rbl">—</span><span class="mid" id="s-rbs">—</span><span id="s-rbr">—</span></div>
+      <div class="stage" style="margin-top:8px">
+        <div class="zoombtns"><button id="s-zin" aria-label="Zoom in">+</button><button id="s-zout" aria-label="Zoom out">−</button></div>
+        <canvas class="chart pany" id="s-cv" role="img" aria-label="Chart for the current story view"></canvas>
+      </div>
+      <div class="readout" id="s-readout" aria-live="polite"><p class="empty">Tap a bar or band for details. Arrow keys step through the story.</p></div>
+      <p class="dataline" id="s-data"></p>
+    </div>
+  </div>
+  <p class="ai-note">Story texts were drafted with AI (Claude) from the atlas's own data notes and are awaiting review. Like the data, they are provisional.</p>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="p-about" role="tabpanel" aria-labelledby="t-about" hidden>
+  <div class="about">
+    <div>
+      <h3>What this is</h3>
+      <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
+      <p>This is an early working version. The structure is in place; the data is not. Every number is a placeholder written from memory, and none has yet been checked against its source.</p>
+    </div>
+    <div>
+      <h3>How certainty is drawn</h3>
+      <div class="lgrow"><i class="sw" style="background:var(--accent)"></i>Firm dates have hard edges</div>
+      <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--accent) 38%,var(--accent) 62%,transparent)"></i>Uncertain ends fade across the plausible range</div>
+      <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(45deg,var(--bar) 0 3px,var(--disp) 3px 5px)"></i>Disputed category, or a scheme that does not apply</div>
+      <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(90deg,var(--ink-4) 0 3px,transparent 3px 7px)"></i>No data, which is not the same as zero</div>
+    </div>
+    <div>
+      <h3>Time base</h3>
+      <p>All dates normalise to years before 2000 CE. Source values carry explicit units (4.6 Ga, 11700 b2k, 3300 BCE, 1760 CE) and are converted in one place, so no lane can silently disagree with another about what a date means.</p>
+    </div>
+    <div>
+      <h3>About the text</h3>
+      <p>Explanatory text on this page, including the stories and marker notes, was drafted with AI (Claude) from the project's data notes and is awaiting review.</p>
+    </div>
+  </div>
+  <h3 style="font-size:17px;font-weight:500;margin:30px 0 8px">Sources registered, none yet ingested</h3>
+  <div class="scroll"><table class="stack" id="src-table"><thead><tr><th>Source</th><th>By</th><th>Licence</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<footer>Deep Time Atlas · v0.3 · early working version · structure in place, sourced data next.</footer>
+</div>
+
+<script type="application/json" id="atlas-data">/*__ATLAS__*/</script>
+<script>
+{
+"use strict";
+const $ = s => document.querySelector(s);
+
+/* ================= TIME ================= */
+const NOW = 2000 - new Date().getFullYear();
+const T_ORIGIN = 4.6e9;
+function parseTime(v){
+  if (v === null || v === undefined) return null;
+  if (typeof v === "number") return v;
+  const s = String(v).trim();
+  if (s === "now" || s === "present") return NOW;
+  let m;
+  if ((m = s.match(/^(-?[\d.]+)\s*Ga$/i))) return parseFloat(m[1]) * 1e9;
+  if ((m = s.match(/^(-?[\d.]+)\s*Ma$/i))) return parseFloat(m[1]) * 1e6;
+  if ((m = s.match(/^(-?[\d.]+)\s*ka$/i))) return parseFloat(m[1]) * 1e3;
+  if ((m = s.match(/^(-?[\d.]+)\s*b2k$/i))) return parseFloat(m[1]);
+  if ((m = s.match(/^(-?[\d.]+)\s*BP$/i))) return parseFloat(m[1]) + 50;
+  if ((m = s.match(/^(-?[\d.]+)\s*BCE$/i))) return 2000 + parseFloat(m[1]);
+  if ((m = s.match(/^(-?[\d.]+)\s*CE$/i))) return 2000 - parseFloat(m[1]);
+  if ((m = s.match(/^(-?[\d.]+)\s*yr$/i))) return parseFloat(m[1]);
+  throw new Error("Unparseable time value: " + s);
+}
+function parsePoint(v){
+  if (v === null || v === undefined) return null;
+  if (typeof v === "object" && !Array.isArray(v)){
+    const est = v.est != null ? parseTime(v.est) : null;
+    const a = v.lo != null ? parseTime(v.lo) : est, b = v.hi != null ? parseTime(v.hi) : est;
+    return { est, older: Math.max(a, b), younger: Math.min(a, b), certain: false };
+  }
+  const t = parseTime(v);
+  return { est: t, older: t, younger: t, certain: true };
+}
+const fmtY = y => y < 0 ? (-y).toLocaleString("en") + " BCE" : y.toLocaleString("en") + " CE";
+function fmtT(t){
+  if (Math.abs(t - NOW) < 1.5) return "now";
+  if (t >= 5e8) return (t / 1e9).toFixed(2) + " Ga";
+  if (t >= 1e6) return (t / 1e6 >= 100 ? (t / 1e6).toFixed(0) : (t / 1e6).toFixed(1)) + " Ma";
+  if (t >= 12000) return (t / 1000 >= 100 ? (t / 1000).toFixed(0) : (t / 1000).toFixed(1)) + " ka";
+  return fmtY(Math.round(2000 - t));
+}
+function fmtSpan(s){
+  if (s >= 1e9) return (s / 1e9).toFixed(2) + " billion years across";
+  if (s >= 1e6) return (s / 1e6).toFixed(1) + " million years across";
+  if (s >= 1e4) return Math.round(s / 1000).toLocaleString("en") + " thousand years across";
+  return Math.round(s).toLocaleString("en") + " years across";
+}
+function fmtAgo(t){
+  const ya = t - NOW;
+  if (ya < 1.5) return "now";
+  if (ya >= 10000) return "about " + Number(ya.toPrecision(2)).toLocaleString("en") + " years ago";
+  return fmtY(Math.round(2000 - t));
+}
+function fmtPointRange(p0, p1){
+  let s = (p0 ? fmtT(p0.est) : "?") + "  →  " + (p1 ? fmtT(p1.est) : "?");
+  const bits = [];
+  if (p0 && !p0.certain) bits.push("start " + fmtT(p0.older) + "–" + fmtT(p0.younger));
+  if (p1 && !p1.certain) bits.push("end " + fmtT(p1.older) + "–" + fmtT(p1.younger));
+  return bits.length ? s + "   ·   " + bits.join("  ·  ") : s;
+}
+const REDUCED = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ease = k => k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+const LYA = t => Math.log10(Math.max(t - NOW, 0) + 1), ULYA = v => Math.pow(10, v) - 1 + NOW;
+
+/* ================= DATA ================= */
+const ATLAS = JSON.parse($("#atlas-data").textContent);
+const DS = ATLAS.datasets;
+const LANE = {}; ATLAS.lanes.forEach(l => LANE[l.id] = l);
+LANE.evidence.maxSpan = 7e8;
+const errors = [];
+function norm(r){
+  try { r._t0 = parsePoint(r.t0); r._t1 = parsePoint(r.t1); }
+  catch (e){ errors.push((r.label || "?") + ": " + e.message); r._t0 = r._t1 = null; }
+  return r;
+}
+Object.values(DS).forEach(ds => {
+  if (ds.records) ds.records.forEach(norm);
+  if (ds.samples){
+    ds.samples.forEach(s => s._t = parseTime(s.t));
+    /* two samples at the same instant: keep both claims by taking their union, and say so */
+    const merged = [];
+    ds.samples.slice().sort((a, b) => b._t - a._t).forEach(s => {
+      const q = merged[merged.length - 1];
+      if (q && q._t === s._t){ errors.push(`duplicate sample at ${s.t}: merged ${q.lo}–${q.hi} with ${s.lo}–${s.hi}`); merged[merged.length - 1] = Object.assign({}, q, { lo: Math.min(q.lo, s.lo), hi: Math.max(q.hi, s.hi) }); }
+      else merged.push(s);
+    });
+    ds._sorted = merged;
+    ds._cov0 = ds.coverage ? parseTime(ds.coverage[0][0]) : ds._sorted[0]._t;
+  }
+  if (ds.bands) ds.bands.forEach(b => b._keys = b.keys.map(([t, v]) => [parseTime(t), v]));
+  if (ds.steps){ ds.steps.forEach(s => s._t = parseTime(s.t)); ds.steps.sort((a, b) => a._t - b._t); }
+  if (ds.items) Object.values(ds.items).forEach(sc => sc.rows.forEach(r => r.items.forEach(norm)));
+});
+ATLAS.overlays.highlights.forEach(norm);
+ATLAS.overlays.presets.forEach(p => { p._t0 = parseTime(p.t0); p._t1 = parseTime(p.t1); });
+if (errors.length) console.warn("Atlas normalisation problems:", errors);
+const CONF = {}; ATLAS.vocab.confidence.forEach(c => CONF[c.id] = c);
+const REGION = {}; ATLAS.vocab.regions.forEach(r => REGION[r.id] = r.label);
+
+function srcOf(rec, ds){
+  const S = ATLAS.sources;
+  const ids = rec.src || ds.defaultSrc || ds.src || [];
+  const real = ids.map(i => S[i]).filter(s => s && s.status !== "invalid");
+  const ing = real.filter(s => s.status === "ingested" || s.status === "verified");
+  if (ing.length) return "Source: " + ing.map(s => s.title).join("; ");
+  const would = [...new Set([...real, ...(ds.wouldUse || []).map(i => S[i]).filter(Boolean)])];
+  if (would.length) return "Would come from: " + would.map(s => s.title).join("; ") + " (not yet ingested)";
+  return "No source yet. Placeholder.";
+}
+
+/* ================= THEME ================= */
+const PAL = {};
+const PROBE = document.createElement("i"); PROBE.style.display = "none"; document.body.appendChild(PROBE);
+function readPal(){
+  ["paper","card","ink","ink-2","ink-3","ink-4","rule","rule-2","accent","on-accent","mark","bar","bar-ink","disp","disp-ink"].forEach(k => {
+    PROBE.style.color = "var(--" + k + ")";
+    PAL[k.replace("-", "")] = getComputedStyle(PROBE).color;
+  });
+}
+readPal();
+function alpha(c, a){
+  if (c[0] === "#"){ const n = parseInt(c.slice(1), 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`; }
+  const m = c.match(/[\d.]+/g) || [0, 0, 0]; return `rgba(${m[0]},${m[1]},${m[2]},${a})`;
+}
+function makeHatch(ctx){
+  const c = document.createElement("canvas"); c.width = c.height = 7;
+  const x = c.getContext("2d");
+  x.strokeStyle = "rgba(30,34,36,.3)"; x.lineWidth = 1.1;
+  x.beginPath(); x.moveTo(-2, 9); x.lineTo(9, -2); x.moveTo(1, 12); x.lineTo(12, 1); x.stroke();
+  return ctx.createPattern(c, "repeat");
+}
+
+/* readout card shared by all views */
+function showInfo(el, f, ds, extra){
+  ds = ds || {}; extra = extra || {};
+  const conf = CONF[f.conf || ds.conf || "estimated"] || { id: "", label: "Unknown", note: "" };
+  const range = f._rangeText || fmtPointRange(f._t0, f._t1);
+  const notes = [f.note, extra.schemeNote, !f.note ? ds.note : null].filter(Boolean);
+  const bad = ["fabricated", "speculative", "disputed"].includes(conf.id);
+  const box = document.createElement("div");
+  const nm = document.createElement("div"); nm.className = "rname"; nm.textContent = (extra.prefix ? extra.prefix + " · " : "") + f.label;
+  const dt = document.createElement("div"); dt.className = "rdate"; dt.textContent = range;
+  const nt = document.createElement("div"); nt.className = "rnote"; nt.textContent = notes.join("  ") + (conf.note ? "  " + conf.note : "");
+  const tg = document.createElement("div"); tg.className = "tags";
+  [[conf.label, bad], [extra.src || srcOf(f, ds), false]].forEach(([t, b]) => { const s = document.createElement("span"); s.className = "tag" + (b ? " bad" : ""); s.textContent = t; tg.appendChild(s); });
+  box.append(nm, dt, nt, tg);
+  el.replaceChildren(box);
+}
+
+/* ================= FULL-ATLAS ENGINE (one per canvas) ================= */
+const PROJ = {
+  linear: { c: t => -t, t: c => -c },
+  log: { c: t => -Math.log10(Math.max(t - NOW, 0) + 1), t: c => Math.pow(10, -c) - 1 + NOW }
+};
+function createView(o){
+  const cv = o.canvas, ctx = cv.getContext("2d");
+  const mm = o.mini || null, mctx = mm ? mm.getContext("2d") : null;
+  const view = { mode: "linear", c0: -340000, c1: -NOW };
+  const st = { scheme: "none", active: new Set(), enabled: {}, vis: {}, tgt: {}, hit: [] };
+  ATLAS.lanes.forEach(l => st.enabled[l.id] = true);
+  let W = 0, H = 0, MW = 0, DPR = 1, hatch = null, raf = null, tween = null, lastNat = null;
+  const MH = 52, AXIS_H = 30, CLIP = 3000;
+
+  const X = t => (PROJ[view.mode].c(Math.max(t, NOW)) - view.c0) / (view.c1 - view.c0) * W;
+  const tAtX = x => Math.max(PROJ[view.mode].t(view.c0 + (x / (W || 1)) * (view.c1 - view.c0)), NOW);
+  const left = () => tAtX(0), right = () => tAtX(W || 1);
+  const cx = x => Math.max(-CLIP, Math.min(CLIP, x));
+  function clampView(){
+    const p = PROJ[view.mode], cMin = p.c(T_ORIGIN), cMax = p.c(NOW);
+    const s = Math.min(Math.max(view.c1 - view.c0, view.mode === "linear" ? 30 : 1e-5), cMax - cMin);
+    const m = (view.c0 + view.c1) / 2; view.c0 = m - s / 2; view.c1 = m + s / 2;
+    if (view.c0 < cMin){ view.c0 = cMin; view.c1 = cMin + s; }
+    if (view.c1 > cMax){ view.c1 = cMax; view.c0 = cMax - s; }
+  }
+  function setRange(a, b){ const p = PROJ[view.mode]; view.c0 = p.c(a); view.c1 = p.c(b); clampView(); }
+  function visRecs(recs){ const tL = left(), tR = right(); return recs.filter(r => r._t0 && r._t1 && r._t0.older >= tR && r._t1.younger <= tL); }
+  function groups(){
+    const g = [];
+    visRecs(DS.regions.records).forEach(r => { let q = g.find(x => x.id === r.region); if (!q) g.push(q = { id: r.region, items: [] }); q.items.push(r); });
+    return g;
+  }
+  function laneNative(l){
+    if (l.encoding === "scheme"){ const n = DS.schemes.items[st.scheme].rows.length; return n ? 20 + n * 24 : 0; }
+    if (l.encoding === "intervals"){ const n = visRecs(DS[l.dataset].records).length; return n ? 15 + n * 11 : 0; }
+    if (l.encoding === "grouped-intervals"){ const n = groups().length; return n ? 15 + n * 23 : 0; }
+    return l.height;
+  }
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth;
+    if (mm){ MW = mm.clientWidth; mm.width = Math.round(MW * DPR); mm.height = Math.round(MH * DPR); mctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+    hatch = null;
+  }
+  function layout(nat){
+    let total = AXIS_H;
+    ATLAS.lanes.forEach(l => { const h = nat[l.id] * (st.vis[l.id] || 0); if (h >= 2) total += h + 10; });
+    H = Math.max(total + 6, o.minH || 180);
+    const cw = Math.round(W * DPR), ch = Math.round(H * DPR);
+    if (cv.width !== cw || cv.height !== ch){ cv.style.height = H + "px"; cv.width = cw; cv.height = ch; }
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    if (!hatch) hatch = makeHatch(ctx);
+  }
+
+  /* interval whose ends fade across their plausible range */
+  function iv(p0, p1, y, h, color, opt){
+    if (!p0 || !p1) return null;
+    const xa = cx(X(p0.older)), xb = cx(X(p0.younger)), xc = cx(X(p1.older)), xd = cx(X(p1.younger));
+    const L = Math.min(xa, xb), R = Math.max(xc, xd);
+    if (R < -20 || L > W + 20) return null;
+    const w = R - L; if (w <= .4) return null;
+    ctx.save();
+    if (w < 2.2){ ctx.fillStyle = alpha(color, .8); ctx.fillRect(L, y, Math.max(w, 1), h); }
+    else {
+      const g = ctx.createLinearGradient(L, 0, R, 0), f = x => Math.max(0, Math.min(1, (x - L) / w));
+      const stops = [[0, p0.certain ? 1 : 0], [f(Math.max(xb, L)), 1], [f(Math.min(xc, R)), 1], [1, p1.certain ? 1 : 0]].sort((a, b) => a[0] - b[0]);
+      let last = -1;
+      stops.forEach(([p, a]) => { const q = Math.min(Math.max(p, last + 1e-6), 1); last = q; g.addColorStop(q, alpha(color, a)); });
+      ctx.fillStyle = g; ctx.fillRect(L, y, w, h);
+    }
+    if (opt && opt.hatch && w > 6){ ctx.fillStyle = hatch; ctx.fillRect(L, y, w, h); }
+    ctx.restore();
+    return { x0: L, x1: R };
+  }
+  function lab(text, x0, x1, y, h, color, size){
+    if (x1 - x0 < 24) return;
+    ctx.save(); ctx.font = `400 ${size}px "IBM Plex Sans", sans-serif`;
+    const vx0 = Math.max(x0, 0), vx1 = Math.min(x1, W), w = vx1 - vx0;
+    if (w < 24){ ctx.restore(); return; }
+    let s = text;
+    if (ctx.measureText(s).width > w - 9){
+      while (s.length > 2 && ctx.measureText(s + "…").width > w - 9) s = s.slice(0, -1);
+      if (s.length <= 2){ ctx.restore(); return; }
+      s += "…";
+    }
+    ctx.fillStyle = color; ctx.textBaseline = "middle"; ctx.fillText(s, vx0 + 5, y + h / 2);
+    ctx.restore();
+  }
+  function cap(text, y){
+    ctx.save(); ctx.font = '400 10px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "top";
+    let s = text;
+    while (s.length > 4 && ctx.measureText(s).width > W - 56) s = s.slice(0, -2);
+    if (s !== text) s = s.trim() + "…";
+    ctx.fillText(s, 5, y); ctx.restore();
+  }
+  const hit = (r, info, y, h, ds, extra) => { if (r) st.hit.push({ x0: r.x0, x1: r.x1, y0: y, y1: y + h, info, ds, extra }); };
+  const laneHit = (y, h, info, ds) => st.hit.push({ x0: 0, x1: W, y0: y, y1: y + h, info, ds });
+
+  const E = {};
+  E["ranked-intervals"] = (ds, y, h, sp, lane) => {
+    const ranks = sp > 1e9 ? [0, 1] : sp > 1e8 ? [1, 2] : sp > 3e6 ? [2, 3] : [3];
+    const rowH = (h - 13) / ranks.length;
+    cap(lane.label + " · ICS boundaries", y);
+    ranks.forEach((rk, i) => {
+      const ry = y + 13 + i * rowH;
+      ds.records.filter(r => r.rank === rk).forEach(r => {
+        const res = iv(r._t0, r._t1, ry, rowH - 3, r.color || "#cccccc", { hatch: r.status === "rejected" || r.conf === "disputed" });
+        if (!res) return;
+        lab(r.label, res.x0, res.x1, ry, rowH - 3, "#22272a", 11);
+        hit(res, r, ry, rowH - 3, ds);
+      });
+    });
+  };
+  E.intervals = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · first and last appearance, not existence", y);
+    visRecs(ds.records).forEach((r, i) => {
+      const ry = y + 14 + i * 11, bh = 9.5, d = r.status === "disputed", sap = r.id === "h-sapiens";
+      const res = iv(r._t0, r._t1, ry, bh, sap ? PAL.accent : d ? PAL.disp : PAL.bar, { hatch: d });
+      if (!res) return;
+      lab(r.label, res.x0, res.x1, ry, bh, sap ? PAL.onaccent : d ? PAL.dispink : PAL.barink, 9.5);
+      hit(res, r, ry, bh, ds);
+    });
+  };
+  function bandLane(ds, y, h){
+    const [lo, hi] = ds.yDomain;
+    const sc = v => y + h - Math.max(0, Math.min(1, (Math.log10(v) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo)))) * h;
+    const pts = ds._sorted;
+    ctx.save();
+    ctx.beginPath();
+    pts.forEach((p, i) => { const x = cx(X(p._t)), yy = sc(p.hi); i ? ctx.lineTo(x, yy) : ctx.moveTo(x, yy); });
+    for (let i = pts.length - 1; i >= 0; i--) ctx.lineTo(cx(X(pts[i]._t)), sc(pts[i].lo));
+    ctx.closePath();
+    ctx.fillStyle = alpha(PAL.accent, .24); ctx.fill();
+    ctx.strokeStyle = alpha(PAL.accent, .75); ctx.lineWidth = 1; ctx.stroke();
+    const xo = cx(X(ds._cov0));
+    if (xo > 0){
+      ctx.fillStyle = alpha(PAL.rule2, .92); ctx.fillRect(0, y, xo, h);
+      ctx.strokeStyle = PAL.ink4; ctx.setLineDash([2, 4]);
+      ctx.beginPath(); ctx.moveTo(xo, y); ctx.lineTo(xo, y + h); ctx.stroke(); ctx.setLineDash([]);
+      if (xo > 120){ ctx.font = '400 10px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "middle"; ctx.fillText("no data — not zero", 6, y + h / 2); }
+    }
+    ctx.restore();
+    return sc;
+  }
+  E.band = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · " + ds.unit + " · log · band is the uncertainty", y);
+    const top = y + 13, bh = h - 14, sc = bandLane(ds, top, bh);
+    if (ds.unit === "people"){
+      ctx.save(); ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textAlign = "right";
+      [[1e4, "10k"], [1e6, "1M"], [1e8, "100M"], [1e10, "10B"]].forEach(([v, t]) => ctx.fillText(t, W - 4, sc(v) + 3));
+      ctx.restore();
+    }
+    laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: fmtT(ds._cov0) + "  →  now" }, ds);
+  };
+  E.stack = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · share of living people · impression, not data", y);
+    const top = y + 13, bh = h - 14, step = 3, cols = [];
+    const kv = (keys, t) => {
+      if (t >= keys[0][0]) return keys[0][1];
+      if (t <= keys[keys.length - 1][0]) return keys[keys.length - 1][1];
+      for (let i = 0; i < keys.length - 1; i++){
+        const [a, va] = keys[i], [b, vb] = keys[i + 1];
+        if (t <= a && t >= b) return va + (vb - va) * ((a - t) / (a - b || 1));
+      }
+      return 0;
+    };
+    for (let px = 0; px <= W; px += step){
+      const t = tAtX(px), v = ds.bands.map(b => kv(b._keys, t)), sum = v.reduce((a, b) => a + b, 0) || 1;
+      cols.push(v.map(x => x / sum));
+    }
+    ds.bands.forEach((b, bi) => {
+      ctx.beginPath();
+      for (let i = 0; i < cols.length; i++){ let acc = 0; for (let j = 0; j < bi; j++) acc += cols[i][j]; const yy = top + acc * bh; i ? ctx.lineTo(i * step, yy) : ctx.moveTo(i * step, yy); }
+      for (let i = cols.length - 1; i >= 0; i--){ let acc = 0; for (let j = 0; j <= bi; j++) acc += cols[i][j]; ctx.lineTo(i * step, top + acc * bh); }
+      ctx.closePath(); ctx.fillStyle = alpha(b.color, .8); ctx.fill();
+    });
+    ds.bands.forEach((b, bi) => {
+      let best = -1, bw = 0;
+      for (let i = 0; i < cols.length; i++) if (cols[i][bi] > bw){ bw = cols[i][bi]; best = i; }
+      if (bw * bh > 12 && best >= 0){
+        let acc = 0; for (let j = 0; j < bi; j++) acc += cols[best][j];
+        ctx.save(); ctx.font = '400 10px "IBM Plex Sans", sans-serif'; ctx.fillStyle = "#1e2224"; ctx.textBaseline = "middle";
+        ctx.fillText(b.label, Math.max(5, Math.min(W - 130, best * step - 44)), top + (acc + cols[best][bi] / 2) * bh);
+        ctx.restore();
+      }
+    });
+    laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "300 ka  →  now" }, ds);
+  };
+  E["grouped-intervals"] = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · conveniences of description, not entities", y);
+    groups().forEach((g, i) => {
+      const ry = y + 14 + i * 23;
+      ctx.save(); ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "top";
+      ctx.fillText(REGION[g.id] || g.id, 5, ry); ctx.restore();
+      g.items.forEach(r => {
+        const d = r.status === "disputed";
+        const res = iv(r._t0, r._t1, ry + 10, 11, d ? PAL.disp : PAL.bar, { hatch: d });
+        if (!res) return;
+        lab(r.label, res.x0, res.x1, ry + 10, 11, d ? PAL.dispink : PAL.barink, 9.5);
+        hit(res, r, ry + 10, 11, ds, { prefix: REGION[g.id] });
+      });
+    });
+  };
+  E.scheme = (ds, y, h, sp, lane) => {
+    const sc = ds.items[st.scheme]; if (!sc.rows.length) return;
+    cap("Periodisation · " + sc.label + " · schemes disagree, on purpose", y);
+    sc.rows.forEach((row, i) => {
+      const ry = y + 15 + i * 24;
+      ctx.save(); ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "top";
+      ctx.fillText(row.label, 5, ry - 1); ctx.restore();
+      row.items.forEach(it => {
+        const res = iv(it._t0, it._t1, ry + 9, 13, it.color || "#a8926b", { hatch: it.status === "disputed" || it.status === "inapplicable" });
+        if (!res) return;
+        lab(it.label, res.x0, res.x1, ry + 9, 13, "#1e2224", 9.5);
+        hit(res, it, ry + 9, 13, ds, { prefix: row.label, schemeNote: sc.note });
+      });
+    });
+  };
+  E.evidence = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · density of evidence, not events", y);
+    const top = y + 13, bh = h - 14, steps = ds.steps;
+    const qAt = t => { for (let i = 0; i < steps.length; i++) if (t <= steps[i]._t) return steps[i].q; return steps[steps.length - 1].q; };
+    for (let px = 0; px < W; px += 2){
+      const q = qAt(tAtX(px));
+      if (q < .25 && Math.floor(px / 6) % 2) continue;
+      const bH = 3 + q * (bh - 3);
+      ctx.fillStyle = alpha(q > .5 ? PAL.accent : q > .2 ? PAL.bar : PAL.ink4, .3 + q * .6);
+      ctx.fillRect(px, top + bh - bH, 2, bH);
+    }
+    steps.forEach(s => {
+      if (!s.label) return;
+      const x = X(s._t); if (x < 12 || x > W - 12) return;
+      ctx.save(); ctx.strokeStyle = PAL.rule; ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, top + bh); ctx.stroke();
+      ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "top"; ctx.fillText(s.label, x + 3, top + 1); ctx.restore();
+    });
+    laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "whole axis" }, ds);
+  };
+  E.curve = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · schematic sine waves, not data", y);
+    const top = y + 13, bh = h - 15;
+    ctx.save(); ctx.strokeStyle = PAL.ink3; ctx.lineWidth = 1.1; ctx.setLineDash([4, 3]); ctx.beginPath();
+    for (let px = 0; px <= W; px += 2){
+      const t = Math.max(tAtX(px), 0);
+      const gl = Math.sin(t / 41000 * 2 * Math.PI) * .35 + Math.sin(t / 100000 * 2 * Math.PI) * .75 + Math.sin(t / 23000 * 2 * Math.PI) * .2;
+      const env = 1 / (1 + Math.pow(t / 3.0e6, 1.2)), lt = Math.sin(t / 1.4e7) * .5 + Math.cos(t / 5.5e7) * .6;
+      let v = gl * env + lt * (1 - env) * .9; if (t < 300) v += (300 - t) / 300 * 1.15;
+      const yy = top + bh / 2 - v * (bh / 2 - 3); px ? ctx.lineTo(px, yy) : ctx.moveTo(px, yy);
+    }
+    ctx.stroke(); ctx.restore();
+    laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "whole axis" }, ds);
+  };
+
+  function ticks(){
+    const tL = left(), tR = right(), out = [];
+    if (view.mode === "log"){
+      for (let e = 0; e <= 10; e++) for (const m of [1, 2, 5]){ const t = m * Math.pow(10, e); if (t <= tL && t >= Math.max(tR, 0)) out.push(t); }
+    } else {
+      const raw = (tL - tR) / 5, mag = Math.pow(10, Math.floor(Math.log10(Math.max(raw, 1e-6))));
+      const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw) || 10 * mag;
+      for (let t = Math.ceil(tR / step) * step; t <= tL; t += step) out.push(t);
+    }
+    return out.sort((a, b) => b - a);            /* oldest first = left to right */
+  }
+  function drawAxis(){
+    ctx.save();
+    ctx.fillStyle = PAL.card; ctx.fillRect(0, 0, W, AXIS_H);
+    ctx.strokeStyle = PAL.rule; ctx.beginPath(); ctx.moveTo(0, AXIS_H - .5); ctx.lineTo(W, AXIS_H - .5); ctx.stroke();
+    ctx.font = '400 10.5px "IBM Plex Mono", monospace'; ctx.textBaseline = "middle";
+    let last = -999;
+    ticks().forEach(t => {
+      const x = X(t); if (x < 2 || x > W - 40 || x - last < 70) return; last = x;
+      ctx.strokeStyle = PAL.rule2; ctx.beginPath(); ctx.moveTo(x, AXIS_H); ctx.lineTo(x, H); ctx.stroke();
+      ctx.strokeStyle = PAL.rule; ctx.beginPath(); ctx.moveTo(x, 20); ctx.lineTo(x, AXIS_H); ctx.stroke();
+      ctx.fillStyle = PAL.ink3; ctx.fillText(fmtT(t), x + 4, 11);
+    });
+    ctx.restore();
+  }
+  function drawHighlights(){
+    let k = 0;
+    ATLAS.overlays.highlights.filter(h => st.active.has(h.id)).forEach(hl => {
+      const a = cx(X(hl._t0.older)), b = cx(X(hl._t1.younger)); if (b < 0 || a > W) return;
+      const ly = AXIS_H + 4 + k * 14; k++;
+      ctx.save();
+      ctx.fillStyle = alpha(PAL.accent, .07); ctx.fillRect(a, AXIS_H, b - a, H - AXIS_H);
+      ctx.strokeStyle = alpha(PAL.accent, .4); ctx.setLineDash([3, 3]);
+      [X(hl._t0.est), X(hl._t1.est)].forEach(x => { if (x > 0 && x < W){ ctx.beginPath(); ctx.moveTo(x, AXIS_H); ctx.lineTo(x, H); ctx.stroke(); } });
+      ctx.setLineDash([]);
+      ctx.font = '500 10px "IBM Plex Sans", sans-serif'; ctx.fillStyle = PAL.accent; ctx.textBaseline = "top";
+      ctx.fillText(hl.label, Math.max(4, Math.min(W - 150, X(hl._t0.est) + 4)), ly);
+      ctx.restore();
+      st.hit.push({ x0: a, x1: b, y0: ly, y1: ly + 13, info: hl, ds: {} });
+    });
+  }
+  const MMP = PROJ.log, MM0 = MMP.c(T_ORIGIN), MM1 = MMP.c(NOW);
+  const mmX = t => (MMP.c(Math.max(t, NOW)) - MM0) / (MM1 - MM0) * MW;
+  const mmT = x => MMP.t(MM0 + (x / (MW || 1)) * (MM1 - MM0));
+  function drawMini(){
+    if (!mm || !MW) return;
+    const barY = 16, barH = 13;
+    mctx.clearRect(0, 0, MW, MH);
+    DS.geo.records.filter(r => r.rank === 0 || r.id === "holocene").forEach(r => {
+      const a = mmX(r._t0.est), b = mmX(r._t1.est); mctx.fillStyle = r.color; mctx.fillRect(a, barY, Math.max(b - a, 1.5), barH);
+    });
+    const hs = DS.hominins.records.find(r => r.id === "h-sapiens");
+    if (hs){ const a = mmX(hs._t0.est); mctx.fillStyle = PAL.accent; mctx.fillRect(a, barY + barH + 2, Math.max(mmX(NOW) - a, 1.5), 3); }
+    mctx.font = '400 9.5px "IBM Plex Mono", monospace'; mctx.fillStyle = PAL.ink3; mctx.textBaseline = "top";
+    [[4.6e9, "4.6 Ga"], [1e9, "1 Ga"], [1e8, "100 Ma"], [1e6, "1 Ma"], [1e4, "10 ka"], [1e2, "100 yr"]].forEach(([t, l]) => {
+      const x = mmX(t); if (x < 1 || x > MW - 30) return;
+      mctx.strokeStyle = PAL.rule; mctx.beginPath(); mctx.moveTo(x, barY); mctx.lineTo(x, barY + barH + 6); mctx.stroke();
+      mctx.fillText(l, Math.min(x + 2, MW - 44), 2);
+    });
+    mctx.textAlign = "right"; mctx.fillText("now", MW - 1, 2); mctx.textAlign = "left";
+    const a0 = mmX(left()), a1 = mmX(right()), x0 = Math.min(a0, a1), w = Math.max(Math.abs(a1 - a0), 2.5);
+    mctx.fillStyle = alpha(PAL.accent, .14); mctx.fillRect(x0, barY - 4, w, barH + 12);
+    mctx.strokeStyle = PAL.accent; mctx.lineWidth = 1.2; mctx.strokeRect(x0 + .5, barY - 3.5, Math.max(w - 1, 1.5), barH + 11);
+  }
+
+  function frame(){
+    raf = null;
+    let anim = false;
+    if (tween){
+      const k = W ? Math.min(1, (performance.now() - tween.s) / tween.ms) : 1, e = ease(k);
+      setRange(ULYA(tween.f[0] + (tween.to[0] - tween.f[0]) * e), ULYA(tween.f[1] + (tween.to[1] - tween.f[1]) * e));
+      if (k < 1) anim = true; else tween = null;
+    }
+    if (!W) return;
+    const sp = left() - right(), dragging = ptrs.size > 0 && lastNat, nat = dragging ? lastNat : {};
+    ATLAS.lanes.forEach(l => {
+      if (!dragging) nat[l.id] = laneNative(l);
+      /* while a drag is in progress, lanes keep their current state; they settle on release */
+      const on = st.enabled[l.id] && nat[l.id] > 0 && sp >= (l.minSpan || 0) && (l.maxSpan == null || sp <= l.maxSpan);
+      const tg = dragging && st.tgt[l.id] !== undefined ? st.tgt[l.id] : (on ? 1 : 0);
+      st.tgt[l.id] = tg;
+      if (st.vis[l.id] === undefined) st.vis[l.id] = tg;
+      const d = tg - st.vis[l.id];
+      if (Math.abs(d) > .012){ st.vis[l.id] += d * .3; anim = true; } else st.vis[l.id] = tg;
+    });
+    lastNat = nat;
+    layout(nat);
+    ctx.clearRect(0, 0, W, H);
+    st.hit = [];
+    drawAxis();
+    let y = AXIS_H + 6 + st.active.size * 15;
+    ATLAS.lanes.forEach(l => {
+      const h = nat[l.id] * (st.vis[l.id] || 0); if (h < 2) return;
+      ctx.save(); ctx.globalAlpha = Math.min(1, st.vis[l.id] * 1.5);
+      ctx.beginPath(); ctx.rect(0, y, W, h); ctx.clip();
+      (E[l.encoding] || (() => {}))(DS[l.dataset], y, nat[l.id], sp, l);
+      ctx.restore();
+      y += h + 10;
+    });
+    drawHighlights();
+    drawMini();
+    if (o.onFrame) o.onFrame({ left: left(), right: right(), span: sp });
+    if (anim) schedule();
+  }
+  function schedule(){ if (!raf) raf = requestAnimationFrame(frame); }
+
+  /* interaction */
+  function zoomAt(px, f){
+    tween = null;
+    const cAt = view.c0 + (px / W) * (view.c1 - view.c0), s = (view.c1 - view.c0) * f;
+    view.c0 = cAt - (px / W) * s; view.c1 = view.c0 + s; clampView(); schedule();
+  }
+  if (o.wheel) cv.addEventListener("wheel", e => { e.preventDefault(); zoomAt(e.clientX - cv.getBoundingClientRect().left, Math.exp(e.deltaY * .0016)); }, { passive: false });
+  const ptrs = new Map(); let lastDist = 0, dragged = false;
+  cv.addEventListener("pointerdown", e => {
+    tween = null; ptrs.set(e.pointerId, e); dragged = false;
+    if (e.pointerType === "mouse") cv.setPointerCapture(e.pointerId);
+    if (ptrs.size === 2){ const p = [...ptrs.values()]; lastDist = Math.abs(p[0].clientX - p[1].clientX); }
+  });
+  cv.addEventListener("pointermove", e => {
+    const r = cv.getBoundingClientRect();
+    if (!ptrs.has(e.pointerId)){ if (e.pointerType === "mouse") pick(e.clientX - r.left, e.clientY - r.top); return; }
+    const prev = ptrs.get(e.pointerId); ptrs.set(e.pointerId, e);
+    if (ptrs.size === 1){
+      const dx = e.clientX - prev.clientX; if (Math.abs(dx) > 1) dragged = true;
+      const s = view.c1 - view.c0; view.c0 -= dx / W * s; view.c1 -= dx / W * s; clampView(); schedule();
+    } else if (ptrs.size === 2){
+      const p = [...ptrs.values()], dist = Math.abs(p[0].clientX - p[1].clientX) || 1;
+      if (lastDist) zoomAt((p[0].clientX + p[1].clientX) / 2 - r.left, lastDist / dist);
+      lastDist = dist; dragged = true;
+    }
+  });
+  ["pointerup", "pointercancel"].forEach(ev => cv.addEventListener(ev, e => {
+    const r = cv.getBoundingClientRect(), single = ptrs.size === 1;
+    ptrs.delete(e.pointerId); lastDist = 0; schedule();
+    if (ev === "pointerup" && single && !dragged) pick(e.clientX - r.left, e.clientY - r.top, true);
+  }));
+  cv.addEventListener("dblclick", e => zoomAt(e.clientX - cv.getBoundingClientRect().left, .5));
+  if (mm){
+    let drag = false;
+    const go = px => { const t = mmT(Math.max(0, Math.min(MW, px))), p = PROJ[view.mode], s = view.c1 - view.c0, c = p.c(Math.max(t, NOW)); tween = null; view.c0 = c - s / 2; view.c1 = c + s / 2; clampView(); schedule(); };
+    mm.addEventListener("pointerdown", e => { drag = true; mm.setPointerCapture(e.pointerId); go(e.clientX - mm.getBoundingClientRect().left); });
+    mm.addEventListener("pointermove", e => { if (drag) go(e.clientX - mm.getBoundingClientRect().left); });
+    ["pointerup", "pointercancel"].forEach(ev => mm.addEventListener(ev, () => drag = false));
+  }
+  function pick(x, y, tap){
+    let f = null;
+    for (let i = st.hit.length - 1; i >= 0; i--){ const h = st.hit[i]; if (x >= h.x0 - 2 && x <= h.x1 + 2 && y >= h.y0 && y <= h.y1){ f = h; break; } }
+    if (!f){ if (tap) o.readout.innerHTML = '<p class="empty">Nothing there. Try a bar, a band or a period.</p>'; return; }
+    showInfo(o.readout, f.info, f.ds, f.extra);
+  }
+  const ro = new ResizeObserver(() => { if (cv.clientWidth !== W || (mm && mm.clientWidth !== MW)){ resize(); schedule(); } });
+  ro.observe(cv); if (mm) ro.observe(mm);
+
+  return {
+    view, st, schedule,
+    range: () => [left(), right()],
+    setModeRange(m, a, b){ tween = null; view.mode = m; setRange(a, b); schedule(); },
+    setMode(m){ const a = left(), b = right(); tween = null; view.mode = m; setRange(a, b); schedule(); },
+    animateTo(a, b, m){
+      const from = [left(), right()];
+      if (m && m !== view.mode){ view.mode = m; setRange(from[0], from[1]); }
+      if (REDUCED() || !W){ tween = null; setRange(a, b); schedule(); return; }
+      tween = { f: [LYA(from[0]), LYA(from[1])], to: [LYA(a), LYA(b)], s: performance.now(), ms: 850 };
+      schedule();
+    },
+    setScheme(k){ st.scheme = k; schedule(); },
+    setLanes(ids){ ATLAS.lanes.forEach(l => st.enabled[l.id] = !ids || ids.includes(l.id)); schedule(); },
+    setHighlights(ids){ st.active = new Set(ids); schedule(); },
+    zoom(f){ zoomAt(W / 2, f); }
+  };
+}
+
+/* ================= HUMAN TIME VIEW ================= */
+const MARKERS = [
+  { id: "fire", short: "Fire", label: "Control of fire", kind: "threshold", t: { est: "400 ka", lo: "1.0 Ma", hi: "300 ka" }, conf: "inferred",
+    note: "Burnt bone and sediment at a few African sites point to fire around a million years ago, but whether people controlled it is argued over. Regular, habitual use is clearer from roughly 400,000 years ago. The line marks that later date; the shading runs back to the earliest claims." },
+  { id: "language", short: "Language", label: "Language", kind: "threshold", t: { lo: "500 ka", hi: "50 ka" }, conf: "disputed",
+    note: "Speech leaves no direct trace. Proposals for when fully modern language emerged run from before the split with Neanderthals, about half a million years ago, to around 50,000 years ago. The hatched band is the spread of serious proposals; no single date is drawn because none is supported." },
+  { id: "ooa", short: "Out of Africa", label: "Out of Africa", kind: "span", t0: { est: "70 ka", lo: "90 ka", hi: "60 ka" }, t1: { est: "45 ka", lo: "55 ka", hi: "40 ka" }, conf: "estimated",
+    note: "The main dispersal of Homo sapiens out of Africa and across Eurasia and into Sahul. Earlier excursions are attested but seem to have left little genetic trace. The dates keep moving as new sites and genomes are studied." },
+  { id: "ice", short: "Ice age ends", label: "End of the last ice age", kind: "span", t0: { est: "19 ka", lo: "20 ka", hi: "18 ka" }, t1: "11700 b2k", conf: "dated",
+    note: "Ice sheets began to retreat after the Last Glacial Maximum, around 19,000 years ago. The Holocene, the present warm interval, formally begins 11,700 years before 2000 CE, a boundary fixed to a layer in a Greenland ice core: the solid line." },
+  { id: "farming", short: "Farming", label: "Agricultural revolution", kind: "span", t0: { est: "12 ka", lo: "13 ka", hi: "11 ka" }, t1: { est: "5000 b2k", lo: "6000 b2k", hi: "4000 b2k" }, conf: "estimated",
+    note: "Not one event and not one place: plants and animals were domesticated in at least seven independent centres over several thousand years, all within the Holocene. The word revolution compresses a slow and scattered process." },
+  { id: "cities", short: "Cities", label: "First cities", kind: "threshold", t: { est: "3500 BCE", lo: "4000 BCE", hi: "3100 BCE" }, conf: "estimated",
+    note: "Uruk, in southern Mesopotamia, grows into a city of tens of thousands during the fourth millennium BCE. Older large settlements such as Çatalhöyük exist; whether they count as cities depends on the definition used." },
+  { id: "writing", short: "Writing", label: "Writing", kind: "threshold", t: { est: "3300 BCE", lo: "3500 BCE", hi: "3100 BCE" }, conf: "dated",
+    note: "The earliest writing appears in Mesopotamia, with independent inventions later in Egypt, China and Mesoamerica. It is the sharpest single change in how much can be known about the past." },
+  { id: "industry", short: "Industry", label: "Industrial revolution", kind: "threshold", t: { est: "1760 CE", lo: "1700 CE", hi: "1830 CE" }, conf: "recorded",
+    note: "Coal had been burned for centuries; what changes from the late eighteenth century, starting in Britain, is sustained growth powered by fossil fuels. Population and energy use per person begin to rise together and have not stopped." }
+];
+MARKERS.forEach(m => {
+  if (m.kind === "threshold") m._t = parsePoint(m.t); else { m._t0 = parsePoint(m.t0); m._t1 = parsePoint(m.t1); }
+  m._o = m.kind === "threshold" ? m._t.older : m._t0.older;
+  m._y = m.kind === "threshold" ? m._t.younger : m._t1.younger;
+  m._v = [NOW + (m._o - NOW) * 1.35, NOW];   /* from just before the marker to the present */
+});
+
+const HGEO = [
+  { row: 0, label: "Pleistocene", t0: "2.58 Ma", t1: "11700 b2k", color: "#f4eea6", conf: "dated", note: "The epoch of repeated glacial cycles. Its base was moved to 2.58 million years ago in 2009." },
+  { row: 0, label: "Holocene", t0: "11700 b2k", t1: "now", color: "#fdf3cf", conf: "measured", note: "The present warm interval. Its base is fixed by ratified definition to a specific layer in the NGRIP ice core from Greenland." },
+  { row: 0, label: "Anthropocene?", t0: "1952 CE", t1: "now", color: "#e0a08c", conf: "disputed", status: "rejected", note: "Proposed as a formal epoch beginning in the early 1950s and rejected in a 2024 vote. Kept, hatched, because the question remains open." },
+  { row: 1, label: "Early Pleistocene (Calabrian)", t0: "1.80 Ma", t1: "774 ka", color: "#efe796", conf: "dated", note: "The Calabrian stage ends at the last reversal of Earth's magnetic field, about 774,000 years ago." },
+  { row: 1, label: "Middle Pleistocene (Chibanian)", t0: "774 ka", t1: "129 ka", color: "#f4eeb0", conf: "dated", note: "Named for a reference section in Japan and ratified in 2020. Its base is the Matuyama–Brunhes magnetic reversal." },
+  { row: 1, label: "Late Pleistocene", t0: "129 ka", t1: "11700 b2k", color: "#f8f3c6", conf: "dated", note: "Begins near the start of the last interglacial, about 129,000 years ago. The stage within it has no ratified name yet." },
+  { row: 1, label: "Greenlandian", t0: "11700 b2k", t1: "8236 b2k", color: "#fdf1d4", conf: "dated", note: "First of three Holocene ages ratified in 2018." },
+  { row: 1, label: "Northgrippian", t0: "8236 b2k", t1: "4250 b2k", color: "#fcebc4", conf: "dated", note: "Begins with the 8.2 ka cooling event, recorded in Greenland ice." },
+  { row: 1, label: "Meghalayan", t0: "4250 b2k", t1: "now", color: "#fbe5b6", conf: "dated", note: "Begins with the 4.2 ka aridity event, defined from a cave formation in Meghalaya, India." }
+];
+HGEO.forEach(norm);
+const HEXTRA = [
+  { id: "h-antecessor", label: "H. antecessor", t0: { est: "1.2 Ma", lo: "1.3 Ma", hi: "1.1 Ma" }, t1: { est: "800 ka", lo: "850 ka", hi: "770 ka" }, conf: "dated", status: "disputed", note: "Known from Atapuerca, Spain. Whether it is a separate species, and how it relates to later humans, is debated." },
+  { id: "h-luzonensis", label: "H. luzonensis", t0: { est: "67 ka", lo: "134 ka", hi: "60 ka" }, t1: { est: "50 ka", lo: "60 ka", hi: "45 ka" }, conf: "dated", note: "Known from a few teeth and bones in Callao Cave, Philippines, described in 2019. The dates are minimum ages." }
+];
+const HHOM = DS.hominins.records.concat(HEXTRA.map(norm)).filter(r => r._t0 && r._t1).sort((a, b) => b._t0.est - a._t0.est);
+
+const HV = (() => {
+  const cv = $("#h-cv"), ctx = cv.getContext("2d"), out = $("#h-readout");
+  const TMAX = 1e6, ML = 50, MR = 10, AXH = 40, ROW = 17, HROW = 15;
+  /* log of (years ago + 30): keeps the last few decades from eating a quarter of the width */
+  const P = { log: { c: t => -Math.log10(Math.max(t - NOW, 0) + 30), t: c => Math.pow(10, -c) - 30 + NOW }, linear: PROJ.linear };
+  const view = { mode: "log", c0: 0, c1: 1 };
+  let ymode = "log";
+  const POP = DS.population, PS = POP._sorted, COV0 = POP._cov0, FIRST = PS[0], YMAXL = 9e9;
+  let W = 0, H = 0, DPR = 1, raf = null, tween = null, hov = null, sel = null, labHits = [], stripHits = [], hatch = null, TOP = 40, BOT = 300, rowsReserved = 1;
+  const lastRow = {};
+  const pw = () => Math.max(W - ML - MR, 1);
+  const X = t => ML + (P[view.mode].c(Math.max(t, NOW)) - view.c0) / (view.c1 - view.c0) * pw();
+  const T = x => Math.min(TMAX, Math.max(P[view.mode].t(view.c0 + ((x - ML) / pw()) * (view.c1 - view.c0)), NOW));
+  function clamp(){
+    const p = P[view.mode], lo = p.c(TMAX), hi = p.c(NOW), minS = view.mode === "log" ? .02 : 8;
+    const s = Math.min(Math.max(view.c1 - view.c0, minS), hi - lo), m = (view.c0 + view.c1) / 2;
+    view.c0 = m - s / 2; view.c1 = m + s / 2;
+    if (view.c0 < lo){ view.c0 = lo; view.c1 = lo + s; }
+    if (view.c1 > hi){ view.c1 = hi; view.c0 = hi - s; }
+  }
+  function setRange(a, b){ const p = P[view.mode]; view.c0 = p.c(Math.min(a, TMAX)); view.c1 = p.c(Math.max(b, NOW)); clamp(); }
+  const Y = v => ymode === "log"
+    ? BOT - (Math.log10(Math.max(v, 1e3)) - 3) / 7 * (BOT - TOP - 4)
+    : BOT - Math.max(v, 0) / YMAXL * (BOT - TOP - 4);
+  function popAt(t){
+    if (t > COV0 || t > PS[0]._t) return null;
+    for (let i = 0; i < PS.length - 1; i++){
+      const a = PS[i], b = PS[i + 1];
+      if (t <= a._t && t >= b._t){
+        const f = (a._t - t) / ((a._t - b._t) || 1), L = (u, v) => Math.pow(10, Math.log10(u) + (Math.log10(v) - Math.log10(u)) * f);
+        const lo = L(a.lo, b.lo), hi = L(a.hi, b.hi); return { lo, hi, mid: Math.sqrt(lo * hi) };
+      }
+    }
+    const z = PS[PS.length - 1]; return { lo: z.lo, hi: z.hi, mid: Math.sqrt(z.lo * z.hi) };
+  }
+  const people = v => v >= 1e9 ? (v / 1e9).toFixed(v < 1e10 ? 1 : 0) + " billion" : v >= 1e6 ? Number((v / 1e6).toPrecision(2)) + " million" : Number(v.toPrecision(2)).toLocaleString("en");
+  const agoShort = ya => ya >= 1e6 ? +(ya / 1e6).toFixed(1) + "M" : ya >= 1e3 ? +(ya / 1e3).toFixed(1) + "k" : String(Math.round(ya));
+  const nice = raw => { const mag = Math.pow(10, Math.floor(Math.log10(Math.max(raw, 1e-9)))); return [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw); };
+  function xticks(){
+    const tL = T(ML), tR = T(ML + pw()), outT = [];
+    let title;
+    if (view.mode === "log"){
+      title = "years ago · logarithmic";
+      for (let e = 0; e <= 6; e++) for (const m of [1, 2, 5]){ const ya = m * Math.pow(10, e), t = ya + NOW; if (t <= tL + 1e-6 && t >= tR) outT.push({ t, l: agoShort(ya) }); }
+    } else if (tL - NOW > 15000){
+      title = "years ago";
+      const s = nice((tL - tR) / 5);
+      for (let ya = Math.ceil((tR - NOW) / s) * s; ya <= tL - NOW; ya += s) outT.push({ t: ya + NOW, l: ya === 0 ? "now" : agoShort(ya) });
+    } else {
+      title = "calendar years";
+      const yL = 2000 - tL, yR = 2000 - tR, s = nice((yR - yL) / 5);
+      for (let y = Math.ceil(yL / s) * s; y <= yR; y += s) outT.push({ t: 2000 - y, l: fmtY(y) });
+    }
+    return { list: outT.sort((a, b) => b.t - a.t), title };
+  }
+  const yticks = () => ymode === "log"
+    ? [[1e3, "1k"], [1e4, "10k"], [1e5, "100k"], [1e6, "1M"], [1e7, "10M"], [1e8, "100M"], [1e9, "1B"], [1e10, "10B"]]
+    : [[0, "0"], [2e9, "2B"], [4e9, "4B"], [6e9, "6B"], [8e9, "8B"]];
+  function resize(){ DPR = Math.min(window.devicePixelRatio || 1, 2); W = cv.clientWidth; hatch = null; rowsReserved = 1; }
+  function band(x0, x1, a, color){ const L = Math.max(ML, x0), R = Math.min(ML + pw(), x1); if (R - L > .3){ ctx.fillStyle = alpha(color, a); ctx.fillRect(L, TOP, R - L, BOT - TOP); } }
+  function fuzzyRect(p0, p1, y, h, a, color){
+    const xa = X(p0.older), xb = X(p0.younger), xc = X(p1.older), xd = X(p1.younger);
+    const L = Math.max(ML, Math.min(xa, xb)), R = Math.min(ML + pw(), Math.max(xc, xd)); if (R - L < .3) return null;
+    const w = (xd - xa) || 1, f = x => Math.max(0, Math.min(1, (x - xa) / w));
+    const g = ctx.createLinearGradient(xa, 0, xd, 0);
+    const stops = [[0, p0.certain ? a : 0], [f(xb), a], [Math.max(f(xb), f(xc)), a], [1, p1.certain ? a : 0]];
+    let last = -1; stops.forEach(([p, v]) => { const q = Math.min(Math.max(p, last + 1e-6), 1); last = q; g.addColorStop(q, alpha(color, v)); });
+    ctx.fillStyle = g; ctx.fillRect(L, y, R - L, h);
+    return { x0: L, x1: R };
+  }
+  function vline(x, dashed, color, wdt){
+    if (x < ML || x > ML + pw()) return;
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = wdt || 1.5; if (dashed) ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(Math.round(x) + .5, TOP); ctx.lineTo(Math.round(x) + .5, BOT); ctx.stroke(); ctx.restore();
+  }
+  function fitText(text, x0, x1, y, color, size){
+    const w = x1 - x0; if (w < 22) return;
+    ctx.font = `400 ${size}px "IBM Plex Sans", sans-serif`;
+    let s = text;
+    if (ctx.measureText(s).width > w - 8){
+      while (s.length > 2 && ctx.measureText(s + "…").width > w - 8) s = s.slice(0, -1);
+      if (s.length <= 2) return; s += "…";
+    }
+    ctx.fillStyle = color; ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText(s, x0 + 5, y);
+  }
+  const anchorX = m => {
+    if (m.kind === "threshold" && m._t.est != null) return X(m._t.est);
+    const a = Math.max(ML, X(m._o)), b = Math.min(ML + pw(), X(m._y)); return (a + b) / 2;
+  };
+  const visHom = () => HHOM.filter(r => Math.min(ML + pw(), X(r._t1.younger)) - Math.max(ML, X(r._t0.older)) > 3);
+  let homsCache = null;
+  const caption = (text, y) => { ctx.font = '400 10.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillText(text, 6, y); };
+
+  function draw(){
+    raf = null;
+    let anim = false;
+    if (tween){
+      const k = W ? Math.min(1, (performance.now() - tween.s) / tween.ms) : 1, e = ease(k);
+      setRange(ULYA(tween.f[0] + (tween.to[0] - tween.f[0]) * e), ULYA(tween.f[1] + (tween.to[1] - tween.f[1]) * e));
+      if (k < 1) anim = true; else tween = null;
+    }
+    if (!W) return;
+
+    /* marker label rows, greedy so they never overlap; while moving, labels keep their rows */
+    const busy = ptrs.size > 0 || !!tween;
+    ctx.font = '500 13px "IBM Plex Sans", sans-serif';
+    const rowsEnd = [], labs = [];
+    MARKERS.forEach(m => {
+      const xo = X(m._o), xy = X(m._y);
+      if (xy < ML - 1 || xo > ML + pw() + 1) return;
+      const ax = anchorX(m), w = ctx.measureText(m.short).width + 16;
+      const lx = Math.max(ML, Math.min(ax - w / 2, ML + pw() - w));
+      const free = q => !(rowsEnd[q] > lx - 4);
+      let r = busy && lastRow[m.id] != null && free(lastRow[m.id]) ? lastRow[m.id] : 0;
+      if (!free(r)){ r = 0; while (!free(r)) r++; }
+      lastRow[m.id] = r; rowsEnd[r] = lx + w; labs.push({ m, ax, lx, w, r });
+    });
+    /* layout never shrinks while panning, so nothing below the chart jumps */
+    rowsReserved = busy ? Math.max(rowsReserved, rowsEnd.length) : Math.max(1, rowsEnd.length);
+    const homs = busy && homsCache ? homsCache : (homsCache = visHom());
+    TOP = 16 + rowsReserved * 26;
+    BOT = TOP + (W < 600 ? 250 : 320);
+    const GEO_Y = BOT + AXH + 4, HOM_Y = GEO_Y + 15 + 2 * (ROW + 2) + 10;
+    H = HOM_Y + (homs.length ? 15 + homs.length * HROW : 0) + 10;
+    const cw = Math.round(W * DPR), ch = Math.round(H * DPR);
+    if (cv.width !== cw || cv.height !== ch){ cv.style.height = H + "px"; cv.width = cw; cv.height = ch; }
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    if (!hatch) hatch = makeHatch(ctx);
+    ctx.clearRect(0, 0, W, H);
+
+    /* grids */
+    ctx.font = '400 11px "IBM Plex Mono", monospace'; ctx.textBaseline = "middle"; ctx.textAlign = "right";
+    yticks().forEach(([v, l]) => {
+      const y = Math.round(Y(v)) + .5;
+      ctx.strokeStyle = PAL.rule2; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(ML, y); ctx.lineTo(ML + pw(), y); ctx.stroke();
+      ctx.fillStyle = PAL.ink3; ctx.fillText(l, ML - 8, y);
+    });
+    const xt = xticks(); ctx.textAlign = "center"; ctx.textBaseline = "top";
+    let last = -999;
+    xt.list.forEach(k => {
+      const x = X(k.t); if (x < ML - 1 || x > ML + pw() + 1) return;
+      ctx.strokeStyle = PAL.rule2; ctx.beginPath(); ctx.moveTo(Math.round(x) + .5, TOP); ctx.lineTo(Math.round(x) + .5, BOT); ctx.stroke();
+      if (x - last < 58) return; last = x;
+      ctx.strokeStyle = PAL.rule; ctx.beginPath(); ctx.moveTo(Math.round(x) + .5, BOT); ctx.lineTo(Math.round(x) + .5, BOT + 5); ctx.stroke();
+      ctx.fillStyle = PAL.ink3; ctx.fillText(k.l, Math.max(ML + 14, Math.min(x, ML + pw() - 18)), BOT + 8);
+    });
+    ctx.textAlign = "right"; ctx.font = '400 11px "IBM Plex Sans", sans-serif'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "top";
+    ctx.fillText(xt.title, ML + pw(), BOT + 24);
+    ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillText(ymode === "log" ? "people · log scale" : "people", ML + 6, TOP + 5);
+    ctx.strokeStyle = PAL.rule; ctx.beginPath(); ctx.moveTo(ML, BOT + .5); ctx.lineTo(ML + pw(), BOT + .5); ctx.stroke();
+
+    ctx.save(); ctx.beginPath(); ctx.rect(ML, TOP, pw(), BOT - TOP); ctx.clip();
+    /* before any estimate: a faint dotted line coasting low, saying only "small" */
+    const xo = X(COV0), yLow = Y(Math.sqrt(FIRST.lo * FIRST.hi));
+    if (xo > ML){
+      ctx.fillStyle = alpha(PAL.rule2, .55); ctx.fillRect(ML, TOP, xo - ML, BOT - TOP);
+      if (ymode === "log"){
+        const g = ctx.createLinearGradient(0, Y(1e5), 0, Y(1e3));
+        g.addColorStop(0, alpha(PAL.accent, 0)); g.addColorStop(.5, alpha(PAL.accent, .1)); g.addColorStop(1, alpha(PAL.accent, 0));
+        ctx.fillStyle = g; ctx.fillRect(ML, Y(1e5), xo - ML, Y(1e3) - Y(1e5));
+      }
+      ctx.strokeStyle = alpha(PAL.accent, .7); ctx.lineWidth = 2; ctx.setLineDash([2, 6]); ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(ML, yLow); ctx.lineTo(xo, yLow); ctx.stroke(); ctx.setLineDash([]); ctx.lineCap = "butt";
+      ctx.strokeStyle = PAL.ink4; ctx.lineWidth = 1; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(xo, TOP); ctx.lineTo(xo, BOT); ctx.stroke(); ctx.setLineDash([]);
+      const w = xo - ML; ctx.fillStyle = PAL.ink3; ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.font = '400 12px "IBM Plex Sans", sans-serif';
+      const ty = Math.min(yLow, BOT) - (ymode === "log" ? 34 : 14);
+      if (w > 260){ ctx.fillText("Not estimated. The dotted line says only 'small':", ML + w / 2, ty); ctx.fillText("thousands to tens of thousands, not a figure", ML + w / 2, ty + 16); }
+      else if (w > 90) ctx.fillText("not estimated", ML + w / 2, ty + 16);
+    }
+    /* marker fills */
+    MARKERS.forEach(m => {
+      const a = sel === m ? .2 : .1;
+      if (m.kind === "threshold"){
+        band(X(m._t.older), X(m._t.younger), a, PAL.mark);
+        if (m.conf === "disputed"){ const L = Math.max(ML, X(m._t.older)), R = Math.min(ML + pw(), X(m._t.younger)); if (R - L > 4){ ctx.fillStyle = hatch; ctx.globalAlpha = .45; ctx.fillRect(L, TOP, R - L, BOT - TOP); ctx.globalAlpha = 1; } }
+      } else fuzzyRect(m._t0, m._t1, TOP, BOT - TOP, a, PAL.mark);
+    });
+    /* population: haze for the range, a strong line through its middle */
+    const pts = [];
+    for (let px = Math.max(ML, xo); px <= ML + pw() + 2; px += 2){ const p = popAt(T(Math.min(px, ML + pw()))); if (p) pts.push([px, p]); }
+    if (pts.length > 1){
+      [1, .62, .3].forEach(f => {
+        ctx.beginPath();
+        pts.forEach(([x, p], i) => { const y = Y(p.mid * Math.pow(p.hi / p.mid, f)); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+        for (let i = pts.length - 1; i >= 0; i--){ const [x, p] = pts[i]; ctx.lineTo(x, Y(p.mid * Math.pow(p.lo / p.mid, f))); }
+        ctx.closePath(); ctx.fillStyle = alpha(PAL.accent, .1); ctx.fill();
+      });
+      ctx.beginPath(); pts.forEach(([x, p], i) => { const y = Y(p.mid); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      ctx.strokeStyle = PAL.accent; ctx.lineWidth = 2.6; ctx.lineJoin = "round"; ctx.stroke();
+    }
+    /* marker lines */
+    MARKERS.forEach(m => {
+      const on = sel === m, col = alpha(PAL.mark, on ? 1 : .8);
+      if (m.kind === "threshold" && m._t.est != null) vline(X(m._t.est), !["dated", "recorded", "measured"].includes(m.conf), col, on ? 2 : 1.5);
+      if (m.kind === "span" && m._t1.certain) vline(X(m._t1.est), false, col, on ? 2 : 1.5);
+    });
+    ctx.restore();
+
+    /* strips: geological time, then hominin species */
+    stripHits = [];
+    ctx.save(); ctx.beginPath(); ctx.rect(0, GEO_Y - 4, W, H - GEO_Y + 4); ctx.clip();
+    ctx.strokeStyle = PAL.rule; ctx.beginPath(); ctx.moveTo(0, GEO_Y - 3.5); ctx.lineTo(W, GEO_Y - 3.5); ctx.stroke();
+    caption("Geological time · ICS", GEO_Y);
+    [0, 1].forEach(row => {
+      const y = GEO_Y + 15 + row * (ROW + 2);
+      HGEO.filter(g => g.row === row).forEach(g => {
+        const r = fuzzyRect(g._t0, g._t1, y, ROW, 1, g.color); if (!r) return;
+        if (g.status === "rejected" && r.x1 - r.x0 > 4){ ctx.fillStyle = hatch; ctx.fillRect(r.x0, y, r.x1 - r.x0, ROW); }
+        ctx.strokeStyle = alpha(PAL.card, 1); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(r.x0 + .5, y); ctx.lineTo(r.x0 + .5, y + ROW); ctx.stroke();
+        fitText(g.label, r.x0, r.x1, y + ROW / 2, "#22272a", 11);
+        stripHits.push({ x0: r.x0, x1: r.x1, y0: y, y1: y + ROW, info: g, ds: DS.geo });
+      });
+    });
+    if (homs.length){
+      caption("Hominin species" + (W > 560 ? " · first and last appearance, not existence" : ""), HOM_Y);
+      homs.forEach((r, i) => {
+        const y = HOM_Y + 15 + i * HROW, d = r.status === "disputed", sap = r.id === "h-sapiens";
+        const res = fuzzyRect(r._t0, r._t1, y, HROW - 3, 1, sap ? PAL.accent : d ? PAL.disp : PAL.bar); if (!res) return;
+        if (d && res.x1 - res.x0 > 6){ ctx.fillStyle = hatch; ctx.fillRect(res.x0, y, res.x1 - res.x0, HROW - 3); }
+        fitText(r.label, res.x0, res.x1, y + (HROW - 3) / 2, sap ? PAL.onaccent : d ? PAL.dispink : PAL.barink, 10.5);
+        stripHits.push({ x0: res.x0, x1: res.x1, y0: y, y1: y + HROW - 3, info: r, ds: DS.hominins });
+      });
+    }
+    ctx.restore();
+
+    /* hover line through everything */
+    if (hov != null && hov >= ML && hov <= ML + pw()){
+      ctx.strokeStyle = alpha(PAL.ink, .3); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(Math.round(hov) + .5, TOP); ctx.lineTo(Math.round(hov) + .5, H - 6); ctx.stroke();
+    }
+
+    /* marker labels */
+    labHits = [];
+    labs.forEach(({ m, ax, lx, w, r }) => {
+      const y = 10 + r * 26, on = sel === m, axc = Math.max(ML, Math.min(ML + pw(), ax));
+      ctx.strokeStyle = alpha(PAL.mark, .45); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(Math.round(axc) + .5, y + 21); ctx.lineTo(Math.round(axc) + .5, TOP); ctx.stroke();
+      ctx.fillStyle = on ? PAL.mark : alpha(PAL.mark, .11);
+      ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(lx, y, w, 21, 11); else ctx.rect(lx, y, w, 21); ctx.fill();
+      ctx.fillStyle = on ? PAL.card : PAL.mark; ctx.font = '500 13px "IBM Plex Sans", sans-serif'; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+      ctx.fillText(m.short, lx + 8, y + 11);
+      labHits.push({ x0: lx, x1: lx + w, y0: y, y1: y + 21, m });
+    });
+
+    /* hover box */
+    if (hov != null && hov >= ML && hov <= ML + pw()){
+      const t = T(hov), p = popAt(t);
+      const lines = [[fmtAgo(t), PAL.ink, 500], p ? ["about " + people(p.mid) + " people", PAL.accent, 500] : ["population not estimated", PAL.ink3, 400], p ? ["range " + people(p.lo) + " to " + people(p.hi), PAL.ink3, 400] : null].filter(Boolean);
+      let bw = 0; lines.forEach(([s, , wt]) => { ctx.font = `${wt} 13px "IBM Plex Sans", sans-serif`; bw = Math.max(bw, ctx.measureText(s).width); });
+      bw += 20; const bh = 12 + lines.length * 18;
+      let bx = hov + 12; if (bx + bw > ML + pw()) bx = hov - 12 - bw;
+      const by = TOP + 8;
+      ctx.fillStyle = alpha(PAL.card, .95); ctx.strokeStyle = PAL.rule; ctx.lineWidth = 1;
+      ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 6); else ctx.rect(bx, by, bw, bh); ctx.fill(); ctx.stroke();
+      ctx.textAlign = "left"; ctx.textBaseline = "top";
+      lines.forEach(([s, c, wt], i) => { ctx.fillStyle = c; ctx.font = `${wt} 13px "IBM Plex Sans", sans-serif`; ctx.fillText(s, bx + 10, by + 7 + i * 18); });
+    }
+    if (anim) schedule();
+  }
+  function schedule(){ if (!raf) raf = requestAnimationFrame(draw); }
+
+  const EMPTY = '<p class="empty">Hover or tap the chart to read the population estimate at that moment. Tap a marker name, a geological period or a species for its dates and how firm they are.</p>';
+  function select(m){
+    sel = m; syncChips();
+    if (!m){ out.innerHTML = EMPTY; schedule(); return; }
+    let range;
+    if (m.kind === "threshold") range = m._t.est != null ? fmtAgo(m._t.est) + "   ·   plausible range " + fmtAgo(m._t.older) + " to " + fmtAgo(m._t.younger) : "somewhere between " + fmtAgo(m._t.older) + " and " + fmtAgo(m._t.younger);
+    else range = fmtAgo(m._t0.est) + "  →  " + fmtAgo(m._t1.est);
+    showInfo(out, { label: m.label, note: m.note, conf: m.conf, _rangeText: range }, {}, { src: "No source yet. Placeholder." });
+    schedule();
+  }
+  function animateTo(a, b){
+    const from = [T(ML), T(ML + pw())];
+    if (REDUCED() || !W){ tween = null; setRange(a, b); schedule(); return; }
+    tween = { f: [LYA(from[0]), LYA(from[1])], to: [LYA(Math.min(a, TMAX)), LYA(b)], s: performance.now(), ms: 850 };
+    schedule();
+  }
+  function zoomAt(px, f){
+    tween = null;
+    const fx = (px - ML) / pw(), cAt = view.c0 + fx * (view.c1 - view.c0), s = (view.c1 - view.c0) * f;
+    view.c0 = cAt - fx * s; view.c1 = view.c0 + s; clamp(); schedule();
+  }
+
+  /* controls */
+  const chipBox = $("#h-chips");
+  chipBox.innerHTML = '<button class="chip" data-id="all">All 1 million years</button>' + MARKERS.map(m => `<button class="chip mk" data-id="${m.id}">${m.label}</button>`).join("");
+  chipBox.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.id === "all"){ animateTo(TMAX, NOW); select(null); return; }
+    const m = MARKERS.find(x => x.id === b.dataset.id); animateTo(m._v[0], m._v[1]); select(m);
+  });
+  function syncChips(){ [...chipBox.children].forEach(b => b.classList.toggle("on", !!sel && b.dataset.id === sel.id)); }
+  function setMode(m){
+    const a = T(ML), b = T(ML + pw()); tween = null; view.mode = m; setRange(a, b);
+    $("#h-log").classList.toggle("on", m === "log"); $("#h-lin").classList.toggle("on", m === "linear"); schedule();
+  }
+  function setY(m){ ymode = m; $("#h-ylog").classList.toggle("on", m === "log"); $("#h-ylin").classList.toggle("on", m === "linear"); schedule(); }
+  $("#h-log").onclick = () => setMode("log");
+  $("#h-lin").onclick = () => setMode("linear");
+  $("#h-ylog").onclick = () => setY("log");
+  $("#h-ylin").onclick = () => setY("linear");
+  $("#h-zin").onclick = () => zoomAt(ML + pw() / 2, .55);
+  $("#h-zout").onclick = () => zoomAt(ML + pw() / 2, 1.8);
+
+  cv.addEventListener("wheel", e => { e.preventDefault(); zoomAt(e.clientX - cv.getBoundingClientRect().left, Math.exp(e.deltaY * .0016)); }, { passive: false });
+  const ptrs = new Map(); let lastDist = 0, dragged = false;
+  cv.addEventListener("pointerdown", e => {
+    tween = null; ptrs.set(e.pointerId, e); dragged = false;
+    if (e.pointerType === "mouse") cv.setPointerCapture(e.pointerId);
+    if (ptrs.size === 2){ const p = [...ptrs.values()]; lastDist = Math.abs(p[0].clientX - p[1].clientX); }
+  });
+  cv.addEventListener("pointermove", e => {
+    const r = cv.getBoundingClientRect();
+    if (!ptrs.has(e.pointerId)){ if (e.pointerType === "mouse"){ hov = e.clientX - r.left; schedule(); } return; }
+    const prev = ptrs.get(e.pointerId); ptrs.set(e.pointerId, e);
+    if (ptrs.size === 1){
+      const dx = e.clientX - prev.clientX; if (Math.abs(dx) > 1) dragged = true;
+      const s = view.c1 - view.c0; view.c0 -= dx / pw() * s; view.c1 -= dx / pw() * s; clamp();
+      if (e.pointerType === "mouse") hov = e.clientX - r.left;
+      schedule();
+    } else if (ptrs.size === 2){
+      const p = [...ptrs.values()], dist = Math.abs(p[0].clientX - p[1].clientX) || 1;
+      if (lastDist) zoomAt((p[0].clientX + p[1].clientX) / 2 - r.left, lastDist / dist);
+      lastDist = dist; dragged = true;
+    }
+  });
+  cv.addEventListener("pointerleave", e => { if (e.pointerType === "mouse" && !ptrs.size){ hov = null; schedule(); } });
+  ["pointerup", "pointercancel"].forEach(ev => cv.addEventListener(ev, e => {
+    const r = cv.getBoundingClientRect(), single = ptrs.size === 1;
+    ptrs.delete(e.pointerId); lastDist = 0; schedule();
+    if (ev !== "pointerup" || !single || dragged) return;
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const lh = labHits.find(h => x >= h.x0 && x <= h.x1 && y >= h.y0 && y <= h.y1);
+    if (lh){ if (sel === lh.m){ select(null); return; } animateTo(lh.m._v[0], lh.m._v[1]); select(lh.m); return; }
+    const sh = stripHits.find(h => x >= h.x0 - 1 && x <= h.x1 + 1 && y >= h.y0 && y <= h.y1);
+    if (sh){ sel = null; syncChips(); hov = x; showInfo(out, sh.info, sh.ds); schedule(); return; }
+    if (y >= TOP && y <= BOT && x >= ML){
+      hov = x;
+      const t = T(x), inside = MARKERS.filter(m => t <= m._o && t >= m._y).sort((a, b) => (a._o - a._y) - (b._o - b._y));
+      select(inside[0] || null);
+    }
+  }));
+  cv.addEventListener("dblclick", e => zoomAt(e.clientX - cv.getBoundingClientRect().left, .5));
+  const ro = new ResizeObserver(() => { if (cv.clientWidth !== W){ resize(); schedule(); } });
+  ro.observe(cv);
+  setRange(TMAX, NOW);
+  return { schedule };
+})();
+
+/* ================= FULL ATLAS TAB ================= */
+const A = createView({
+  canvas: $("#a-cv"), mini: $("#a-mm"), readout: $("#a-readout"), wheel: true,
+  onFrame: r => { $("#a-rbl").textContent = fmtT(r.left); $("#a-rbr").textContent = fmtT(r.right); $("#a-rbs").textContent = fmtSpan(r.span); }
+});
+A.setScheme("threeage"); A.setHighlights(["holocene"]); A.setModeRange("log", 340000, NOW);
+ATLAS.overlays.presets.forEach(p => {
+  const b = document.createElement("button"); b.className = "chip"; b.textContent = p.label;
+  b.onclick = () => A.animateTo(p._t0, p._t1); $("#a-presets").appendChild(b);
+});
+$("#a-lin").onclick = () => { A.setMode("linear"); syncAtlas(); };
+$("#a-log").onclick = () => { A.setMode("log"); syncAtlas(); };
+Object.entries(DS.schemes.items).forEach(([k, v]) => {
+  const b = document.createElement("button"); b.className = "chip"; b.textContent = v.label; b.dataset.k = k;
+  b.onclick = () => { A.setScheme(k); syncAtlas(); }; $("#a-schemes").appendChild(b);
+});
+ATLAS.overlays.highlights.forEach(hl => {
+  const b = document.createElement("button"); b.className = "chip"; b.textContent = hl.label; b.dataset.k = hl.id;
+  b.onclick = () => { const s = A.st.active; s.has(hl.id) ? s.delete(hl.id) : s.add(hl.id); A.schedule(); syncAtlas(); };
+  $("#a-hl").appendChild(b);
+});
+ATLAS.lanes.forEach(l => {
+  const lab = document.createElement("label"); lab.className = "tog";
+  const cb = document.createElement("input"); cb.type = "checkbox"; cb.dataset.k = l.id;
+  cb.onchange = () => { A.st.enabled[l.id] = cb.checked; A.schedule(); syncAtlas(); };
+  lab.append(cb, document.createTextNode(l.label)); $("#a-lanes").appendChild(lab);
+});
+function syncAtlas(){
+  $("#a-lin").classList.toggle("on", A.view.mode === "linear"); $("#a-log").classList.toggle("on", A.view.mode === "log");
+  [...$("#a-schemes").children].forEach(c => c.classList.toggle("on", c.dataset.k === A.st.scheme));
+  [...$("#a-hl").children].forEach(c => c.classList.toggle("on", A.st.active.has(c.dataset.k)));
+  [...$("#a-lanes").querySelectorAll("input")].forEach(cb => { cb.checked = !!A.st.enabled[cb.dataset.k]; cb.parentNode.classList.toggle("off", !cb.checked); });
+}
+syncAtlas();
+$("#a-zin").onclick = () => A.zoom(.55);
+$("#a-zout").onclick = () => A.zoom(1.8);
+(function status(){
+  const flagged = Object.entries(DS).filter(([, d]) => ["fabricated", "speculative"].includes(d.conf)).map(([k]) => k);
+  let n = 0; Object.values(DS).forEach(d => { if (d.records) n += d.records.length; if (d.items) Object.values(d.items).forEach(s => s.rows.forEach(r => n += r.items.length)); });
+  $("#a-status").innerHTML = `<b>Not researched.</b> ${n} intervals and ${Object.keys(ATLAS.sources).length - 1} registered sources, none yet ingested. Lanes that are invented or speculative in their entirety: ${flagged.join(", ")}.`;
+})();
+
+/* ================= STORIES ================= */
+const STORIES = [
+  { id: "reading", title: "How to read this chart", dek: "The visual conventions used throughout the atlas.", scenes: [
+    { t0: "500 ka", t1: "now", lanes: ["hominins"], text: "Faded ends mark uncertainty. Each end of a bar fades across the range of plausible dates, from oldest to youngest, instead of pretending to a single year. Ranges here are first and last appearances in a sparse fossil record, so species probably lived beyond both ends." },
+    { t0: "800 ka", t1: "100 ka", lanes: ["hominins"], text: "Hatching marks a disputed category. Homo heidelbergensis is increasingly treated as a label of convenience rather than a species, and Denisovans are defined mostly from DNA. Tap any bar for its dates, how firm they are, and where a real figure would come from." },
+    { t0: "1.0 Ma", t1: "now", mode: "log", lanes: ["pop", "evidence"], text: "Pale grey with a dashed edge means no data. The population lane starts 300,000 years ago; further left the value is unknown, which is not the same as zero. The strip below it is not about the past at all: it shows how much can be said about each era." },
+    { t0: "12 ka", t1: "now", lanes: ["polity", "pop"], text: "Some lanes carry far more uncertainty than others. The political-forms lane is labelled an impression, not data: nobody has these numbers, and categories such as 'chiefdom' are themselves contested. The more finished such a lane looks, the more it overstates what is known." }
+  ]},
+  { id: "periods", title: "Same label, different worlds", dek: "Periodisation schemes cut the same millennia in incompatible ways.", scenes: [
+    { t0: "12 ka", t1: "now", scheme: "threeage", lanes: ["scheme", "regions"], text: "The Stone, Bronze and Iron Age sequence was devised in Denmark in the 1830s to arrange a museum collection. It was later stretched into a world history it was never designed to be." },
+    { t0: "6500 b2k", t1: "2000 b2k", scheme: "threeage", lanes: ["scheme"], text: "In this placeholder data the Bronze Age begins in Southwest Asia around 3300 BCE and in Britain around 2400 BCE. The same label covers worlds roughly nine centuries apart, and the label hides that." },
+    { t0: "75 ka", t1: "now", scheme: "threeage", lanes: ["scheme", "regions"], text: "In Australia the scheme does not apply at all. There is no Bronze Age, and calling some 65,000 years of continuous occupation a 'Stone Age' says more about the classification than about the people classified." },
+    { t0: "20 ka", t1: "now", scheme: "modes", lanes: ["scheme", "regions"], text: "The Marxian sequence of modes of production divides the same span by social relations instead of tools. Its universality was contested from the start, including by Marx in late writings on societies outside Western Europe." },
+    { t0: "3.0 Ma", t1: "now", mode: "log", scheme: "climate", lanes: ["scheme", "geo"], text: "A climate-led scheme moves the turning points again: the onset of glacial cycles, the shift to 100,000-year cycles, the Last Glacial Maximum, and the unusually stable Holocene in which all farming took place." }
+  ]},
+  { id: "cousins", title: "Not the only humans", dek: "For most of the past two million years, several kinds of hominin lived at once.", scenes: [
+    { t0: "7.5 Ma", t1: "now", lanes: ["geo", "hominins"], text: "Seven million years of hominins on a linear axis, where length is true duration. Hatched bars are disputed: Sahelanthropus may not be a hominin at all, and H. habilis may combine material from more than one species." },
+    { t0: "3.0 Ma", t1: "1.0 Ma", lanes: ["hominins"], text: "Between about 2.5 and 1.5 million years ago, Paranthropus, early Homo and Homo erectus overlap. Homo erectus is the longest-lived member of the genus by a wide margin." },
+    { t0: "500 ka", t1: "now", lanes: ["hominins"], hl: ["ooa"], text: "Around 300,000 years ago Homo sapiens appears alongside Neanderthals, Denisovans and Homo naledi. Denisovans are known mostly from DNA and a handful of fragments, so their bar is close to a guess." },
+    { t0: "120 ka", t1: "20 ka", lanes: ["hominins", "regions"], hl: ["ooa"], text: "By around 40,000 years ago the last Neanderthals disappear from the record, and Homo floresiensis somewhat earlier. Since then Homo sapiens has been the only hominin known to survive, which is unusual in the history of the lineage." }
+  ]},
+  { id: "ice", title: "People and the ice", dek: "Dispersal, a supervolcano and the Last Glacial Maximum.", scenes: [
+    { t0: "150 ka", t1: "10 ka", lanes: ["hominins", "regions", "pop"], hl: ["ooa", "toba"], text: "The main dispersal out of Africa is placed roughly 70,000 to 45,000 years ago, though the dates keep moving. The Toba eruption about 74,000 years ago is firmly dated; the idea that it nearly wiped out humanity is now widely doubted." },
+    { t0: "40 ka", t1: "8000 b2k", lanes: ["regions", "pop"], hl: ["lgm"], text: "At the Last Glacial Maximum, about 26,500 to 19,000 years ago, sea level stood roughly 120 metres lower. Many coastlines people lived on are now underwater, which skews the surviving evidence toward inland sites." },
+    { t0: "36 ka", t1: "10 ka", lanes: ["regions"], hl: ["lgm"], text: "Claims for the first settlement of the Americas run from about 15,000 to more than 30,000 years ago. The bar is hatched because specialists dispute the evidence at both ends on methodological grounds." },
+    { t0: "14 ka", t1: "now", scheme: "climate", lanes: ["scheme", "geo", "regions"], hl: ["holocene"], text: "The Holocene began 11,700 years before 2000 CE, a boundary fixed to a specific layer in a Greenland ice core. Its climate has been unusually stable, and every farming society falls inside it." }
+  ]},
+  { id: "anthropocene", title: "The epoch that was voted down", dek: "Where should the present begin?", scenes: [
+    { t0: "13 ka", t1: "now", lanes: ["geo"], hl: ["holocene"], text: "Geologists define epochs by physical markers in rock or ice. The start of the Holocene is one of the few boundaries on this chart tied to a ratified marker, in the NGRIP ice core from Greenland." },
+    { t0: "1720 CE", t1: "now", lanes: ["geo", "pop", "energy"], hl: ["fossil"], text: "A formal Anthropocene epoch beginning in the early 1950s was proposed, and rejected in a 2024 vote by the relevant stratigraphic body. It stays on the chart, hatched, because the underlying question remains open." },
+    { t0: "13 ka", t1: "now", lanes: ["geo", "regions"], hl: ["agriculture", "fossil"], text: "Proposed start dates have ranged from the spread of farming to mid-twentieth-century nuclear tests. Each choice tells a different story about what changed, and who changed it." }
+  ]}
+];
+const S = createView({
+  canvas: $("#s-cv"), mini: $("#s-mm"), readout: $("#s-readout"), wheel: false, minH: 200,
+  onFrame: r => { $("#s-rbl").textContent = fmtT(r.left); $("#s-rbr").textContent = fmtT(r.right); $("#s-rbs").textContent = fmtSpan(r.span); }
+});
+const cur = { s: -1, k: 0 };
+$("#s-list").innerHTML = STORIES.map((s, i) => `<button class="st-item" data-i="${i}" aria-current="false"><b>${s.title}</b><span>${s.dek}</span></button>`).join("");
+$("#s-list").addEventListener("click", e => { const b = e.target.closest("button"); if (b) go("story-" + STORIES[+b.dataset.i].id); });
+function openStory(i, k){
+  cur.s = i;
+  [...$("#s-list").children].forEach((b, j) => b.setAttribute("aria-current", j === i));
+  const s = STORIES[i];
+  $("#s-title").textContent = s.title; $("#s-dek").textContent = s.dek;
+  $("#s-dots").innerHTML = s.scenes.map((_, j) => `<button data-k="${j}" aria-label="View ${j + 1} of ${s.scenes.length}">${j + 1}</button>`).join("");
+  scene(k || 0);
+}
+function scene(k){
+  const s = STORIES[cur.s], sc = s.scenes[k]; cur.k = k;
+  S.setScheme(sc.scheme || "none"); S.setLanes(sc.lanes); S.setHighlights(sc.hl || []);
+  S.animateTo(parseTime(sc.t0), parseTime(sc.t1), sc.mode || "linear");
+  $("#s-text").textContent = sc.text;
+  [...$("#s-dots").children].forEach((b, j) => b.classList.toggle("on", j === k));
+  $("#s-prev").disabled = cur.s === 0 && k === 0;
+  $("#s-next").disabled = cur.s === STORIES.length - 1 && k === s.scenes.length - 1;
+  $("#s-next").textContent = k === s.scenes.length - 1 && cur.s < STORIES.length - 1 ? "Next story →" : "Next →";
+  const flagged = sc.lanes.map(id => LANE[id]).filter(l => l && DS[l.dataset] && ["fabricated", "speculative"].includes(DS[l.dataset].conf))
+    .map(l => l.label + (DS[l.dataset].conf === "fabricated" ? " is invented; read its shape only" : " is a speculative impression"));
+  $("#s-data").innerHTML = "<b>Not researched.</b> All values in this view are unsourced placeholders." + (flagged.length ? " " + flagged.join("; ") + "." : "");
+  $("#s-readout").innerHTML = '<p class="empty">Tap a bar or band for details. Arrow keys step through the story.</p>';
+}
+function setStoryHash(){ try { history.replaceState(null, "", "#story-" + STORIES[cur.s].id); } catch (e){} }
+function step(d){
+  const s = STORIES[cur.s]; let k = cur.k + d;
+  if (k >= s.scenes.length){ if (cur.s < STORIES.length - 1){ openStory(cur.s + 1, 0); setStoryHash(); } return; }
+  if (k < 0){ if (cur.s > 0){ openStory(cur.s - 1, STORIES[cur.s - 1].scenes.length - 1); setStoryHash(); } return; }
+  scene(k);
+}
+$("#s-dots").addEventListener("click", e => { const b = e.target.closest("button"); if (b) scene(+b.dataset.k); });
+$("#s-prev").onclick = () => step(-1);
+$("#s-next").onclick = () => step(1);
+$("#s-zin").onclick = () => S.zoom(.55);
+$("#s-zout").onclick = () => S.zoom(1.8);
+$("#s-open").onclick = () => {
+  const [a, b] = S.range();
+  A.setModeRange(S.view.mode, a, b); A.setScheme(S.st.scheme); A.setHighlights([...S.st.active]);
+  ATLAS.lanes.forEach(l => A.st.enabled[l.id] = !!S.st.enabled[l.id]);
+  syncAtlas(); go("atlas");
+};
+const fsEl = $("#p-stories");
+if (!fsEl.requestFullscreen) $("#s-full").hidden = true;
+$("#s-full").onclick = () => {
+  try {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else fsEl.requestFullscreen().catch(() => { $("#s-full").hidden = true; });
+  } catch (e){ $("#s-full").hidden = true; }
+};
+document.addEventListener("fullscreenchange", () => { $("#s-full").textContent = document.fullscreenElement ? "Exit full screen" : "Full screen"; });
+document.addEventListener("keydown", e => {
+  if ($("#p-stories").hidden || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if (e.key === "ArrowRight"){ e.preventDefault(); step(1); }
+  if (e.key === "ArrowLeft"){ e.preventDefault(); step(-1); }
+});
+
+/* ================= ABOUT ================= */
+$("#src-table tbody").innerHTML = Object.entries(ATLAS.sources).filter(([k]) => k !== "placeholder").map(([, s]) => {
+  const esc = x => String(x || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const title = s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>` : esc(s.title);
+  return `<tr><td>${title}</td><td>${esc(s.org || s.authors)}${s.year ? ", " + s.year : ""}</td><td>${esc(s.license)}</td><td class="status">${esc(s.status)}</td></tr>`;
+}).join("");
+
+/* ================= ROUTING ================= */
+const TABS = ["human", "atlas", "stories", "about"];
+function show(tab){
+  TABS.forEach(t => { $("#p-" + t).hidden = t !== tab; $("#t-" + t).setAttribute("aria-selected", String(t === tab)); });
+  requestAnimationFrame(() => { HV.schedule(); A.schedule(); S.schedule(); });
+}
+function routeTo(h){
+  if (h.indexOf("story-") === 0){
+    const i = STORIES.findIndex(s => "story-" + s.id === h);
+    show("stories");
+    if (i >= 0 && i !== cur.s) openStory(i, 0); else if (cur.s < 0) openStory(0, 0);
+    return;
+  }
+  if (h === "stories"){ show("stories"); if (cur.s < 0) openStory(0, 0); return; }
+  show(TABS.includes(h) ? h : "human");
+}
+const route = () => routeTo(decodeURIComponent(location.hash.slice(1)));
+/* switch views directly; the address is updated where the frame allows it, never relied on */
+function go(name){
+  try { history.replaceState(null, "", "#" + name); } catch (e){}
+  routeTo(name);
+}
+document.querySelectorAll(".tabs a").forEach(a => a.addEventListener("click", e => { e.preventDefault(); go(a.getAttribute("href").slice(1)); }));
+window.addEventListener("hashchange", route);
+route();
+
+/* theme and fonts */
+const redraw = () => { readPal(); HV.schedule(); A.schedule(); S.schedule(); };
+new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+}
+</script>
+</body>
+</html>
