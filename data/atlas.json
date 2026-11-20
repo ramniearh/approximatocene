@@ -98,11 +98,11 @@
     "ics": {
       "title": "International Chronostratigraphic Chart",
       "org": "International Commission on Stratigraphy",
-      "year": 2023,
+      "year": "2024/12",
       "url": "https://stratigraphy.org/chart",
-      "license": "CC BY",
-      "format": "PDF / machine-readable",
-      "status": "not yet ingested"
+      "license": "CC BY 4.0",
+      "format": "web chart (data copied to data/reference/geologic_time_ics.csv)",
+      "status": "ingested"
     },
     "hyde": {
       "title": "HYDE 3.3 — History Database of the Global Environment",
@@ -183,8 +183,8 @@
       "org": "Smithsonian NMNH",
       "url": "https://humanorigins.si.edu/evidence/human-fossils/species",
       "license": "educational use",
-      "format": "HTML",
-      "status": "not yet ingested"
+      "format": "web pages (data copied to data/reference/hominin_species_smithsonian.csv)",
+      "status": "ingested"
     },
     "pbdb": {
       "title": "Paleobiology Database",
@@ -256,7 +256,7 @@
       "label": "Hominin species",
       "dataset": "hominins",
       "encoding": "intervals",
-      "height": 148,
+      "height": 190,
       "minSpan": 0,
       "maxSpan": 25000000.0
     },
@@ -327,8 +327,12 @@
           "id": "hadean",
           "label": "Hadean",
           "rank": 0,
-          "t0": "4.60 Ga",
-          "t1": "4.03 Ga",
+          "t0": "4567 Ma",
+          "t1": {
+            "est": "4031 Ma",
+            "lo": "4034 Ma",
+            "hi": "4028 Ma"
+          },
           "color": "#c9a3b4",
           "conf": "dated"
         },
@@ -336,8 +340,12 @@
           "id": "archean",
           "label": "Archean",
           "rank": 0,
-          "t0": "4.03 Ga",
-          "t1": "2.50 Ga",
+          "t0": {
+            "est": "4031 Ma",
+            "lo": "4034 Ma",
+            "hi": "4028 Ma"
+          },
+          "t1": "2500 Ma",
           "color": "#e0a8c6",
           "conf": "dated"
         },
@@ -345,8 +353,12 @@
           "id": "proterozoic",
           "label": "Proterozoic",
           "rank": 0,
-          "t0": "2.50 Ga",
-          "t1": "538.8 Ma",
+          "t0": "2500 Ma",
+          "t1": {
+            "est": "538.8 Ma",
+            "lo": "539.4 Ma",
+            "hi": "538.2 Ma"
+          },
           "color": "#eeb6cf",
           "conf": "dated"
         },
@@ -354,7 +366,11 @@
           "id": "phanerozoic",
           "label": "Phanerozoic",
           "rank": 0,
-          "t0": "538.8 Ma",
+          "t0": {
+            "est": "538.8 Ma",
+            "lo": "539.4 Ma",
+            "hi": "538.2 Ma"
+          },
           "t1": "now",
           "color": "#bfd8bf",
           "conf": "dated"
@@ -363,8 +379,16 @@
           "id": "paleozoic",
           "label": "Palaeozoic",
           "rank": 1,
-          "t0": "538.8 Ma",
-          "t1": "251.9 Ma",
+          "t0": {
+            "est": "538.8 Ma",
+            "lo": "539.4 Ma",
+            "hi": "538.2 Ma"
+          },
+          "t1": {
+            "est": "251.902 Ma",
+            "lo": "251.926 Ma",
+            "hi": "251.878 Ma"
+          },
           "color": "#b3d3c2",
           "conf": "dated"
         },
@@ -372,8 +396,12 @@
           "id": "mesozoic",
           "label": "Mesozoic",
           "rank": 1,
-          "t0": "251.9 Ma",
-          "t1": "66.0 Ma",
+          "t0": {
+            "est": "251.902 Ma",
+            "lo": "251.926 Ma",
+            "hi": "251.878 Ma"
+          },
+          "t1": "66.00 Ma",
           "color": "#b7dce6",
           "conf": "dated"
         },
@@ -381,7 +409,7 @@
           "id": "cenozoic",
           "label": "Cenozoic",
           "rank": 1,
-          "t0": "66.0 Ma",
+          "t0": "66.00 Ma",
           "t1": "now",
           "color": "#f4dca6",
           "conf": "dated"
@@ -390,8 +418,16 @@
           "id": "cambrian",
           "label": "Cambrian",
           "rank": 2,
-          "t0": "538.8 Ma",
-          "t1": "485.4 Ma",
+          "t0": {
+            "est": "538.8 Ma",
+            "lo": "539.4 Ma",
+            "hi": "538.2 Ma"
+          },
+          "t1": {
+            "est": "486.85 Ma",
+            "lo": "488.35 Ma",
+            "hi": "485.35 Ma"
+          },
           "color": "#c6d6c6",
           "conf": "dated"
         },
@@ -399,8 +435,16 @@
           "id": "ordovician",
           "label": "Ordovician",
           "rank": 2,
-          "t0": "485.4 Ma",
-          "t1": "443.8 Ma",
+          "t0": {
+            "est": "486.85 Ma",
+            "lo": "488.35 Ma",
+            "hi": "485.35 Ma"
+          },
+          "t1": {
+            "est": "443.1 Ma",
+            "lo": "444.1 Ma",
+            "hi": "442.1 Ma"
+          },
           "color": "#aed6c4",
           "conf": "dated"
         },
@@ -408,8 +452,16 @@
           "id": "silurian",
           "label": "Silurian",
           "rank": 2,
-          "t0": "443.8 Ma",
-          "t1": "419.2 Ma",
+          "t0": {
+            "est": "443.1 Ma",
+            "lo": "444.1 Ma",
+            "hi": "442.1 Ma"
+          },
+          "t1": {
+            "est": "419.62 Ma",
+            "lo": "420.98 Ma",
+            "hi": "418.26 Ma"
+          },
           "color": "#c3ded1",
           "conf": "dated"
         },
@@ -417,8 +469,16 @@
           "id": "devonian",
           "label": "Devonian",
           "rank": 2,
-          "t0": "419.2 Ma",
-          "t1": "358.9 Ma",
+          "t0": {
+            "est": "419.62 Ma",
+            "lo": "420.98 Ma",
+            "hi": "418.26 Ma"
+          },
+          "t1": {
+            "est": "358.86 Ma",
+            "lo": "359.05 Ma",
+            "hi": "358.67 Ma"
+          },
           "color": "#d6c6a8",
           "conf": "dated"
         },
@@ -426,8 +486,16 @@
           "id": "carboniferous",
           "label": "Carboniferous",
           "rank": 2,
-          "t0": "358.9 Ma",
-          "t1": "298.9 Ma",
+          "t0": {
+            "est": "358.86 Ma",
+            "lo": "359.05 Ma",
+            "hi": "358.67 Ma"
+          },
+          "t1": {
+            "est": "298.9 Ma",
+            "lo": "299.05 Ma",
+            "hi": "298.75 Ma"
+          },
           "color": "#c8d0b6",
           "conf": "dated"
         },
@@ -435,8 +503,16 @@
           "id": "permian",
           "label": "Permian",
           "rank": 2,
-          "t0": "298.9 Ma",
-          "t1": "251.9 Ma",
+          "t0": {
+            "est": "298.9 Ma",
+            "lo": "299.05 Ma",
+            "hi": "298.75 Ma"
+          },
+          "t1": {
+            "est": "251.902 Ma",
+            "lo": "251.926 Ma",
+            "hi": "251.878 Ma"
+          },
           "color": "#e6b3a3",
           "conf": "dated"
         },
@@ -444,8 +520,16 @@
           "id": "triassic",
           "label": "Triassic",
           "rank": 2,
-          "t0": "251.9 Ma",
-          "t1": "201.4 Ma",
+          "t0": {
+            "est": "251.902 Ma",
+            "lo": "251.926 Ma",
+            "hi": "251.878 Ma"
+          },
+          "t1": {
+            "est": "201.4 Ma",
+            "lo": "201.6 Ma",
+            "hi": "201.2 Ma"
+          },
           "color": "#cbb6dc",
           "conf": "dated"
         },
@@ -453,8 +537,16 @@
           "id": "jurassic",
           "label": "Jurassic",
           "rank": 2,
-          "t0": "201.4 Ma",
-          "t1": "145.0 Ma",
+          "t0": {
+            "est": "201.4 Ma",
+            "lo": "201.6 Ma",
+            "hi": "201.2 Ma"
+          },
+          "t1": {
+            "est": "143.1 Ma",
+            "lo": "143.7 Ma",
+            "hi": "142.5 Ma"
+          },
           "color": "#a8cbe0",
           "conf": "dated"
         },
@@ -462,8 +554,12 @@
           "id": "cretaceous",
           "label": "Cretaceous",
           "rank": 2,
-          "t0": "145.0 Ma",
-          "t1": "66.0 Ma",
+          "t0": {
+            "est": "143.1 Ma",
+            "lo": "143.7 Ma",
+            "hi": "142.5 Ma"
+          },
+          "t1": "66.00 Ma",
           "color": "#c1dfa6",
           "conf": "dated"
         },
@@ -471,8 +567,8 @@
           "id": "paleogene",
           "label": "Palaeogene",
           "rank": 2,
-          "t0": "66.0 Ma",
-          "t1": "23.03 Ma",
+          "t0": "66.00 Ma",
+          "t1": "23.04 Ma",
           "color": "#f2b48c",
           "conf": "dated"
         },
@@ -498,8 +594,8 @@
           "id": "paleocene",
           "label": "Palaeocene",
           "rank": 3,
-          "t0": "66.0 Ma",
-          "t1": "56.0 Ma",
+          "t0": "66.00 Ma",
+          "t1": "56.00 Ma",
           "color": "#f7c0a3",
           "conf": "dated"
         },
@@ -507,7 +603,7 @@
           "id": "eocene",
           "label": "Eocene",
           "rank": 3,
-          "t0": "56.0 Ma",
+          "t0": "56.00 Ma",
           "t1": "33.9 Ma",
           "color": "#f7cba3",
           "conf": "dated"
@@ -517,7 +613,7 @@
           "label": "Oligocene",
           "rank": 3,
           "t0": "33.9 Ma",
-          "t1": "23.03 Ma",
+          "t1": "23.04 Ma",
           "color": "#f7d6b8",
           "conf": "dated"
         },
@@ -544,7 +640,7 @@
           "label": "Pleistocene",
           "rank": 3,
           "t0": "2.58 Ma",
-          "t1": "11.7 ka",
+          "t1": "0.0117 Ma",
           "color": "#f7f4c0",
           "conf": "dated"
         },
@@ -552,7 +648,7 @@
           "id": "holocene",
           "label": "Holocene",
           "rank": 3,
-          "t0": "11700 b2k",
+          "t0": "0.0117 Ma",
           "t1": "now",
           "color": "#fdf9d4",
           "conf": "measured",
@@ -567,7 +663,10 @@
           "color": "#e0a08c",
           "status": "rejected",
           "conf": "disputed",
-          "note": "Proposed as a formal epoch and voted down in 2024. Kept on the chart because the argument is real: proposed start dates have ranged from the Neolithic to the 1960s."
+          "note": "Proposed as a formal epoch and voted down in 2024. Kept on the chart because the argument is real: proposed start dates have ranged from the Neolithic to the 1960s.",
+          "src": [
+            "placeholder"
+          ]
         }
       ]
     },
@@ -589,173 +688,218 @@
     "hominins": {
       "kind": "intervals",
       "defaultSrc": [
-        "placeholder"
+        "smithsonian"
       ],
-      "wouldUse": [
-        "smithsonian",
-        "pbdb"
-      ],
-      "note": "Ranges are first and last appearance dates in a sparse fossil record. Absence of fossils is not absence of the species; the faded ends carry that.",
+      "wouldUse": [],
+      "note": "Dates are the Smithsonian Human Origins Program's first and last appearances in a sparse fossil record. Absence of fossils is not absence of the species. Labelled bars are five well-established species, an editorial choice; the faint bars are the others.",
       "records": [
         {
           "id": "sahelanthropus",
-          "label": "Sahelanthropus",
-          "t0": {
-            "est": "7.2 Ma",
-            "lo": "7.6 Ma",
-            "hi": "6.9 Ma"
-          },
-          "t1": {
-            "est": "6.8 Ma",
-            "lo": "7.0 Ma",
-            "hi": "6.2 Ma"
-          },
+          "label": "S. tchadensis",
+          "name": "Sahelanthropus tchadensis",
+          "t0": "7 Ma",
+          "t1": "6 Ma",
+          "openEnds": true,
           "status": "disputed",
           "conf": "disputed",
-          "note": "One badly distorted skull. Whether it is a hominin at all is argued."
+          "note": "Smithsonian: “Sometime between 7 and 6 million years ago”. One badly distorted skull. Whether it is a hominin at all is argued. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
-          "id": "ardipithecus",
-          "label": "Ardipithecus",
-          "t0": {
-            "est": "5.8 Ma",
-            "lo": "6.2 Ma",
-            "hi": "5.5 Ma"
-          },
-          "t1": {
-            "est": "4.35 Ma",
-            "lo": "4.5 Ma",
-            "hi": "4.2 Ma"
-          },
-          "conf": "dated"
+          "id": "orrorin",
+          "label": "O. tugenensis",
+          "name": "Orrorin tugenensis",
+          "t0": "6.2 Ma",
+          "t1": "5.8 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “Sometime between 6.2 and 5.8 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "ar-kadabba",
+          "label": "Ar. kadabba",
+          "name": "Ardipithecus kadabba",
+          "t0": "5.8 Ma",
+          "t1": "5.2 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “Between about 5.8 and 5.2 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "ar-ramidus",
+          "label": "Ar. ramidus",
+          "name": "Ardipithecus ramidus",
+          "t0": "4.4 Ma",
+          "t1": "4.4 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 4.4 million years ago” (a single date, not a span). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "au-anamensis",
           "label": "Au. anamensis",
-          "t0": {
-            "est": "4.2 Ma",
-            "lo": "4.4 Ma",
-            "hi": "4.1 Ma"
-          },
-          "t1": {
-            "est": "3.8 Ma",
-            "lo": "3.9 Ma",
-            "hi": "3.7 Ma"
-          },
-          "conf": "dated"
+          "name": "Australopithecus anamensis",
+          "t0": "4.2 Ma",
+          "t1": "3.8 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 4.2 to 3.8 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "au-afarensis",
           "label": "Au. afarensis",
-          "t0": {
-            "est": "3.9 Ma",
-            "lo": "4.0 Ma",
-            "hi": "3.8 Ma"
-          },
-          "t1": {
-            "est": "2.9 Ma",
-            "lo": "3.0 Ma",
-            "hi": "2.8 Ma"
-          },
+          "name": "Australopithecus afarensis",
+          "t0": "3.85 Ma",
+          "t1": "2.95 Ma",
+          "openEnds": true,
+          "main": true,
           "conf": "dated",
-          "note": "Lucy's species; among the better-sampled early hominins."
+          "note": "Smithsonian: “Between about 3.85 and 2.95 million years ago”. Lucy's species; among the better-sampled early hominins. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "kenyanthropus",
+          "label": "K. platyops",
+          "name": "Kenyanthropus platyops",
+          "t0": "3.5 Ma",
+          "t1": "3.5 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 3.5 million years ago” (a single date, not a span). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "au-africanus",
           "label": "Au. africanus",
-          "t0": {
-            "est": "3.3 Ma",
-            "lo": "3.7 Ma",
-            "hi": "3.0 Ma"
-          },
-          "t1": {
-            "est": "2.1 Ma",
-            "lo": "2.4 Ma",
-            "hi": "1.9 Ma"
-          },
+          "name": "Australopithecus africanus",
+          "t0": "3.3 Ma",
+          "t1": "2.1 Ma",
+          "openEnds": true,
           "conf": "estimated",
-          "note": "South African cave deposits are notoriously hard to date."
+          "note": "Smithsonian: “About 3.3 to 2.1 million years ago”. South African cave deposits are notoriously hard to date. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
-          "id": "paranthropus",
-          "label": "Paranthropus",
-          "t0": {
-            "est": "2.7 Ma",
-            "lo": "2.9 Ma",
-            "hi": "2.6 Ma"
-          },
-          "t1": {
-            "est": "1.2 Ma",
-            "lo": "1.4 Ma",
-            "hi": "1.0 Ma"
-          },
-          "conf": "dated"
+          "id": "p-aethiopicus",
+          "label": "P. aethiopicus",
+          "name": "Paranthropus aethiopicus",
+          "t0": "2.7 Ma",
+          "t1": "2.3 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 2.7 to 2.3 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "au-garhi",
+          "label": "Au. garhi",
+          "name": "Australopithecus garhi",
+          "t0": "2.5 Ma",
+          "t1": "2.5 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 2.5 million years ago” (a single date, not a span). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "h-habilis",
           "label": "H. habilis",
-          "t0": {
-            "est": "2.4 Ma",
-            "lo": "2.8 Ma",
-            "hi": "2.3 Ma"
-          },
-          "t1": {
-            "est": "1.65 Ma",
-            "lo": "1.7 Ma",
-            "hi": "1.4 Ma"
-          },
+          "name": "Homo habilis",
+          "t0": "2.4 Ma",
+          "t1": "1.4 Ma",
+          "openEnds": true,
           "status": "disputed",
           "conf": "disputed",
-          "note": "Arguably a wastebasket taxon; some material may belong elsewhere."
+          "note": "Smithsonian: “2.4 million to 1.4 million years ago”. Arguably a wastebasket taxon; some material may belong elsewhere. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "p-boisei",
+          "label": "P. boisei",
+          "name": "Paranthropus boisei",
+          "t0": "2.3 Ma",
+          "t1": "1.2 Ma",
+          "openEnds": true,
+          "main": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 2.3 to 1.2 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "au-sediba",
+          "label": "Au. sediba",
+          "name": "Australopithecus sediba",
+          "t0": "1.98 Ma",
+          "t1": "1.977 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “Between 1.977 and 1.98 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "h-rudolfensis",
+          "label": "H. rudolfensis",
+          "name": "Homo rudolfensis",
+          "t0": "1.9 Ma",
+          "t1": "1.8 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 1.9 million to 1.8 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "h-erectus",
           "label": "H. erectus",
-          "t0": {
-            "est": "1.9 Ma",
-            "lo": "2.0 Ma",
-            "hi": "1.8 Ma"
-          },
-          "t1": {
-            "est": "110 ka",
-            "lo": "150 ka",
-            "hi": "100 ka"
-          },
+          "name": "Homo erectus",
+          "t0": "1.89 Ma",
+          "t1": "110 ka",
+          "openEnds": true,
+          "main": true,
           "conf": "dated",
-          "note": "The longest-lived member of our genus by a wide margin."
+          "note": "Smithsonian: “Between about 1.89 million and 110,000 years ago”. The longest-lived member of our genus by a wide margin. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "p-robustus",
+          "label": "P. robustus",
+          "name": "Paranthropus robustus",
+          "t0": "1.8 Ma",
+          "t1": "1.2 Ma",
+          "openEnds": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 1.8 to 1.2 million years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "h-heidelbergensis",
           "label": "H. heidelbergensis",
-          "t0": {
-            "est": "700 ka",
-            "lo": "800 ka",
-            "hi": "600 ka"
-          },
-          "t1": {
-            "est": "200 ka",
-            "lo": "300 ka",
-            "hi": "150 ka"
-          },
+          "name": "Homo heidelbergensis",
+          "t0": "700 ka",
+          "t1": "200 ka",
+          "openEnds": true,
           "status": "disputed",
           "conf": "disputed",
-          "note": "Increasingly treated as a label of convenience rather than a species."
+          "note": "Smithsonian: “About 700,000 to 200,000 years ago”. Increasingly treated as a label of convenience rather than a species. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "h-neanderthalensis",
+          "label": "H. neanderthalensis",
+          "name": "Homo neanderthalensis",
+          "t0": "400 ka",
+          "t1": "40 ka",
+          "openEnds": true,
+          "main": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 400,000 - 40,000 years ago”. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "h-naledi",
           "label": "H. naledi",
-          "t0": {
-            "est": "335 ka",
-            "lo": "355 ka",
-            "hi": "320 ka"
-          },
-          "t1": {
-            "est": "236 ka",
-            "lo": "250 ka",
-            "hi": "220 ka"
-          },
+          "name": "Homo naledi",
+          "t0": "335 ka",
+          "t1": "236 ka",
+          "openEnds": true,
           "conf": "dated",
-          "note": "Dated only in 2017. The deposit's interpretation remains actively disputed."
+          "note": "Smithsonian: “335,000 - 236,000 years ago”. The deposit's interpretation remains actively disputed. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+        },
+        {
+          "id": "h-sapiens",
+          "label": "H. sapiens",
+          "name": "Homo sapiens",
+          "t0": "300 ka",
+          "t1": "now",
+          "openEnds": true,
+          "main": true,
+          "conf": "dated",
+          "note": "Smithsonian: “About 300,000 years ago to present”. The boundary of 'anatomically modern' is a definition, not an observation. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "denisovans",
@@ -772,50 +916,20 @@
           },
           "status": "disputed",
           "conf": "inferred",
-          "note": "Defined largely from DNA plus a handful of fragments. The range is close to a guess."
-        },
-        {
-          "id": "h-neanderthalensis",
-          "label": "H. neanderthalensis",
-          "t0": {
-            "est": "430 ka",
-            "lo": "500 ka",
-            "hi": "400 ka"
-          },
-          "t1": {
-            "est": "40 ka",
-            "lo": "42 ka",
-            "hi": "37 ka"
-          },
-          "conf": "dated"
+          "note": "Defined largely from DNA plus a handful of fragments. The range is close to a guess.",
+          "src": [
+            "placeholder"
+          ]
         },
         {
           "id": "h-floresiensis",
           "label": "H. floresiensis",
-          "t0": {
-            "est": "100 ka",
-            "lo": "190 ka",
-            "hi": "90 ka"
-          },
-          "t1": {
-            "est": "50 ka",
-            "lo": "60 ka",
-            "hi": "46 ka"
-          },
+          "name": "Homo floresiensis",
+          "t0": "100 ka",
+          "t1": "50 ka",
+          "openEnds": true,
           "conf": "dated",
-          "note": "Dates were revised drastically in 2016. Expect more revision."
-        },
-        {
-          "id": "h-sapiens",
-          "label": "H. sapiens",
-          "t0": {
-            "est": "315 ka",
-            "lo": "350 ka",
-            "hi": "260 ka"
-          },
-          "t1": "now",
-          "conf": "dated",
-          "note": "Jebel Irhoud pushed this back. The boundary of 'anatomically modern' is a definition, not an observation."
+          "note": "Smithsonian: “About 100,000 – 50,000 years ago”. Its dates have been revised drastically before. Expect more revision. The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         }
       ]
     },

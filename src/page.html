@@ -153,7 +153,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 
 <header class="top">
-  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>placeholder data, not yet researched</b></p>
+  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological and species dates now sourced</p>
   <h1>Deep time, <b>to scale</b></h1>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
@@ -191,7 +191,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <canvas class="chart" id="h-cv" role="img" aria-label="World population over the last million years, with markers for fire, language, dispersal out of Africa, the end of the last ice age, farming, writing and industrialisation, and strips for geological time and hominin species"></canvas>
   </div>
   <div class="readout" id="h-readout" aria-live="polite"><p class="empty">Hover or tap the chart to read the population estimate at that moment. Tap a marker name, a geological period or a species for its dates and how firm they are.</p></div>
-  <p class="dataline"><b>Placeholder data.</b> No figure here has been checked against a source yet. The population line is the midpoint of a rough range, and the shading is that range. Before 300,000 years ago there is no estimate at all.</p>
+  <p class="dataline"><b>Mostly placeholder data.</b> Only the geological strip (ICS chart, v2024/12) and the species dates (Smithsonian Human Origins Program) are sourced; Denisovans, H. antecessor and H. luzonensis are still placeholders, and no other figure here has been checked against a source yet. The population line is the midpoint of a rough range, and the shading is that range. Before 300,000 years ago there is no estimate at all.</p>
 </section>
 
 <!-- ============ FULL ATLAS ============ -->
@@ -256,12 +256,13 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; the data is not. Every number is a placeholder written from memory, and none has yet been checked against its source.</p>
+      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
       <div class="lgrow"><i class="sw" style="background:var(--accent)"></i>Firm dates have hard edges</div>
       <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--accent) 38%,var(--accent) 62%,transparent)"></i>Uncertain ends fade across the plausible range</div>
+      <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--bar) 30%,var(--bar) 70%,transparent)"></i>Species bars: a short fixed fade past the first and last fossils, as a reminder that species outlive their fossils; the fade's width is not data</div>
       <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(45deg,var(--bar) 0 3px,var(--disp) 3px 5px)"></i>Disputed category, or a scheme that does not apply</div>
       <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(90deg,var(--ink-4) 0 3px,transparent 3px 7px)"></i>No data, which is not the same as zero</div>
     </div>
@@ -274,7 +275,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
       <p>Explanatory text on this page, including the stories and marker notes, was drafted with AI (Claude) from the project's data notes and is awaiting review.</p>
     </div>
   </div>
-  <h3 style="font-size:17px;font-weight:500;margin:30px 0 8px">Sources registered, none yet ingested</h3>
+  <h3 style="font-size:17px;font-weight:500;margin:30px 0 8px">Sources registered, and which are in use</h3>
   <div class="scroll"><table class="stack" id="src-table"><thead><tr><th>Source</th><th>By</th><th>Licence</th><th>Status</th></tr></thead><tbody></tbody></table></div>
 </section>
 
@@ -489,17 +490,31 @@ function createView(o){
   /* interval whose ends fade across their plausible range */
   function iv(p0, p1, y, h, color, opt){
     if (!p0 || !p1) return null;
+    if (opt && opt.open){
+      /* soft open ends: solid between the source's dates, then a fixed-width fade outside them (not data) */
+      const F = 12, xs = cx(X(p0.est)), xe = cx(X(p1.est)), fr = Math.abs(p1.est - NOW) < 1.5 ? 0 : F;
+      const L = xs - F, R = xe + fr, w = R - L, a = opt.a || 1;
+      if (R < -20 || L > W + 20) return null;
+      const g = ctx.createLinearGradient(L, 0, R, 0);
+      g.addColorStop(0, alpha(color, 0)); g.addColorStop(F / w, alpha(color, a));
+      g.addColorStop(Math.max(F / w, (xe - L) / w), alpha(color, a)); g.addColorStop(1, alpha(color, fr ? 0 : a));
+      ctx.save(); ctx.fillStyle = g; ctx.fillRect(L, y, w, h);
+      if (opt.hatch && w > 6){ ctx.fillStyle = hatch; ctx.fillRect(L, y, w, h); }
+      ctx.restore();
+      return { x0: L, x1: R };
+    }
+    const k = (opt && opt.a) || 1;
     const xa = cx(X(p0.older)), xb = cx(X(p0.younger)), xc = cx(X(p1.older)), xd = cx(X(p1.younger));
     const L = Math.min(xa, xb), R = Math.max(xc, xd);
     if (R < -20 || L > W + 20) return null;
     const w = R - L; if (w <= .4) return null;
     ctx.save();
-    if (w < 2.2){ ctx.fillStyle = alpha(color, .8); ctx.fillRect(L, y, Math.max(w, 1), h); }
+    if (w < 2.2){ ctx.fillStyle = alpha(color, .8 * k); ctx.fillRect(L, y, Math.max(w, 1), h); }
     else {
       const g = ctx.createLinearGradient(L, 0, R, 0), f = x => Math.max(0, Math.min(1, (x - L) / w));
       const stops = [[0, p0.certain ? 1 : 0], [f(Math.max(xb, L)), 1], [f(Math.min(xc, R)), 1], [1, p1.certain ? 1 : 0]].sort((a, b) => a[0] - b[0]);
       let last = -1;
-      stops.forEach(([p, a]) => { const q = Math.min(Math.max(p, last + 1e-6), 1); last = q; g.addColorStop(q, alpha(color, a)); });
+      stops.forEach(([p, a]) => { const q = Math.min(Math.max(p, last + 1e-6), 1); last = q; g.addColorStop(q, alpha(color, a * k)); });
       ctx.fillStyle = g; ctx.fillRect(L, y, w, h);
     }
     if (opt && opt.hatch && w > 6){ ctx.fillStyle = hatch; ctx.fillRect(L, y, w, h); }
@@ -546,13 +561,17 @@ function createView(o){
     });
   };
   E.intervals = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · first and last appearance, not existence", y);
-    visRecs(ds.records).forEach((r, i) => {
-      const ry = y + 14 + i * 11, bh = 9.5, d = r.status === "disputed", sap = r.id === "h-sapiens";
-      const res = iv(r._t0, r._t1, ry, bh, sap ? PAL.accent : d ? PAL.disp : PAL.bar, { hatch: d });
-      if (!res) return;
-      lab(r.label, res.x0, res.x1, ry, bh, sap ? PAL.onaccent : d ? PAL.dispink : PAL.barink, 9.5);
-      hit(res, r, ry, bh, ds);
+    cap(lane.label + " · first and last fossils, not existence · labelled: five well-established (editorial pick); faint: the rest", y);
+    let ry = y + 14;
+    visRecs(ds.records).forEach(r => {
+      /* main species: full bar with label; the others: thin, faint, details on tap */
+      const m = !!r.main, bh = m ? 10 : 5, d = r.status === "disputed", sap = r.id === "h-sapiens";
+      const res = iv(r._t0, r._t1, ry, bh, sap ? PAL.accent : d ? PAL.disp : PAL.bar, { hatch: d, open: r.openEnds, a: m ? 1 : .45 });
+      if (res){
+        if (m) lab(r.label, res.x0, res.x1, ry, bh, sap ? PAL.onaccent : d ? PAL.dispink : PAL.barink, 9.5);
+        hit(res, r, m ? ry : ry - 1, m ? bh : bh + 2, ds);
+      }
+      ry += bh + (m ? 2 : 1.5);
     });
   };
   function bandLane(ds, y, h){
@@ -883,27 +902,29 @@ MARKERS.forEach(m => {
   m._v = [NOW + (m._o - NOW) * 1.35, NOW];   /* from just before the marker to the present */
 });
 
+/* Dates from the ICS chart v2024/12 (data/reference/geologic_time_ics.csv), except the Anthropocene, which is not on the chart. */
 const HGEO = [
-  { row: 0, label: "Pleistocene", t0: "2.58 Ma", t1: "11700 b2k", color: "#f4eea6", conf: "dated", note: "The epoch of repeated glacial cycles. Its base was moved to 2.58 million years ago in 2009." },
-  { row: 0, label: "Holocene", t0: "11700 b2k", t1: "now", color: "#fdf3cf", conf: "measured", note: "The present warm interval. Its base is fixed by ratified definition to a specific layer in the NGRIP ice core from Greenland." },
-  { row: 0, label: "Anthropocene?", t0: "1952 CE", t1: "now", color: "#e0a08c", conf: "disputed", status: "rejected", note: "Proposed as a formal epoch beginning in the early 1950s and rejected in a 2024 vote. Kept, hatched, because the question remains open." },
-  { row: 1, label: "Early Pleistocene (Calabrian)", t0: "1.80 Ma", t1: "774 ka", color: "#efe796", conf: "dated", note: "The Calabrian stage ends at the last reversal of Earth's magnetic field, about 774,000 years ago." },
-  { row: 1, label: "Middle Pleistocene (Chibanian)", t0: "774 ka", t1: "129 ka", color: "#f4eeb0", conf: "dated", note: "Named for a reference section in Japan and ratified in 2020. Its base is the Matuyama–Brunhes magnetic reversal." },
-  { row: 1, label: "Late Pleistocene", t0: "129 ka", t1: "11700 b2k", color: "#f8f3c6", conf: "dated", note: "Begins near the start of the last interglacial, about 129,000 years ago. The stage within it has no ratified name yet." },
-  { row: 1, label: "Greenlandian", t0: "11700 b2k", t1: "8236 b2k", color: "#fdf1d4", conf: "dated", note: "First of three Holocene ages ratified in 2018." },
-  { row: 1, label: "Northgrippian", t0: "8236 b2k", t1: "4250 b2k", color: "#fcebc4", conf: "dated", note: "Begins with the 8.2 ka cooling event, recorded in Greenland ice." },
-  { row: 1, label: "Meghalayan", t0: "4250 b2k", t1: "now", color: "#fbe5b6", conf: "dated", note: "Begins with the 4.2 ka aridity event, defined from a cave formation in Meghalaya, India." }
+  { row: 0, label: "Pleistocene", t0: "2.58 Ma", t1: "0.0117 Ma", color: "#f4eea6", conf: "dated", note: "The epoch of repeated glacial cycles." },
+  { row: 0, label: "Holocene", t0: "0.0117 Ma", t1: "now", color: "#fdf3cf", conf: "measured", note: "The present warm interval. Its base is defined by a specific layer in the NGRIP ice core from Greenland." },
+  { row: 0, label: "Anthropocene?", t0: "1952 CE", t1: "now", color: "#e0a08c", conf: "disputed", status: "rejected", src: ["placeholder"], note: "Proposed as a formal epoch and rejected. Not on the ICS chart; its start date here is an unsourced placeholder. Kept, hatched, because the question remains open." },
+  { row: 1, label: "Gelasian", t0: "2.58 Ma", t1: "1.80 Ma", color: "#ece38a", conf: "dated", note: "First stage of the Pleistocene." },
+  { row: 1, label: "Calabrian", t0: "1.80 Ma", t1: "0.774 Ma", color: "#efe796", conf: "dated", note: "Ends at the last reversal of Earth's magnetic field." },
+  { row: 1, label: "Chibanian", t0: "0.774 Ma", t1: "0.129 Ma", color: "#f4eeb0", conf: "dated", note: "Named for a reference section in Japan. Its base is the Matuyama–Brunhes magnetic reversal." },
+  { row: 1, label: "Upper Pleistocene", t0: "0.129 Ma", t1: "0.0117 Ma", color: "#f8f3c6", conf: "dated", note: "Begins near the start of the last interglacial. The stage within it has no ratified name yet." },
+  { row: 1, label: "Greenlandian", t0: "0.0117 Ma", t1: "0.0082 Ma", color: "#fdf1d4", conf: "dated", note: "First of the three Holocene ages." },
+  { row: 1, label: "Northgrippian", t0: "0.0082 Ma", t1: "0.0042 Ma", color: "#fcebc4", conf: "dated", note: "Begins with the 8.2 ka cooling event, recorded in Greenland ice." },
+  { row: 1, label: "Meghalayan", t0: "0.0042 Ma", t1: "now", color: "#fbe5b6", conf: "dated", note: "Begins with the 4.2 ka aridity event, defined from a cave formation in Meghalaya, India." }
 ];
 HGEO.forEach(norm);
 const HEXTRA = [
-  { id: "h-antecessor", label: "H. antecessor", t0: { est: "1.2 Ma", lo: "1.3 Ma", hi: "1.1 Ma" }, t1: { est: "800 ka", lo: "850 ka", hi: "770 ka" }, conf: "dated", status: "disputed", note: "Known from Atapuerca, Spain. Whether it is a separate species, and how it relates to later humans, is debated." },
-  { id: "h-luzonensis", label: "H. luzonensis", t0: { est: "67 ka", lo: "134 ka", hi: "60 ka" }, t1: { est: "50 ka", lo: "60 ka", hi: "45 ka" }, conf: "dated", note: "Known from a few teeth and bones in Callao Cave, Philippines, described in 2019. The dates are minimum ages." }
+  { id: "h-antecessor", src: ["placeholder"], label: "H. antecessor", t0: { est: "1.2 Ma", lo: "1.3 Ma", hi: "1.1 Ma" }, t1: { est: "800 ka", lo: "850 ka", hi: "770 ka" }, conf: "dated", status: "disputed", note: "Known from Atapuerca, Spain. Whether it is a separate species, and how it relates to later humans, is debated." },
+  { id: "h-luzonensis", src: ["placeholder"], label: "H. luzonensis", t0: { est: "67 ka", lo: "134 ka", hi: "60 ka" }, t1: { est: "50 ka", lo: "60 ka", hi: "45 ka" }, conf: "dated", note: "Known from a few teeth and bones in Callao Cave, Philippines, described in 2019. The dates are minimum ages." }
 ];
 const HHOM = DS.hominins.records.concat(HEXTRA.map(norm)).filter(r => r._t0 && r._t1).sort((a, b) => b._t0.est - a._t0.est);
 
 const HV = (() => {
   const cv = $("#h-cv"), ctx = cv.getContext("2d"), out = $("#h-readout");
-  const TMAX = 1e6, ML = 50, MR = 10, AXH = 40, ROW = 17, HROW = 15;
+  const TMAX = 1e6, ML = 50, MR = 10, AXH = 40, ROW = 17, HROW = 15, BGROW = 8;
   /* log of (years ago + 30): keeps the last few decades from eating a quarter of the width */
   const P = { log: { c: t => -Math.log10(Math.max(t - NOW, 0) + 30), t: c => Math.pow(10, -c) - 30 + NOW }, linear: PROJ.linear };
   const view = { mode: "log", c0: 0, c1: 1 };
@@ -971,6 +992,16 @@ const HV = (() => {
     ctx.fillStyle = g; ctx.fillRect(L, y, R - L, h);
     return { x0: L, x1: R };
   }
+  /* soft open ends: solid between the source's dates, then a fixed-width fade outside them (not data) */
+  function openRect(p0, p1, y, h, a, color){
+    const F = 12, xs = X(p0.est), xe = X(p1.est), fr = Math.abs(p1.est - NOW) < 1.5 ? 0 : F;
+    const L0 = xs - F, R0 = xe + fr, L = Math.max(ML, L0), R = Math.min(ML + pw(), R0); if (R - L < .3) return null;
+    const w = R0 - L0, g = ctx.createLinearGradient(L0, 0, R0, 0);
+    g.addColorStop(0, alpha(color, 0)); g.addColorStop(F / w, alpha(color, a));
+    g.addColorStop(Math.max(F / w, (xe - L0) / w), alpha(color, a)); g.addColorStop(1, alpha(color, fr ? 0 : a));
+    ctx.fillStyle = g; ctx.fillRect(L, y, R - L, h);
+    return { x0: L, x1: R };
+  }
   function vline(x, dashed, color, wdt){
     if (x < ML || x > ML + pw()) return;
     ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = wdt || 1.5; if (dashed) ctx.setLineDash([5, 4]);
@@ -1024,7 +1055,7 @@ const HV = (() => {
     TOP = 16 + rowsReserved * 26;
     BOT = TOP + (W < 600 ? 250 : 320);
     const GEO_Y = BOT + AXH + 4, HOM_Y = GEO_Y + 15 + 2 * (ROW + 2) + 10;
-    H = HOM_Y + (homs.length ? 15 + homs.length * HROW : 0) + 10;
+    H = HOM_Y + (homs.length ? 15 + homs.reduce((s, r) => s + (r.main ? HROW : BGROW), 0) : 0) + 10;
     const cw = Math.round(W * DPR), ch = Math.round(H * DPR);
     if (cv.width !== cw || cv.height !== ch){ cv.style.height = H + "px"; cv.width = cw; cv.height = ch; }
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -1115,13 +1146,19 @@ const HV = (() => {
       });
     });
     if (homs.length){
-      caption("Hominin species" + (W > 560 ? " · first and last appearance, not existence" : ""), HOM_Y);
-      homs.forEach((r, i) => {
-        const y = HOM_Y + 15 + i * HROW, d = r.status === "disputed", sap = r.id === "h-sapiens";
-        const res = fuzzyRect(r._t0, r._t1, y, HROW - 3, 1, sap ? PAL.accent : d ? PAL.disp : PAL.bar); if (!res) return;
-        if (d && res.x1 - res.x0 > 6){ ctx.fillStyle = hatch; ctx.fillRect(res.x0, y, res.x1 - res.x0, HROW - 3); }
-        fitText(r.label, res.x0, res.x1, y + (HROW - 3) / 2, sap ? PAL.onaccent : d ? PAL.dispink : PAL.barink, 10.5);
-        stripHits.push({ x0: res.x0, x1: res.x1, y0: y, y1: y + HROW - 3, info: r, ds: DS.hominins });
+      caption("Hominin species" + (W > 760 ? " · first and last fossils, not existence · labelled: five well-established (editorial pick); faint: the rest" : W > 560 ? " · first and last fossils, not existence" : " · faint: tap for details"), HOM_Y);
+      let y = HOM_Y + 15;
+      homs.forEach(r => {
+        /* main species: full bar with label; the others: thin, faint, details on tap */
+        const m = !!r.main, rh = m ? HROW : BGROW, bh = rh - 3, d = r.status === "disputed", sap = r.id === "h-sapiens";
+        const color = sap ? PAL.accent : d ? PAL.disp : PAL.bar, a = m ? 1 : .45;
+        const res = r.openEnds ? openRect(r._t0, r._t1, y, bh, a, color) : fuzzyRect(r._t0, r._t1, y, bh, a, color);
+        if (res){
+          if (d && res.x1 - res.x0 > 6){ ctx.fillStyle = hatch; ctx.fillRect(res.x0, y, res.x1 - res.x0, bh); }
+          if (m) fitText(r.label, res.x0, res.x1, y + bh / 2, sap ? PAL.onaccent : d ? PAL.dispink : PAL.barink, 10.5);
+          stripHits.push({ x0: res.x0, x1: res.x1, y0: y - (m ? 0 : 1), y1: y + bh + (m ? 0 : 1), info: r, ds: DS.hominins });
+        }
+        y += rh;
       });
     }
     ctx.restore();
@@ -1288,13 +1325,14 @@ $("#a-zout").onclick = () => A.zoom(1.8);
 (function status(){
   const flagged = Object.entries(DS).filter(([, d]) => ["fabricated", "speculative"].includes(d.conf)).map(([k]) => k);
   let n = 0; Object.values(DS).forEach(d => { if (d.records) n += d.records.length; if (d.items) Object.values(d.items).forEach(s => s.rows.forEach(r => n += r.items.length)); });
-  $("#a-status").innerHTML = `<b>Not researched.</b> ${n} intervals and ${Object.keys(ATLAS.sources).length - 1} registered sources, none yet ingested. Lanes that are invented or speculative in their entirety: ${flagged.join(", ")}.`;
+  const ing = Object.values(ATLAS.sources).filter(s => s.status === "ingested").map(s => s.title);
+  $("#a-status").innerHTML = `<b>Mostly not researched.</b> ${n} intervals and ${Object.keys(ATLAS.sources).length - 1} registered sources; in use so far: ${ing.length ? ing.join(", ") : "none"}. Everything else is placeholder. Lanes that are invented or speculative in their entirety: ${flagged.join(", ")}.`;
 })();
 
 /* ================= STORIES ================= */
 const STORIES = [
   { id: "reading", title: "How to read this chart", dek: "The visual conventions used throughout the atlas.", scenes: [
-    { t0: "500 ka", t1: "now", lanes: ["hominins"], text: "Faded ends mark uncertainty. Each end of a bar fades across the range of plausible dates, from oldest to youngest, instead of pretending to a single year. Ranges here are first and last appearances in a sparse fossil record, so species probably lived beyond both ends." },
+    { t0: "500 ka", t1: "now", lanes: ["hominins"], text: "Faded ends mark uncertainty. Each species bar runs between its first and last known fossils, as given by the Smithsonian, and then fades a little past both ends: in a sparse fossil record, species probably lived longer than their fossils show. The fade is a reminder, not a measurement. Five well-established species are labelled; the faint bars are the rest." },
     { t0: "800 ka", t1: "100 ka", lanes: ["hominins"], text: "Hatching marks a disputed category. Homo heidelbergensis is increasingly treated as a label of convenience rather than a species, and Denisovans are defined mostly from DNA. Tap any bar for its dates, how firm they are, and where a real figure would come from." },
     { t0: "1.0 Ma", t1: "now", mode: "log", lanes: ["pop", "evidence"], text: "Pale grey with a dashed edge means no data. The population lane starts 300,000 years ago; further left the value is unknown, which is not the same as zero. The strip below it is not about the past at all: it shows how much can be said about each era." },
     { t0: "12 ka", t1: "now", lanes: ["polity", "pop"], text: "Some lanes carry far more uncertainty than others. The political-forms lane is labelled an impression, not data: nobody has these numbers, and categories such as 'chiefdom' are themselves contested. The more finished such a lane looks, the more it overstates what is known." }
@@ -1350,7 +1388,8 @@ function scene(k){
   $("#s-next").textContent = k === s.scenes.length - 1 && cur.s < STORIES.length - 1 ? "Next story →" : "Next →";
   const flagged = sc.lanes.map(id => LANE[id]).filter(l => l && DS[l.dataset] && ["fabricated", "speculative"].includes(DS[l.dataset].conf))
     .map(l => l.label + (DS[l.dataset].conf === "fabricated" ? " is invented; read its shape only" : " is a speculative impression"));
-  $("#s-data").innerHTML = "<b>Not researched.</b> All values in this view are unsourced placeholders." + (flagged.length ? " " + flagged.join("; ") + "." : "");
+  const srcd = [sc.lanes.includes("geo") && "geological dates are from the ICS chart", sc.lanes.includes("hominins") && "species dates are from the Smithsonian (except Denisovans)"].filter(Boolean);
+  $("#s-data").innerHTML = (srcd.length ? "<b>Mostly not researched.</b> Here, " + srcd.join(" and ") + "; all other values in this view are unsourced placeholders." : "<b>Not researched.</b> All values in this view are unsourced placeholders.") + (flagged.length ? " " + flagged.join("; ") + "." : "");
   $("#s-readout").innerHTML = '<p class="empty">Tap a bar or band for details. Arrow keys step through the story.</p>';
 }
 function setStoryHash(){ try { history.replaceState(null, "", "#story-" + STORIES[cur.s].id); } catch (e){} }

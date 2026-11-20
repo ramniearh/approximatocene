@@ -51,6 +51,16 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - The largest-polity table checks every 100th year from 3400 BCE to 2000 CE, plus 2024 (there is no year 0). It gives the polity with the largest mapped area and how many polities Cliopatria maps that year. **It can miss short peaks:** the Mongol Empire (about 27 million km² around 1280, ending 1293 in Cliopatria) falls between samples. Checking every year would fix that if it matters.
   - Areas are the area of the drawn borders, rounded to whole km². Cliopatria itself says borders, names and dates are one version among disputed ones. "Polities present" counts what Cliopatria maps, which is far from every polity, especially in early periods.
 
+## Sourced data on the page
+
+- **Geology (Nov 2026):** both the Human time strip (`HGEO` in `src/page.html`) and the Full atlas geology lane (`geo` in `data/atlas.json`) now take their dates from `geologic_time_ics.csv`. Where the ICS gives "±", the bar end fades across that range. The Human time strip uses the chart's own names (Gelasian, Calabrian, Chibanian, Upper Pleistocene) instead of "Early/Middle/Late Pleistocene". Years that the chart doesn't give (when units were ratified, and so on) were removed from the period notes. The Anthropocene is not on the chart, so it stays hatched and is marked as an unsourced placeholder. The ICS source now shows as "ingested", and the status lines on every tab say geology is sourced and the rest isn't.
+- **Hominin species (Nov 2026):** the species lane (`hominins` in `data/atlas.json`, shared by Full atlas and Stories, and used by the Human time strip) now holds the 21 Smithsonian species, with dates from `hominin_species_smithsonian.csv`. Each species' details box quotes the Smithsonian's wording. Notes kept from earlier lost any years no source gives.
+  - The Ardipithecus and Paranthropus genus bars are gone; their species replace them.
+  - Five species are labelled and drawn full size: *Au. afarensis*, *P. boisei*, *H. erectus*, *H. neanderthalensis* and *H. sapiens*. This is an editorial pick (agreed with Eduardo), and the About tab says so. The rest are thin and faint, and show their details on tap.
+  - Bars are solid between the Smithsonian's dates and then fade over a fixed 12 pixels past each end (none at "now"). This is a reminder that species outlive their fossils, not data; the About legend and each details box say so.
+  - Earlier "disputed" flags (hatching) were kept for *Sahelanthropus*, *H. habilis* and *H. heidelbergensis*. They are editorial judgments, not from the source.
+  - Denisovans, *H. antecessor* and *H. luzonensis* keep their placeholder dates and say "No source yet. Placeholder."
+
 ## Open questions (Eduardo's call)
 
 - Should the political-forms lane stay? Nobody has these numbers. The options are to keep it as a clearly labelled impression, to replace it with something countable (such as the size of the largest polity over time), or to drop it. A sourced "largest polity over time" now exists in `data/reference/` (from Cliopatria), so the countable option is ready if wanted.
