@@ -153,7 +153,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 
 <header class="top">
-  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological and species dates now sourced</p>
+  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates and population since 10,000 BCE now sourced</p>
   <h1>Deep time, <b>to scale</b></h1>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
@@ -182,8 +182,9 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     </div>
   </div>
   <div class="legend-line">
-    <span><i class="sw" style="height:3px;background:var(--accent)"></i>Population, middle of the range</span>
-    <span><i class="sw" style="background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--accent) 30%,transparent),transparent)"></i>Range</span>
+    <span><i class="sw" style="height:3px;background:var(--accent)"></i>Population, Our World in Data (1800 on)</span>
+    <span><i class="sw" style="height:3px;background:repeating-linear-gradient(90deg,var(--accent) 0 7px,transparent 7px 11px)"></i>Model reconstruction, HYDE 3.3 (10,000 BCE–1790)</span>
+    <span><i class="sw" style="background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--accent) 30%,transparent),transparent)"></i>Placeholder range, not sourced</span>
     <span><i class="sw" style="height:2px;background:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 7px)"></i>Not estimated</span>
     <span><i class="sw" style="background:color-mix(in srgb,var(--mark) 22%,transparent);border-left:2px solid var(--mark)"></i>Threshold and its plausible range</span>
   </div>
@@ -191,7 +192,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <canvas class="chart" id="h-cv" role="img" aria-label="World population over the last million years, with markers for fire, language, dispersal out of Africa, the end of the last ice age, farming, writing and industrialisation, and strips for geological time and hominin species"></canvas>
   </div>
   <div class="readout" id="h-readout" aria-live="polite"><p class="empty">Hover or tap the chart to read the population estimate at that moment. Tap a marker name, a geological period or a species for its dates and how firm they are.</p></div>
-  <p class="dataline"><b>Mostly placeholder data.</b> Only the geological strip (ICS chart, v2024/12) and the species dates (Smithsonian Human Origins Program) are sourced; Denisovans, H. antecessor and H. luzonensis are still placeholders, and no other figure here has been checked against a source yet. The population line is the midpoint of a rough range, and the shading is that range. Before 300,000 years ago there is no estimate at all.</p>
+  <p class="dataline"><b>Partly placeholder data.</b> Sourced: the geological strip (ICS chart, v2024/12), the species dates (Smithsonian Human Origins Program; Denisovans, H. antecessor and H. luzonensis are still placeholders) and world population from 10,000 BCE to 2023 (Our World in Data, which joins HYDE 3.3, Gapminder and the UN). That source gives one figure per year and no range; before 1800 its figures are model reconstructions, so the line is dashed there. The shaded range from 300,000 years ago to 10,000 BCE is an unsourced placeholder, and before 300,000 years ago there is no estimate at all. Marker dates have not been checked against a source yet.</p>
 </section>
 
 <!-- ============ FULL ATLAS ============ -->
@@ -256,7 +257,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
+      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
@@ -373,6 +374,8 @@ Object.values(DS).forEach(ds => {
     ds._sorted = merged;
     ds._cov0 = ds.coverage ? parseTime(ds.coverage[0][0]) : ds._sorted[0]._t;
   }
+  /* population: an unsourced placeholder range kept for the stretch the source does not cover */
+  if (ds.placeholder){ ds.placeholder.forEach(s => s._t = parseTime(s.t)); ds._ph = ds.placeholder.slice().sort((a, b) => b._t - a._t); }
   if (ds.bands) ds.bands.forEach(b => b._keys = b.keys.map(([t, v]) => [parseTime(t), v]));
   if (ds.steps){ ds.steps.forEach(s => s._t = parseTime(s.t)); ds.steps.sort((a, b) => a._t - b._t); }
   if (ds.items) Object.values(ds.items).forEach(sc => sc.rows.forEach(r => r.items.forEach(norm)));
@@ -392,6 +395,21 @@ function srcOf(rec, ds){
   const would = [...new Set([...real, ...(ds.wouldUse || []).map(i => S[i]).filter(Boolean)])];
   if (would.length) return "Would come from: " + would.map(s => s.title).join("; ") + " (not yet ingested)";
   return "No source yet. Placeholder.";
+}
+
+/* population line from single-figure samples (newest last); HYDE figures are reconstructions, so those stretches are dashed */
+const modelled = s => /^HYDE/.test(s.src || "");
+function srcLine(ctx, pts, fx, fy, lw){
+  ctx.save(); ctx.strokeStyle = PAL.accent; ctx.lineWidth = lw; ctx.lineJoin = "round"; ctx.lineCap = "butt";
+  let i = 0;
+  while (i < pts.length - 1){
+    const dash = modelled(pts[i]); let j = i;
+    ctx.beginPath(); ctx.moveTo(fx(pts[i]), fy(pts[i]));
+    while (j < pts.length - 1 && modelled(pts[j]) === dash){ j++; ctx.lineTo(fx(pts[j]), fy(pts[j])); }
+    ctx.setLineDash(dash ? [lw * 2.6, lw * 1.8] : []); ctx.stroke();
+    i = j;
+  }
+  ctx.restore();
 }
 
 /* ================= THEME ================= */
@@ -577,14 +595,16 @@ function createView(o){
   function bandLane(ds, y, h){
     const [lo, hi] = ds.yDomain;
     const sc = v => y + h - Math.max(0, Math.min(1, (Math.log10(v) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo)))) * h;
-    const pts = ds._sorted;
+    const rng = ds._ph || ds._sorted;
     ctx.save();
     ctx.beginPath();
-    pts.forEach((p, i) => { const x = cx(X(p._t)), yy = sc(p.hi); i ? ctx.lineTo(x, yy) : ctx.moveTo(x, yy); });
-    for (let i = pts.length - 1; i >= 0; i--) ctx.lineTo(cx(X(pts[i]._t)), sc(pts[i].lo));
+    rng.forEach((p, i) => { const x = cx(X(p._t)), yy = sc(p.hi); i ? ctx.lineTo(x, yy) : ctx.moveTo(x, yy); });
+    for (let i = rng.length - 1; i >= 0; i--) ctx.lineTo(cx(X(rng[i]._t)), sc(rng[i].lo));
     ctx.closePath();
-    ctx.fillStyle = alpha(PAL.accent, .24); ctx.fill();
-    ctx.strokeStyle = alpha(PAL.accent, .75); ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = alpha(PAL.accent, ds._ph ? .14 : .24); ctx.fill();
+    ctx.strokeStyle = alpha(PAL.accent, ds._ph ? .4 : .75); ctx.lineWidth = 1; ctx.stroke();
+    /* a sourced single-figure series: a line, dashed where the source's figures are model reconstructions */
+    if (ds._ph) srcLine(ctx, ds._sorted, p => cx(X(p._t)), p => sc(p.v), 1.6);
     const xo = cx(X(ds._cov0));
     if (xo > 0){
       ctx.fillStyle = alpha(PAL.rule2, .92); ctx.fillRect(0, y, xo, h);
@@ -596,7 +616,7 @@ function createView(o){
     return sc;
   }
   E.band = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · " + ds.unit + " · log · band is the uncertainty", y);
+    cap(lane.label + " · " + ds.unit + " · log · " + (ds._ph ? "shaded: placeholder · line: Our World in Data, dashed where modelled" : "band is the uncertainty"), y);
     const top = y + 13, bh = h - 14, sc = bandLane(ds, top, bh);
     if (ds.unit === "people"){
       ctx.save(); ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textAlign = "right";
@@ -929,7 +949,7 @@ const HV = (() => {
   const P = { log: { c: t => -Math.log10(Math.max(t - NOW, 0) + 30), t: c => Math.pow(10, -c) - 30 + NOW }, linear: PROJ.linear };
   const view = { mode: "log", c0: 0, c1: 1 };
   let ymode = "log";
-  const POP = DS.population, PS = POP._sorted, COV0 = POP._cov0, FIRST = PS[0], YMAXL = 9e9;
+  const POP = DS.population, PS = POP._sorted, PH = POP._ph, COV0 = POP._cov0, FIRST = PH[0], YMAXL = 9e9;
   let W = 0, H = 0, DPR = 1, raf = null, tween = null, hov = null, sel = null, labHits = [], stripHits = [], hatch = null, TOP = 40, BOT = 300, rowsReserved = 1;
   const lastRow = {};
   const pw = () => Math.max(W - ML - MR, 1);
@@ -946,16 +966,21 @@ const HV = (() => {
   const Y = v => ymode === "log"
     ? BOT - (Math.log10(Math.max(v, 1e3)) - 3) / 7 * (BOT - TOP - 4)
     : BOT - Math.max(v, 0) / YMAXL * (BOT - TOP - 4);
+  /* sourced stretch: the nearest published figure, not an interpolation. Before it: the placeholder range. */
   function popAt(t){
-    if (t > COV0 || t > PS[0]._t) return null;
-    for (let i = 0; i < PS.length - 1; i++){
-      const a = PS[i], b = PS[i + 1];
+    if (t <= PS[0]._t){
+      let best = PS[0]; PS.forEach(s => { if (Math.abs(s._t - t) < Math.abs(best._t - t)) best = s; });
+      return { sourced: true, v: best.v, year: 2000 - best._t, src: best.src };
+    }
+    if (t > COV0 || t > PH[0]._t) return null;
+    for (let i = 0; i < PH.length - 1; i++){
+      const a = PH[i], b = PH[i + 1];
       if (t <= a._t && t >= b._t){
         const f = (a._t - t) / ((a._t - b._t) || 1), L = (u, v) => Math.pow(10, Math.log10(u) + (Math.log10(v) - Math.log10(u)) * f);
         const lo = L(a.lo, b.lo), hi = L(a.hi, b.hi); return { lo, hi, mid: Math.sqrt(lo * hi) };
       }
     }
-    const z = PS[PS.length - 1]; return { lo: z.lo, hi: z.hi, mid: Math.sqrt(z.lo * z.hi) };
+    return null;
   }
   const people = v => v >= 1e9 ? (v / 1e9).toFixed(v < 1e10 ? 1 : 0) + " billion" : v >= 1e6 ? Number((v / 1e6).toPrecision(2)) + " million" : Number(v.toPrecision(2)).toLocaleString("en");
   const agoShort = ya => ya >= 1e6 ? +(ya / 1e6).toFixed(1) + "M" : ya >= 1e3 ? +(ya / 1e3).toFixed(1) + "k" : String(Math.round(ya));
@@ -1109,9 +1134,9 @@ const HV = (() => {
         if (m.conf === "disputed"){ const L = Math.max(ML, X(m._t.older)), R = Math.min(ML + pw(), X(m._t.younger)); if (R - L > 4){ ctx.fillStyle = hatch; ctx.globalAlpha = .45; ctx.fillRect(L, TOP, R - L, BOT - TOP); ctx.globalAlpha = 1; } }
       } else fuzzyRect(m._t0, m._t1, TOP, BOT - TOP, a, PAL.mark);
     });
-    /* population: haze for the range, a strong line through its middle */
-    const pts = [];
-    for (let px = Math.max(ML, xo); px <= ML + pw() + 2; px += 2){ const p = popAt(T(Math.min(px, ML + pw()))); if (p) pts.push([px, p]); }
+    /* population before 10,000 BCE: a placeholder range drawn as haze only, with no line through it */
+    const pts = [], xs = X(PS[0]._t);
+    for (let px = Math.max(ML, xo); px <= Math.min(ML + pw(), xs) + 2; px += 2){ const p = popAt(T(Math.min(px, xs, ML + pw()))); if (p && !p.sourced) pts.push([Math.min(px, xs), p]); }
     if (pts.length > 1){
       [1, .62, .3].forEach(f => {
         ctx.beginPath();
@@ -1119,9 +1144,14 @@ const HV = (() => {
         for (let i = pts.length - 1; i >= 0; i--){ const [x, p] = pts[i]; ctx.lineTo(x, Y(p.mid * Math.pow(p.lo / p.mid, f))); }
         ctx.closePath(); ctx.fillStyle = alpha(PAL.accent, .1); ctx.fill();
       });
-      ctx.beginPath(); pts.forEach(([x, p], i) => { const y = Y(p.mid); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
-      ctx.strokeStyle = PAL.accent; ctx.lineWidth = 2.6; ctx.lineJoin = "round"; ctx.stroke();
+      const x0 = pts[0][0], x1 = pts[pts.length - 1][0], mid = pts[Math.floor(pts.length / 2)];
+      if (x1 - x0 > 150){
+        ctx.fillStyle = PAL.ink3; ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.font = 'italic 400 12px "IBM Plex Sans", sans-serif';
+        ctx.fillText("placeholder range, not sourced", (x0 + x1) / 2, Math.max(TOP + 30, Y(mid[1].hi) - 8));
+      }
     }
+    /* population from 10,000 BCE: Our World in Data, dashed where its figures are model reconstructions */
+    srcLine(ctx, PS, p => X(p._t), p => Y(p.v), 2.6);
     /* marker lines */
     MARKERS.forEach(m => {
       const on = sel === m, col = alpha(PAL.mark, on ? 1 : .8);
@@ -1184,7 +1214,10 @@ const HV = (() => {
     /* hover box */
     if (hov != null && hov >= ML && hov <= ML + pw()){
       const t = T(hov), p = popAt(t);
-      const lines = [[fmtAgo(t), PAL.ink, 500], p ? ["about " + people(p.mid) + " people", PAL.accent, 500] : ["population not estimated", PAL.ink3, 400], p ? ["range " + people(p.lo) + " to " + people(p.hi), PAL.ink3, 400] : null].filter(Boolean);
+      const lines = [[fmtAgo(t), PAL.ink, 500]].concat(
+        !p ? [["population not estimated", PAL.ink3, 400]]
+        : p.sourced ? [["about " + people(p.v) + " people", PAL.accent, 500], ["figure for " + (p.year < 0 ? fmtY(p.year) : p.year + " CE") + " · " + p.src, PAL.ink3, 400], [modelled(p) ? "a model reconstruction; no range given" : "no range given by the source", PAL.ink3, 400]]
+        : [["placeholder range " + people(p.lo) + " to " + people(p.hi), PAL.ink3, 400], ["not sourced", PAL.ink3, 400]]);
       let bw = 0; lines.forEach(([s, , wt]) => { ctx.font = `${wt} 13px "IBM Plex Sans", sans-serif`; bw = Math.max(bw, ctx.measureText(s).width); });
       bw += 20; const bh = 12 + lines.length * 18;
       let bx = hov + 12; if (bx + bw > ML + pw()) bx = hov - 12 - bw;
@@ -1388,7 +1421,7 @@ function scene(k){
   $("#s-next").textContent = k === s.scenes.length - 1 && cur.s < STORIES.length - 1 ? "Next story →" : "Next →";
   const flagged = sc.lanes.map(id => LANE[id]).filter(l => l && DS[l.dataset] && ["fabricated", "speculative"].includes(DS[l.dataset].conf))
     .map(l => l.label + (DS[l.dataset].conf === "fabricated" ? " is invented; read its shape only" : " is a speculative impression"));
-  const srcd = [sc.lanes.includes("geo") && "geological dates are from the ICS chart", sc.lanes.includes("hominins") && "species dates are from the Smithsonian (except Denisovans)"].filter(Boolean);
+  const srcd = [sc.lanes.includes("geo") && "geological dates are from the ICS chart", sc.lanes.includes("hominins") && "species dates are from the Smithsonian (except Denisovans)", sc.lanes.includes("pop") && "population from 10,000 BCE is from Our World in Data"].filter(Boolean);
   $("#s-data").innerHTML = (srcd.length ? "<b>Mostly not researched.</b> Here, " + srcd.join(" and ") + "; all other values in this view are unsourced placeholders." : "<b>Not researched.</b> All values in this view are unsourced placeholders.") + (flagged.length ? " " + flagged.join("; ") + "." : "");
   $("#s-readout").innerHTML = '<p class="empty">Tap a bar or band for details. Arrow keys step through the story.</p>';
 }

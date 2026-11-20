@@ -128,8 +128,9 @@
       "org": "Global Change Data Lab",
       "url": "https://ourworldindata.org",
       "license": "CC BY 4.0",
-      "format": "CSV / API",
-      "status": "not yet ingested"
+      "format": "CSV (long-run world population copied to data/reference/world_population_owid.csv)",
+      "status": "ingested",
+      "note": "World population 10,000 BCE–2023, joining HYDE 3.3, Gapminder v7 and UN WPP 2024. Last updated by OWID 2024-07-15, read 2026-11-20."
     },
     "westerhold": {
       "title": "CENOGRID — astronomically dated benthic record",
@@ -949,15 +950,1322 @@
       ],
       "conf": "modelled",
       "src": [
-        "placeholder"
+        "owid"
       ],
       "wouldUse": [
         "hyde",
         "maddison",
         "owid"
       ],
-      "note": "Before about 1800 these are reconstructions; before 10 ka they are carrying-capacity models wearing the costume of a census. The band width is the honest part of this lane.",
+      "note": "From 10,000 BCE to 2023 the line is Our World in Data's long-run world population series (data/reference/world_population_owid.csv). OWID joins three sources: HYDE 3.3 up to 1790, Gapminder v7 for 1800–1949 and UN World Population Prospects 2024 from 1950, and warns of possible breaks where they meet. It gives one central figure per year and no range. Figures before 1800 are model reconstructions, so that part of the line is dashed. Between 300,000 years ago and 10,000 BCE the shaded range is still an unsourced placeholder.",
       "samples": [
+        {
+          "t": "10000 BCE",
+          "v": 4501152,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "9000 BCE",
+          "v": 5687125,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "8000 BCE",
+          "v": 7314623,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "7000 BCE",
+          "v": 9651703,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "6000 BCE",
+          "v": 13278309,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "5000 BCE",
+          "v": 19155698,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "4000 BCE",
+          "v": 28859174,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "3000 BCE",
+          "v": 44577880,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "2000 BCE",
+          "v": 72685064,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1000 BCE",
+          "v": 110530464,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "0 CE",
+          "v": 232268832,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "100 CE",
+          "v": 237052192,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "200 CE",
+          "v": 240762160,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "300 CE",
+          "v": 227702848,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "400 CE",
+          "v": 241697008,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "500 CE",
+          "v": 253395808,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "600 CE",
+          "v": 271638944,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "700 CE",
+          "v": 278346080,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "800 CE",
+          "v": 285870176,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "900 CE",
+          "v": 311142688,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1000 CE",
+          "v": 323462624,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1100 CE",
+          "v": 397889888,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1200 CE",
+          "v": 444653984,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1300 CE",
+          "v": 456248096,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1400 CE",
+          "v": 442309216,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1500 CE",
+          "v": 503051104,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1600 CE",
+          "v": 516147616,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1700 CE",
+          "v": 595456896,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1710 CE",
+          "v": 617975872,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1720 CE",
+          "v": 648184768,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1730 CE",
+          "v": 670899968,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1740 CE",
+          "v": 702227776,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1750 CE",
+          "v": 753279296,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1760 CE",
+          "v": 788254976,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1770 CE",
+          "v": 827951488,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1780 CE",
+          "v": 900945152,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1790 CE",
+          "v": 942261696,
+          "src": "HYDE 3.3"
+        },
+        {
+          "t": "1800 CE",
+          "v": 983104755,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1801 CE",
+          "v": 986464967,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1802 CE",
+          "v": 989864750,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1803 CE",
+          "v": 993304404,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1804 CE",
+          "v": 996784263,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1805 CE",
+          "v": 1000304675,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1806 CE",
+          "v": 1003866016,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1807 CE",
+          "v": 1007468698,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1808 CE",
+          "v": 1011113144,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1809 CE",
+          "v": 1014799822,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1810 CE",
+          "v": 1020150076,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1811 CE",
+          "v": 1025557675,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1812 CE",
+          "v": 1031616616,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1813 CE",
+          "v": 1038342722,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1814 CE",
+          "v": 1045238421,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1815 CE",
+          "v": 1052307852,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1816 CE",
+          "v": 1059555372,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1817 CE",
+          "v": 1066985519,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1818 CE",
+          "v": 1074603043,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1819 CE",
+          "v": 1082114553,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1820 CE",
+          "v": 1089507052,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1821 CE",
+          "v": 1096534977,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1822 CE",
+          "v": 1103392066,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1823 CE",
+          "v": 1110594705,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1824 CE",
+          "v": 1117897019,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1825 CE",
+          "v": 1125304048,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1826 CE",
+          "v": 1132861806,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1827 CE",
+          "v": 1140524282,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1828 CE",
+          "v": 1148292956,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1829 CE",
+          "v": 1155618460,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1830 CE",
+          "v": 1162497339,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1831 CE",
+          "v": 1168886301,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1832 CE",
+          "v": 1174792985,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1833 CE",
+          "v": 1180213555,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1834 CE",
+          "v": 1185694036,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1835 CE",
+          "v": 1191237685,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1836 CE",
+          "v": 1196838401,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1837 CE",
+          "v": 1202503348,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1838 CE",
+          "v": 1208233715,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1839 CE",
+          "v": 1213934891,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1840 CE",
+          "v": 1219617217,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1841 CE",
+          "v": 1225283810,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1842 CE",
+          "v": 1230929323,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1843 CE",
+          "v": 1236555463,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1844 CE",
+          "v": 1242258939,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1845 CE",
+          "v": 1248042343,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1846 CE",
+          "v": 1253907423,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1847 CE",
+          "v": 1259855932,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1848 CE",
+          "v": 1265889730,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1849 CE",
+          "v": 1271136843,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1850 CE",
+          "v": 1275602897,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1851 CE",
+          "v": 1278768180,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1852 CE",
+          "v": 1281158448,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1853 CE",
+          "v": 1282781891,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1854 CE",
+          "v": 1284514999,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1855 CE",
+          "v": 1286359120,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1856 CE",
+          "v": 1288315736,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1857 CE",
+          "v": 1290386388,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1858 CE",
+          "v": 1292572700,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1859 CE",
+          "v": 1295121860,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1860 CE",
+          "v": 1298027373,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1861 CE",
+          "v": 1301279942,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1862 CE",
+          "v": 1304883100,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1863 CE",
+          "v": 1308825538,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1864 CE",
+          "v": 1312850777,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1865 CE",
+          "v": 1316952210,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1866 CE",
+          "v": 1321129252,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1867 CE",
+          "v": 1325389634,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1868 CE",
+          "v": 1329732282,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1869 CE",
+          "v": 1334654211,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1870 CE",
+          "v": 1340168478,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1871 CE",
+          "v": 1346202715,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1872 CE",
+          "v": 1352896118,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1873 CE",
+          "v": 1360163018,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1874 CE",
+          "v": 1367501771,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1875 CE",
+          "v": 1374940414,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1876 CE",
+          "v": 1382459121,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1877 CE",
+          "v": 1390028839,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1878 CE",
+          "v": 1397666358,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1879 CE",
+          "v": 1405838237,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1880 CE",
+          "v": 1414583216,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1881 CE",
+          "v": 1423919001,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1882 CE",
+          "v": 1433850986,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1883 CE",
+          "v": 1444371648,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1884 CE",
+          "v": 1455021634,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1885 CE",
+          "v": 1465857041,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1886 CE",
+          "v": 1476798447,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1887 CE",
+          "v": 1487893376,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1888 CE",
+          "v": 1499115427,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1889 CE",
+          "v": 1510109709,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1890 CE",
+          "v": 1520891633,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1891 CE",
+          "v": 1531425085,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1892 CE",
+          "v": 1541712153,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1893 CE",
+          "v": 1551756342,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1894 CE",
+          "v": 1561938512,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1895 CE",
+          "v": 1572272041,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1896 CE",
+          "v": 1582693744,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1897 CE",
+          "v": 1593261169,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1898 CE",
+          "v": 1603953574,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1899 CE",
+          "v": 1615300901,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1900 CE",
+          "v": 1627273655,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1901 CE",
+          "v": 1639887187,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1902 CE",
+          "v": 1653151632,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1903 CE",
+          "v": 1667064512,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1904 CE",
+          "v": 1681154888,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1905 CE",
+          "v": 1695427510,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1906 CE",
+          "v": 1709887300,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1907 CE",
+          "v": 1724558347,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1908 CE",
+          "v": 1739441480,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1909 CE",
+          "v": 1753729257,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1910 CE",
+          "v": 1767417985,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1911 CE",
+          "v": 1780422213,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1912 CE",
+          "v": 1792912374,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1913 CE",
+          "v": 1804803374,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1914 CE",
+          "v": 1816884694,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1915 CE",
+          "v": 1829102909,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1916 CE",
+          "v": 1841395693,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1917 CE",
+          "v": 1853777065,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1918 CE",
+          "v": 1866778878,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1919 CE",
+          "v": 1880624916,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1920 CE",
+          "v": 1895426673,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1921 CE",
+          "v": 1910916276,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1922 CE",
+          "v": 1927207651,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1923 CE",
+          "v": 1944216846,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1924 CE",
+          "v": 1961489200,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1925 CE",
+          "v": 1979027667,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1926 CE",
+          "v": 1996813608,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1927 CE",
+          "v": 2014848732,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1928 CE",
+          "v": 2033160306,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1929 CE",
+          "v": 2052125441,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1930 CE",
+          "v": 2071786711,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1931 CE",
+          "v": 2092158599,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1932 CE",
+          "v": 2113215566,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1933 CE",
+          "v": 2134919626,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1934 CE",
+          "v": 2156892673,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1935 CE",
+          "v": 2179140887,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1936 CE",
+          "v": 2201762907,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1937 CE",
+          "v": 2224730578,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1938 CE",
+          "v": 2248127325,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1939 CE",
+          "v": 2270675197,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1940 CE",
+          "v": 2291979566,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1941 CE",
+          "v": 2312098978,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1942 CE",
+          "v": 2331135363,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1943 CE",
+          "v": 2349014611,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1944 CE",
+          "v": 2366918849,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1945 CE",
+          "v": 2384671779,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1946 CE",
+          "v": 2402301767,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1947 CE",
+          "v": 2421291820,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1948 CE",
+          "v": 2441897177,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1949 CE",
+          "v": 2467923023,
+          "src": "Gapminder v7 (country sums)"
+        },
+        {
+          "t": "1950 CE",
+          "v": 2493092852,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1951 CE",
+          "v": 2536927034,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1952 CE",
+          "v": 2584086340,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1953 CE",
+          "v": 2634106241,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1954 CE",
+          "v": 2685894857,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1955 CE",
+          "v": 2740213796,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1956 CE",
+          "v": 2795409991,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1957 CE",
+          "v": 2852618331,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1958 CE",
+          "v": 2911249671,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1959 CE",
+          "v": 2965950350,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1960 CE",
+          "v": 3015470889,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1961 CE",
+          "v": 3064869675,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1962 CE",
+          "v": 3123374312,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1963 CE",
+          "v": 3192807826,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1964 CE",
+          "v": 3264487343,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1965 CE",
+          "v": 3334533710,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1966 CE",
+          "v": 3404041131,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1967 CE",
+          "v": 3473412877,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1968 CE",
+          "v": 3545187246,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1969 CE",
+          "v": 3619491581,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1970 CE",
+          "v": 3694683794,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1971 CE",
+          "v": 3769847867,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1972 CE",
+          "v": 3844917684,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1973 CE",
+          "v": 3920805041,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1974 CE",
+          "v": 3996416100,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1975 CE",
+          "v": 4070735279,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1976 CE",
+          "v": 4144246382,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1977 CE",
+          "v": 4217863796,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1978 CE",
+          "v": 4292097499,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1979 CE",
+          "v": 4368539520,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1980 CE",
+          "v": 4447606240,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1981 CE",
+          "v": 4528777306,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1982 CE",
+          "v": 4612673415,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1983 CE",
+          "v": 4697327573,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1984 CE",
+          "v": 4782175518,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1985 CE",
+          "v": 4868943457,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1986 CE",
+          "v": 4958072839,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1987 CE",
+          "v": 5049746390,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1988 CE",
+          "v": 5141992540,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1989 CE",
+          "v": 5234431736,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1990 CE",
+          "v": 5327803106,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1991 CE",
+          "v": 5418735886,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1992 CE",
+          "v": 5505989815,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1993 CE",
+          "v": 5591544802,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1994 CE",
+          "v": 5675551258,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1995 CE",
+          "v": 5758878977,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1996 CE",
+          "v": 5842055730,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1997 CE",
+          "v": 5924787819,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1998 CE",
+          "v": 6007066691,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "1999 CE",
+          "v": 6089006328,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2000 CE",
+          "v": 6171702992,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2001 CE",
+          "v": 6254936464,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2002 CE",
+          "v": 6337730343,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2003 CE",
+          "v": 6420361633,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2004 CE",
+          "v": 6503377774,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2005 CE",
+          "v": 6586970132,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2006 CE",
+          "v": 6671452019,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2007 CE",
+          "v": 6757308776,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2008 CE",
+          "v": 6844457659,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2009 CE",
+          "v": 6932766416,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2010 CE",
+          "v": 7021732143,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2011 CE",
+          "v": 7110923773,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2012 CE",
+          "v": 7201202478,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2013 CE",
+          "v": 7291793585,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2014 CE",
+          "v": 7381616239,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2015 CE",
+          "v": 7470491876,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2016 CE",
+          "v": 7558554527,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2017 CE",
+          "v": 7645617952,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2018 CE",
+          "v": 7729902779,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2019 CE",
+          "v": 7811293699,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2020 CE",
+          "v": 7887001289,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2021 CE",
+          "v": 7954448387,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2022 CE",
+          "v": 8021407196,
+          "src": "UN WPP 2024"
+        },
+        {
+          "t": "2023 CE",
+          "v": 8091734933,
+          "src": "UN WPP 2024"
+        }
+      ],
+      "placeholder": [
         {
           "t": "300 ka",
           "lo": 3000,
@@ -992,71 +2300,6 @@
           "t": "12 ka",
           "lo": 1000000,
           "hi": 10000000
-        },
-        {
-          "t": "8000 b2k",
-          "lo": 3000000,
-          "hi": 15000000
-        },
-        {
-          "t": "7000 b2k",
-          "lo": 15000000,
-          "hi": 40000000
-        },
-        {
-          "t": "3000 BCE",
-          "lo": 30000000,
-          "hi": 60000000
-        },
-        {
-          "t": "1000 BCE",
-          "lo": 50000000,
-          "hi": 100000000
-        },
-        {
-          "t": "1 CE",
-          "lo": 150000000,
-          "hi": 330000000
-        },
-        {
-          "t": "1000 CE",
-          "lo": 250000000,
-          "hi": 350000000
-        },
-        {
-          "t": "1500 CE",
-          "lo": 420000000,
-          "hi": 540000000
-        },
-        {
-          "t": "1700 CE",
-          "lo": 600000000,
-          "hi": 750000000
-        },
-        {
-          "t": "1800 CE",
-          "lo": 900000000,
-          "hi": 1050000000
-        },
-        {
-          "t": "1900 CE",
-          "lo": 1550000000,
-          "hi": 1700000000
-        },
-        {
-          "t": "1950 CE",
-          "lo": 2500000000,
-          "hi": 2560000000
-        },
-        {
-          "t": "2000 CE",
-          "lo": 6100000000,
-          "hi": 6150000000
-        },
-        {
-          "t": "now",
-          "lo": 8200000000,
-          "hi": 8250000000
         }
       ]
     },

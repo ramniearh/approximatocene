@@ -23,7 +23,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - The view can zoom in freely but never out past about 1 million years.
 - Time axis: logarithmic by default, with a linear option. Population axis: logarithmic by default, with a linear option. On linear the curve goes nearly vertical at the end, which is intended.
 - Clicking a marker shows everything from just before that marker up to the present.
-- Population: one clear line through the middle of each range, with the range as a soft haze around it. **The line is the geometric midpoint of a placeholder range, not a sourced estimate.** When real data arrives (HYDE 3.3 or Our World in Data, which publish central estimates), the line should switch to those.
+- Population: the line is Our World in Data's central estimate from 10,000 BCE (dashed while it is a HYDE reconstruction). Before that only a placeholder haze is shown, with no line (see "Sourced data on the page").
 - Before 300,000 years ago there is no population estimate. A faint dotted line runs low there to say "small, thousands to tens of thousands", and the page labels it as not a figure.
 - Geology strip: Pleistocene and Holocene, with the Early, Middle (Chibanian) and Late Pleistocene, the three Holocene ages, and a hatched "Anthropocene?" for the 2024 rejection.
 - The hominin strip shows species (several of them contested), not subspecies. Disputed ones are hatched.
@@ -31,7 +31,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 
 ## Data status
 
-- **Everything is a placeholder** written from memory to make the page work. Nothing has been checked against a source.
+- **Most values are placeholders** written from memory to make the page work. The exceptions are geology, hominin species and population from 10,000 BCE (see "Sourced data on the page").
 - Fixed: the population list had two samples at the same date ("5000 b2k" and "3000 BCE" are the same year). The first was moved to 7000 b2k (5000 BCE), which seemed to be the intent. This needs confirming when real figures go in.
 - Some lanes in the Full atlas are invented outright and labelled that way. Temperature is sine waves and energy per person has made-up numbers. The political-forms lane is a speculative impression.
 - Sources to start with, when real data goes in: Our World in Data or HYDE 3.3 for population, the International Chronostratigraphic Chart for geological dates, and the Smithsonian Human Origins pages for hominin species. Candidate sources are listed in `docs/reference/SOURCES.md` and in `data/atlas.json` under `sources`.
@@ -60,11 +60,16 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - Bars are solid between the Smithsonian's dates and then fade over a fixed 12 pixels past each end (none at "now"). This is a reminder that species outlive their fossils, not data; the About legend and each details box say so.
   - Earlier "disputed" flags (hatching) were kept for *Sahelanthropus*, *H. habilis* and *H. heidelbergensis*. They are editorial judgments, not from the source.
   - Denisovans, *H. antecessor* and *H. luzonensis* keep their placeholder dates and say "No source yet. Placeholder."
+- **Population (Nov 2026):** from 10,000 BCE to 2023 the population line (`population` in `data/atlas.json`, used by all three chart tabs) is the OWID series from `world_population_owid.csv`, all 261 rows, each tagged with its underlying source. OWID gives no range, so there is no haze over that stretch. Instead the line is **dashed where the figures are HYDE 3.3 model reconstructions (to 1790) and solid from 1800** (Gapminder, then UN). Both choices were Eduardo's.
+  - Hovering shows the nearest published figure and its year and source, not an interpolated value.
+  - **Kept, at Eduardo's choice:** the placeholder range from 300,000 years ago to 10,000 BCE (`population.placeholder`). It is drawn as haze only, with no line, and labelled "placeholder range, not sourced". Before 300,000 years ago it still says "not estimated".
+  - The line ends at 2023, where the source ends. On the Full atlas log axis that leaves a visible gap before "now".
+  - OWID's year 0 is entered as "0 CE", so its BCE years are read at face value (−1000 → 1000 BCE). At this scale a one-year shift wouldn't show.
 
 ## Open questions (Eduardo's call)
 
 - Should the political-forms lane stay? Nobody has these numbers. The options are to keep it as a clearly labelled impression, to replace it with something countable (such as the size of the largest polity over time), or to drop it. A sourced "largest polity over time" now exists in `data/reference/` (from Cliopatria), so the countable option is ready if wanted.
-- Population: Our World in Data chosen as the first source (Nov 2026). Still open: whether to add rival reconstructions to show where they disagree and to give the line a range.
+- Population: Our World in Data is now on the page (Nov 2026). Still open: whether to add rival reconstructions to show where they disagree and to give the line a range, and what source (if any) to use for 300,000 years ago to 10,000 BCE, where the placeholder haze remains.
 
 ## Ideas, not yet done
 
