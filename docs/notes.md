@@ -63,13 +63,15 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - **Population (Nov 2026):** from 10,000 BCE to 2023 the population line (`population` in `data/atlas.json`, used by all three chart tabs) is the OWID series from `world_population_owid.csv`, all 261 rows, each tagged with its underlying source. OWID gives no range, so there is no haze over that stretch. Instead the line is **dashed where the figures are HYDE 3.3 model reconstructions (to 1790) and solid from 1800** (Gapminder, then UN). Both choices were Eduardo's.
   - Hovering shows the nearest published figure and its year and source, not an interpolated value.
   - **Kept, at Eduardo's choice:** the placeholder range from 300,000 years ago to 10,000 BCE (`population.placeholder`). It is drawn as haze only, with no line, and labelled "placeholder range, not sourced". Before 300,000 years ago it still says "not estimated".
-  - The line ends at 2023, where the source ends. On the Full atlas log axis that leaves a visible gap before "now".
+  - **"Now" is fixed at 2023** (Nov 2026, Eduardo's call), the last year in the OWID series, so the line reaches the right edge. "Years ago" counts back from 2023 everywhere on the page, and the About tab says so. If newer population data is added, move `NOW` in `src/page.html` with it.
+  - Wording for the unsourced stretches (Eduardo's, deliberately vague for now): 300,000 years ago to 10,000 BCE is "probably a range of guesses (not sourced)"; before 300,000 years ago it's "not estimated. Presumably there were some humans here and there". The old "thousands to tens of thousands" text is gone. The faint dotted line is still drawn at the same low height, though, so it still hints at a size.
   - OWID's year 0 is entered as "0 CE", so its BCE years are read at face value (−1000 → 1000 BCE). At this scale a one-year shift wouldn't show.
 
 ## Open questions (Eduardo's call)
 
 - Should the political-forms lane stay? Nobody has these numbers. The options are to keep it as a clearly labelled impression, to replace it with something countable (such as the size of the largest polity over time), or to drop it. A sourced "largest polity over time" now exists in `data/reference/` (from Cliopatria), so the countable option is ready if wanted.
 - Population: Our World in Data is now on the page (Nov 2026). Still open: whether to add rival reconstructions to show where they disagree and to give the line a range, and what source (if any) to use for 300,000 years ago to 10,000 BCE, where the placeholder haze remains.
+- **To revisit: population before 10,000 BCE.** Both unsourced stretches are left vague on purpose for now. Decide later (1) whether the "range of guesses" from 300,000 years ago to 10,000 BCE gets a real source (for example published Palaeolithic population estimates or effective-population-size studies, which measure something different), stays as an openly labelled guess, or is removed, and (2) whether the dotted line before 300,000 years ago should go, since its height still suggests a size.
 
 ## Ideas, not yet done
 
