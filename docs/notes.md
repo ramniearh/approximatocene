@@ -57,7 +57,12 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - `global_temperature_pages2k.csv`: PAGES 2k Consortium (2019) global mean temperature, 1–2000 CE, with the median and 2.5–97.5% range of the 7,000-member ensemble, raw and 31-year filtered, in °C relative to 1961–1990. The instrumental target (Cowtan & Way) runs to 2017.
   - `co2_ice_cores_bereiter.csv`: the Antarctic CO₂ composite (Bereiter et al. 2015), from 2001 CE back to 805 ka, in ppm with 1σ. The `underlying_record` column says which ice core each row is from, following the source's own list. Where that list overlaps (105–115 ka) or skips (611–612 ka), the column says so instead of picking. Ages are AICC2012 except for Law Dome, WAIS and Siple Dome.
   - `co2_mauna_loa_noaa.csv`: NOAA GML / Scripps Mauna Loa annual means, 1959–2025 (file created 2026-11-19). The last year may still be revised, and Dec 2022–Jul 2023 was measured at Maunakea after the eruption.
-  - **Not done: CO₂ before 800 ka.** The CenCO2PIP Consortium (2023, *Science*) data product (Zenodo 14537923, v1.02, CC BY 4.0) is about 140 spreadsheets of individual proxy estimates (boron, stomata, paleosols and others), not a single curve. Its smoothed 66-million-year curve is in the paper's supplement. Open question below.
+  - `co2_proxies_cenco2pip.csv`: CO₂ before the ice cores, as **individual proxy estimates, not a curve** (Eduardo's choice, Nov 2026). From the CenCO2PIP Consortium (2023, *Science*, doi:10.1126/science.adi5177) data product v1.02 (Zenodo 14537923, Dec 2024, CC BY 4.0), which is 137 spreadsheets, one per study. There are 6,088 estimates from 0 to 455 Ma (most are Cenozoic), each with its age and CO₂ uncertainty, proxy type, study DOI and the CenCO2PIP flags.
+    - `category` is the project's own grading. **1** means high quality with the uncertainty fully worked out; **2** means high quality, but the uncertainty is not yet fully constrained; **3** means an outdated method or an uncertainty that can't be fully quantified. `category_reason` gives their wording. The project also marks values as superseded or quarantined. 3,712 estimates are category 1–2 and neither superseded nor quarantined. A page lane would most likely show only those, but that is a choice still to make.
+    - Rows with no CO₂ value (1,815, marked "NA" in the source) are left out. The names and emails of the people who entered the data are left out too.
+    - Kept as published, though they look odd: 9 estimates are zero or negative CO₂ (paleosol and boron studies). Some DOIs in a few files count upward row by row (for example `10.1130/G36467.38`), which looks like an Excel fill error in the source. The `product_file` column still identifies the study.
+    - One fix: in `boron_isotopes_guillermic_2022` the first few cells of each row sit two columns to the left of their headers. Proxy, author and year were read from where they actually are. Age and CO₂ were already in place.
+    - CenCO2PIP's own smoothed 66-million-year curve (in the paper's supplement) is not used.
 
 ## Sourced data on the page
 
@@ -82,7 +87,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - **To revisit: population before 10,000 BCE.** Both unsourced stretches are left vague on purpose for now. Decide later (1) whether the "range of guesses" from 300,000 years ago to 10,000 BCE gets a real source (for example published Palaeolithic population estimates or effective-population-size studies, which measure something different), stays as an openly labelled guess, or is removed, and (2) whether the dotted line before 300,000 years ago should go, since its height still suggests a size.
 
 - **Temperature lane: how to show four records.** They measure different things (deep-sea δ¹⁸O, Antarctic temperature, global temperature) in different units. Options: separate stacked strips, or one lane that switches record by zoom with the handover marked. Either way, the joins should be visible, not smoothed.
-- **Carbon before 800 ka:** use CenCO2PIP's individual proxy points (scattered, with their own error bars), get its published smoothed curve from the paper's supplement, or leave the carbon lane starting at 800 ka.
+- **Carbon before 800 ka:** decided (Nov 2026), use CenCO2PIP's individual proxy points, not a curve. Still open: which categories to show (probably 1–2 only), and whether category 3 appears faded or not at all.
 
 ## Ideas, not yet done
 
