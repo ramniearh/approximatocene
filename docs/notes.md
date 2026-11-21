@@ -113,6 +113,14 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - **Not used: PBDB's first-appearance dates for major groups.** They are computed from every record in the database, misidentified ones included, so several are badly off: flowering plants (Angiospermae) in the Carboniferous (about 359–347 Ma), amniotes in the Devonian, and land plants (Embryophyta) in the Ediacaran. Benton et al. 2015 is used instead for animals (above); plants still need a curated source.
 - `animal_genus_diversity_pbdb.csv` (read 2026-11-21) is PBDB data service 1.2, `occs/diversity` with `base_name=Metazoa`, `count=genera` and `time_reso=stage`, using the default settings (no `recent`, so living genera are not extended to the present). It has 99 stages, kept exactly as PBDB returns them, including its own stage boundaries, which differ slightly from ICS 2024 in places. The Přídolí stage has no row. The last Holocene stages have almost no records (Greenlandian has one), so their counts are tiny. The data service gives the licence as **CC0**, not CC BY as first registered. With `base_name=Eukaryota`, PBDB returned *fewer* genera than for animals alone, so that query was not used.
 
+- **No stated uncertainty is not certainty (Nov 2026, Eduardo).** The new lanes had drifted toward false certainty: uncertainty was drawn only where a source published numbers for it. The rule now: where a source gives no uncertainty, the mark is dashed, faded or soft-topped, never crisp. The About legend explains this.
+  - Dashed: the largest-polity line, the UN "most populous country" line, the extinction marks, and milestones with no published range (early life).
+  - Faded: the CENOGRID and EPICA lines (no error band or age uncertainty in the files) and the milestone spans.
+  - Soft-topped: the fossil diversity bars.
+  - Confidence tags corrected: extinctions and the Benton groups are now "estimated" (they had been tagged "dated"), and the milestones "inferred" (also previously "dated"), with a note that each is one paper's dating.
+  - The UN line's note says India has held no census since 2011, so the 2022 crossover with China is uncertain.
+  - Lanes that already draw a published range (PAGES 2k, CO₂ proxies, Seshat ranges, Benton soft maxima) are unchanged.
+
 ## Open questions (Eduardo's call)
 
 - Political forms: decided (Nov 2026, Eduardo), replaced by "largest polity by mapped area, every year". Still open: should composites such as "(British Empire)" count, or only single polities? The population lane uses Seshat (decided Nov 2026).

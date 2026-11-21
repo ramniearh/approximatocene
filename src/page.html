@@ -266,6 +266,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
       <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--bar) 30%,var(--bar) 70%,transparent)"></i>Species bars: a short fixed fade past the first and last fossils, as a reminder that species outlive their fossils; the fade's width is not data</div>
       <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(45deg,var(--bar) 0 3px,var(--disp) 3px 5px)"></i>Disputed category, or a scheme that does not apply</div>
       <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(90deg,var(--ink-4) 0 3px,transparent 3px 7px)"></i>No data, which is not the same as zero</div>
+      <div class="lgrow"><i class="sw" style="background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 20%,transparent),var(--accent)),repeating-linear-gradient(90deg,var(--accent) 0 5px,transparent 5px 8px)"></i>Dashed lines, faded lines and soft-topped bars: the source gives no uncertainty for these values, which is not the same as certain</div>
     </div>
     <div>
       <h3>Time base</h3>
@@ -670,7 +671,7 @@ function createView(o){
   /* largest polity by mapped area, every year (Cliopatria): a line, and beneath it which polity held the lead */
   const fmtKm = v => v >= 1e6 ? (v / 1e6) + "M" : v >= 1e3 ? (v / 1e3) + "k" : String(v);
   E["largest-polity"] = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · by mapped area, km², log · Cliopatria · area is not population; borders are disputed", y);
+    cap(lane.label + " · by mapped area, km², log · Cliopatria · dashed: the source gives no uncertainty; borders are disputed · area is not population", y);
     const top = y + 13, plotH = h - 15 - 17, barY = top + plotH + 3, barH = 13;
     const [lo, hi] = ds.yDomain, L0 = Math.log10(lo), L1 = Math.log10(hi);
     const fy = v => top + plotH - Math.max(0, Math.min(1, (Math.log10(Math.max(v, lo)) - L0) / (L1 - L0))) * plotH;
@@ -679,7 +680,8 @@ function createView(o){
     yTicks(ds.ticks, fy, " km²", fmtKm);
     const [a, b] = visIdx(T);
     ctx.save(); ctx.strokeStyle = PAL.accent; ctx.lineWidth = 1.4; ctx.lineJoin = "round";
-    seriesPath(T, i => R[i][1], fy, a, b); ctx.stroke(); ctx.restore();
+    /* dashed: Cliopatria gives one version of each border and no uncertainty, which is not the same as certain */
+    ctx.setLineDash([5, 3]); seriesPath(T, i => R[i][1], fy, a, b); ctx.stroke(); ctx.restore();
     const info = i => {
       const r = R[i];
       return { label: ds.names[r[2]] + " · " + r[1].toLocaleString("en") + " km²", _rangeText: fmtY(r[0]) + " · largest of " + r[3] + " polities Cliopatria maps that year", note: ds.note, conf: ds.conf, src: ds.src };
@@ -699,12 +701,18 @@ function createView(o){
   function lifeMark(p0, p1, y0, hh, color){
     const xa = cx(X(p0.older)), xd = cx(X(p1.younger));
     if (xd < -4 || xa > W + 4) return null;
-    if (xd - xa < 3){ const xm = (xa + xd) / 2; ctx.fillStyle = alpha(color, .85); ctx.fillRect(xm - 1, y0, 2, hh); return { x0: xm - 4, x1: xm + 4 }; }
-    iv(p0, p1, y0, hh, color, { a: .85 });
+    /* no published range (or too narrow to see): a dashed line, so it does not read as a firm date */
+    if (xd - xa < 3){
+      const xm = Math.round((xa + xd) / 2) + .5;
+      ctx.save(); ctx.strokeStyle = alpha(color, .9); ctx.lineWidth = 1.5; ctx.setLineDash([3, 2]);
+      ctx.beginPath(); ctx.moveTo(xm, y0); ctx.lineTo(xm, y0 + hh); ctx.stroke(); ctx.restore();
+      return { x0: xm - 4, x1: xm + 4 };
+    }
+    iv(p0, p1, y0, hh, color, { a: .6 });
     return { x0: xa, x1: xd };
   }
   E.life = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · top: early milestones · bars: animal genera known from fossils per stage (PBDB), shaded: the big five extinctions (ICS) · rows: when living groups began (Benton et al. 2015)", y);
+    cap(lane.label + " · top: early milestones, one paper each · bars: animal genera known from fossils per stage (PBDB), soft tops: depends on sampling · dashed: big five extinctions at conventional ICS boundaries · rows: when living groups began (Benton et al. 2015)", y);
     const mTop = y + 14, mH = 14;
     /* early milestones, each from its own paper */
     ctx.save();
@@ -716,7 +724,7 @@ function createView(o){
         ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink2; ctx.textBaseline = "middle";
         ctx.fillText(m.short, res.x1 + 4, mTop + mH / 2); lastM = res.x1 + 4 + ctx.measureText(m.short).width;
       }
-      st.hit.push({ x0: res.x0 - 2, x1: res.x1 + 2, y0: mTop, y1: mTop + mH, ds, at: () => ({ label: m.label, _rangeText: m.when, note: m.note, conf: "dated", src: m.src }) });
+      st.hit.push({ x0: res.x0 - 2, x1: res.x1 + 2, y0: mTop, y1: mTop + mH, ds, at: () => ({ label: m.label, _rangeText: m.when, note: m.note + " One paper's dating; other studies give other dates, and new finds move them.", conf: "inferred", src: m.src }) });
     });
     ctx.restore();
     /* living groups: soft maximum (faded) to minimum age (solid), then a thin line to now */
@@ -734,7 +742,7 @@ function createView(o){
       ctx.font = '400 9px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink2; ctx.textBaseline = "middle";
       const tw = ctx.measureText(g.short).width, lx = xb + 4 + tw < W - 4 ? Math.max(xb + 4, 2) : Math.max(xa - tw - 4, 2);
       if (lx < W - 20) ctx.fillText(g.short, lx, gy + (gRow - 2) / 2);
-      st.hit.push({ x0: Math.min(xa, xb - 4), x1: Math.max(xn, lx + tw), y0: gy, y1: gy + gRow, ds, at: () => ({ label: g.label, _rangeText: g.when, note: ds.groupsNote, conf: "dated", src: ds.groupsSrc }) });
+      st.hit.push({ x0: Math.min(xa, xb - 4), x1: Math.max(xn, lx + tw), y0: gy, y1: gy + gRow, ds, at: () => ({ label: g.label, _rangeText: g.when, note: ds.groupsNote, conf: "estimated", src: ds.groupsSrc }) });
     });
     ctx.restore();
     const top = mTop + mH + 4, bh = 82, fy = v => top + bh - Math.min(1, v / ds.yMax) * bh;
@@ -746,7 +754,9 @@ function createView(o){
       const x0 = cx(X(ds._T[i])), x1 = cx(X(ds._T1[i]));
       if (x1 < 0 || x0 > W || x1 - x0 < .2) return;
       const yy = fy(r[2]);
-      ctx.fillStyle = alpha(PAL.bar, .85); ctx.fillRect(x0, yy, Math.max(x1 - x0 - (x1 - x0 > 4 ? 1 : 0), .8), top + bh - yy);
+      /* soft tops: the count depends on how much has been found and recorded, and PBDB gives no uncertainty for it */
+      const g = ctx.createLinearGradient(0, yy, 0, top + bh); g.addColorStop(0, alpha(PAL.bar, .15)); g.addColorStop(Math.min(.35, 12 / Math.max(top + bh - yy, 1)), alpha(PAL.bar, .8)); g.addColorStop(1, alpha(PAL.bar, .85));
+      ctx.fillStyle = g; ctx.fillRect(x0, yy, Math.max(x1 - x0 - (x1 - x0 > 4 ? 1 : 0), .8), top + bh - yy);
       st.hit.push({ x0, x1, y0: top, y1: top + bh, ds, at: () => ({
         label: r[5] + " · " + r[2].toLocaleString("en") + " animal genera",
         _rangeText: r[0] + " – " + r[1] + " Ma · " + r[3].toLocaleString("en") + " of them found in this stage · " + r[4].toLocaleString("en") + " fossil records",
@@ -756,13 +766,14 @@ function createView(o){
     ds.extinctions.forEach(e => {
       const xa = cx(X(e._t0.older)), xd = cx(X(e._t1.younger)), xm = cx(X((e._t0.est + e._t1.est) / 2));
       if (xd < -4 || xa > W + 4) return;
-      if (xd - xa < 3){ ctx.fillStyle = alpha(PAL.accent, .75); ctx.fillRect(xm - 1, top, 2, bh); }
+      /* dashed: the boundary is dated, but the extinction itself unfolded over time and its placement here is a convention */
+      if (xd - xa < 3){ ctx.save(); ctx.strokeStyle = alpha(PAL.accent, .85); ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(Math.round(xm) + .5, top); ctx.lineTo(Math.round(xm) + .5, top + bh); ctx.stroke(); ctx.restore(); }
       else iv(e._t0, e._t1, top, bh, PAL.accent, { a: .4 });
       if (xm - lastLab > 70 && xm < W - 30){
         ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.accent; ctx.textBaseline = "top";
         ctx.fillText(e.short, Math.max(xm + 4, 2), top + 2); lastLab = xm + ctx.measureText(e.short).width;
       }
-      st.hit.push({ x0: Math.min(xa, xm - 4), x1: Math.max(xd, xm + 4), y0: top, y1: top + bh, ds, at: () => ({ label: e.label, _rangeText: fmtPointRange(e._t0, e._t1), note: e.note, conf: "dated", src: ["ics"] }) });
+      st.hit.push({ x0: Math.min(xa, xm - 4), x1: Math.max(xd, xm + 4), y0: top, y1: top + bh, ds, at: () => ({ label: e.label, _rangeText: "boundary " + fmtPointRange(e._t0, e._t1), note: e.note + " The extinction itself unfolded over time; the dashed mark is the conventional boundary, not a single moment.", conf: "estimated", src: ["ics"] }) });
     });
     ctx.restore();
   };
@@ -770,7 +781,7 @@ function createView(o){
   /* polity population: every Seshat estimate as published (a sample of polities, not all), plus the most populous country from 1950 */
   const fmtPpl = v => v >= 1e9 ? (v / 1e9) + "B" : v >= 1e6 ? (v / 1e6) + "M" : v >= 1e3 ? (v / 1e3) + "k" : String(v);
   E["polity-pop"] = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · people, log · Seshat's sample of polities, not all of them · bars: published ranges · dark line: most populous country (UN, from 1950)", y);
+    cap(lane.label + " · people, log · Seshat's sample of polities, not all of them · bars: published ranges · dashed: most populous country (UN estimates, from 1950)", y);
     const top = y + 13, bh = h - 15, [lo, hi] = ds.yDomain, L0 = Math.log10(lo), L1 = Math.log10(hi);
     const fy = v => top + bh - Math.max(0, Math.min(1, (Math.log10(Math.max(v, lo)) - L0) / (L1 - L0))) * bh;
     noData(-1, X(ds._T[0]), top, bh);
@@ -778,7 +789,8 @@ function createView(o){
     const R = ds.rows, U = ds.un;
     st.hit.push({ x0: X(U._T[0]) - 3, x1: W, y0: top, y1: top + bh, ds, at: x => {
       const k = nearest(U._T, tAtX(x)), r = U.rows[k];
-      return { label: U.countries[r[2]] + " · " + r[1].toLocaleString("en") + " people", _rangeText: fmtY(r[0]) + " · most populous country" + NEAREST, note: ds.note, conf: U.conf, src: U.src };
+      return { label: U.countries[r[2]] + " · " + r[1].toLocaleString("en") + " people", _rangeText: fmtY(r[0]) + " · most populous country" + NEAREST,
+               note: "The most populous country each year, from the UN World Population Prospects 2024 via Our World in Data. These are estimates with no range given here: India has held no census since 2011, so its recent figures, and the year it overtook China (2022 in this series), are less certain than one line suggests.", conf: U.conf, src: U.src };
     } });
     const info = i => {
       const r = R[i], p = ds.polities[r[4]];
@@ -808,7 +820,7 @@ function createView(o){
     }));
     const [ua, ub] = visIdx(U._T);
     ctx.strokeStyle = PAL.ink; ctx.lineWidth = 1.8; ctx.lineJoin = "round";
-    seriesPath(U._T, i => U.rows[i][1], fy, ua, ub); ctx.stroke();
+    ctx.setLineDash([5, 3]); seriesPath(U._T, i => U.rows[i][1], fy, ua, ub); ctx.stroke(); ctx.setLineDash([]);
     ctx.restore();
   };
   E["grouped-intervals"] = (ds, y, h, sp, lane) => {
@@ -942,9 +954,11 @@ function createView(o){
         for (let i = b; i >= a; i--) ctx.lineTo(cx(X(T[i])), fy(s.rows[i][2]));
         ctx.closePath(); ctx.fillStyle = alpha(PAL.accent, .2); ctx.fill();
       }
-      ctx.strokeStyle = PAL.accent; ctx.lineWidth = 1.3; ctx.lineJoin = "round";
+      /* no band from the source: the line is drawn faded, because no stated uncertainty is not the same as certain */
+      const banded = s.rows[0].length >= 4;
+      ctx.strokeStyle = banded ? PAL.accent : alpha(PAL.accent, .6); ctx.lineWidth = 1.3; ctx.lineJoin = "round";
       seriesPath(T, i => s.rows[i][1], fy, a, b); ctx.stroke();
-      sampleDots(T, i => s.rows[i][1], fy, a, b, PAL.accent);
+      sampleDots(T, i => s.rows[i][1], fy, a, b, banded ? PAL.accent : alpha(PAL.accent, .6));
       if (s._instr){
         const I = s._instr, [ia, ib] = visIdx(I._T);
         ctx.strokeStyle = PAL.ink2; ctx.lineWidth = 1;
@@ -959,7 +973,7 @@ function createView(o){
         }
         const k = nearest(T, t), r = s.rows[k];
         const val = fmtV(r[1]) + " " + s.unit + (r.length >= 4 ? " (95% range " + fmtV(r[2]) + " to " + fmtV(r[3]) + ")" : "");
-        return { label: s.label + " · " + val, _rangeText: fmtT(T[k]) + NEAREST, note: s.note, conf: s.conf, src: s.src };
+        return { label: s.label + " · " + val, _rangeText: fmtT(T[k]) + NEAREST, note: s.note + (r.length >= 4 ? "" : " The source file gives no uncertainty for these values or their ages, which grows further back in time; the line is drawn faded for that reason."), conf: s.conf, src: s.src };
       } });
     });
   };
