@@ -257,7 +257,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life lane counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The lane also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
+      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life lane counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The lane also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. Above the bars are three early milestones, each dated by one paper: signs of life in 3.48-billion-year-old hot-spring deposits (Djokic et al. 2017), the Great Oxidation Event (Gumsley et al. 2017) and the oldest multicellular eukaryotes (Miao et al. 2024). Below them, twelve living animal groups each show when their living members last shared a common ancestor, between the oldest fossil firmly in the group and the oldest plausible date (Benton et al. 2015). The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
@@ -403,7 +403,11 @@ Object.values(DS).forEach(ds => {
     const pad = (hi - lo) * .06; s._lo = lo - pad; s._hi = hi + pad;
   });
   if (ds.kind === "co2") [ds.ice, ds.mlo, ds.proxies].forEach(prepSeries);
-  if (ds.kind === "life"){ prepSeries(ds); ds._T1 = ds.rows.map(r => AGE.Ma(r[1])); ds.extinctions.forEach(norm); }
+  if (ds.kind === "life"){
+    prepSeries(ds); ds._T1 = ds.rows.map(r => AGE.Ma(r[1])); ds.extinctions.forEach(norm);
+    ds.milestones.forEach(m => { if (m.t) m._t = parsePoint(m.t); else norm(m); });
+    ds.groups.forEach(g => g._t = parsePoint(g.t));
+  }
   if (ds.kind === "polity-pop"){ prepSeries(ds); ds._T1 = ds.rows.map(r => AGE.CE(r[1])); prepSeries(ds.un); }
   if (ds.kind === "largest-polity"){
     prepSeries(ds);
@@ -522,7 +526,7 @@ function createView(o){
     if (l.encoding === "grouped-intervals"){ const n = groups().length; return n ? 15 + n * 23 : 0; }
     if (l.encoding === "strips"){ const n = stripsOn(DS[l.dataset]).length; return n ? n * STRIP_H : 0; }
     if (l.encoding === "co2") return covPx(DS.co2.proxies._T[0], NOW) >= 40 ? l.height : 0;
-    if (l.encoding === "life") return covPx(DS[l.dataset]._T[0], NOW) >= 40 ? l.height : 0;
+    if (l.encoding === "life"){ const L = DS[l.dataset], old = Math.max(L._T[0], ...L.milestones.map(m => (m._t || m._t0).older)); return covPx(old, NOW) >= 40 ? l.height : 0; }
     if (l.encoding === "polity-pop") return covPx(DS[l.dataset]._T[0], NOW) >= 40 ? l.height : 0;
     if (l.encoding === "largest-polity"){ const T = DS[l.dataset]._T; return covPx(T[0], T[T.length - 1]) >= 40 ? l.height : 0; }
     return l.height;
@@ -691,9 +695,49 @@ function createView(o){
   };
 
   /* life: animal genera known from fossils per stage (PBDB), with the five largest mass extinctions at ICS dates */
+  /* a mark for a dated point or span; ends fade across their published range. Positions use the range, never an invented middle */
+  function lifeMark(p0, p1, y0, hh, color){
+    const xa = cx(X(p0.older)), xd = cx(X(p1.younger));
+    if (xd < -4 || xa > W + 4) return null;
+    if (xd - xa < 3){ const xm = (xa + xd) / 2; ctx.fillStyle = alpha(color, .85); ctx.fillRect(xm - 1, y0, 2, hh); return { x0: xm - 4, x1: xm + 4 }; }
+    iv(p0, p1, y0, hh, color, { a: .85 });
+    return { x0: xa, x1: xd };
+  }
   E.life = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · animal genera known from fossils, per stage (PBDB) · shaded: the five largest mass extinctions (ICS dates)", y);
-    const top = y + 13, bh = h - 15, fy = v => top + bh - Math.min(1, v / ds.yMax) * bh;
+    cap(lane.label + " · top: early milestones · bars: animal genera known from fossils per stage (PBDB), shaded: the big five extinctions (ICS) · rows: when living groups began (Benton et al. 2015)", y);
+    const mTop = y + 14, mH = 14;
+    /* early milestones, each from its own paper */
+    ctx.save();
+    let lastM = -1e9;
+    ds.milestones.forEach(m => {
+      const p0 = m._t0 || m._t, p1 = m._t1 || m._t, res = lifeMark(p0, p1, mTop, mH, PAL.accent);
+      if (!res) return;
+      if (res.x0 - lastM > 8 && res.x1 + 4 < W - 20){
+        ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink2; ctx.textBaseline = "middle";
+        ctx.fillText(m.short, res.x1 + 4, mTop + mH / 2); lastM = res.x1 + 4 + ctx.measureText(m.short).width;
+      }
+      st.hit.push({ x0: res.x0 - 2, x1: res.x1 + 2, y0: mTop, y1: mTop + mH, ds, at: () => ({ label: m.label, _rangeText: m.when, note: m.note, conf: "dated", src: m.src }) });
+    });
+    ctx.restore();
+    /* living groups: soft maximum (faded) to minimum age (solid), then a thin line to now */
+    const gTop = y + 14 + mH + 4 + 82 + 6, gRow = Math.max(6, Math.floor((h - (gTop - y) - 2) / ds.groups.length));
+    ctx.save();
+    ds.groups.forEach((g, k) => {
+      const gy = gTop + k * gRow, p = g._t, xa = cx(X(p.older)), xb = cx(X(p.younger)), xn = cx(X(NOW));
+      if (xn < -4 || xa > W + 4) return;
+      if (xb - xa > 1){
+        const gr = ctx.createLinearGradient(xa, 0, xb, 0); gr.addColorStop(0, alpha(PAL.bar, 0)); gr.addColorStop(1, alpha(PAL.bar, .95));
+        ctx.fillStyle = gr; ctx.fillRect(xa, gy, xb - xa, gRow - 2);
+      }
+      ctx.fillStyle = alpha(PAL.bar, .95); ctx.fillRect(xb - 1, gy, 2, gRow - 2);
+      ctx.fillStyle = alpha(PAL.bar, .5); ctx.fillRect(xb, gy + (gRow - 2) / 2 - .5, Math.max(xn - xb, 0), 1);
+      ctx.font = '400 9px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink2; ctx.textBaseline = "middle";
+      const tw = ctx.measureText(g.short).width, lx = xb + 4 + tw < W - 4 ? Math.max(xb + 4, 2) : Math.max(xa - tw - 4, 2);
+      if (lx < W - 20) ctx.fillText(g.short, lx, gy + (gRow - 2) / 2);
+      st.hit.push({ x0: Math.min(xa, xb - 4), x1: Math.max(xn, lx + tw), y0: gy, y1: gy + gRow, ds, at: () => ({ label: g.label, _rangeText: g.when, note: ds.groupsNote, conf: "dated", src: ds.groupsSrc }) });
+    });
+    ctx.restore();
+    const top = mTop + mH + 4, bh = 82, fy = v => top + bh - Math.min(1, v / ds.yMax) * bh;
     noData(-1, X(ds._T[0]), top, bh);
     yTicks(ds.ticks, fy, "");
     const R = ds.rows;

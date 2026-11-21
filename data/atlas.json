@@ -262,6 +262,42 @@
       "format": "GeoJSON (yearly largest polity computed to data/reference/largest_polity_by_year_cliopatria.csv)",
       "status": "ingested"
     },
+    "djokic2017": {
+      "title": "Earliest signs of life on land preserved in ca. 3.5 Ga hot spring deposits",
+      "authors": "Djokic et al.",
+      "year": 2017,
+      "url": "https://doi.org/10.1038/ncomms15263",
+      "license": "CC BY 4.0",
+      "format": "article (date copied to data/reference/life_milestones.csv)",
+      "status": "ingested"
+    },
+    "gumsley2017": {
+      "title": "Timing and tempo of the Great Oxidation Event",
+      "authors": "Gumsley et al.",
+      "year": 2017,
+      "url": "https://doi.org/10.1073/pnas.1608824114",
+      "license": "open access (PNAS)",
+      "format": "article (dates copied to data/reference/life_milestones.csv)",
+      "status": "ingested"
+    },
+    "miao2024": {
+      "title": "1.63-billion-year-old multicellular eukaryotes from the Chuanlinggou Formation in North China",
+      "authors": "Miao et al.",
+      "year": 2024,
+      "url": "https://doi.org/10.1126/sciadv.adk3208",
+      "license": "CC BY 4.0",
+      "format": "article (date copied to data/reference/life_milestones.csv)",
+      "status": "ingested"
+    },
+    "benton2015": {
+      "title": "Constraints on the timescale of animal evolutionary history",
+      "authors": "Benton et al.",
+      "year": 2015,
+      "url": "https://doi.org/10.26879/424",
+      "license": "article, open access",
+      "format": "article (12 group ages copied to data/reference/life_milestones.csv)",
+      "status": "ingested"
+    },
     "placeholder": {
       "title": "No source — placeholder",
       "note": "Written from memory during pilot construction. Must be replaced.",
@@ -301,7 +337,7 @@
       "label": "Life",
       "dataset": "life",
       "encoding": "life",
-      "height": 104,
+      "height": 240,
       "minSpan": 0,
       "maxSpan": null
     },
@@ -47557,6 +47593,196 @@
           "t1": "66.00 Ma",
           "note": "One of the five largest mass extinctions in the fossil record, which ended the non-bird dinosaurs. The mark is the ICS date for the Cretaceous–Paleogene boundary, where the extinction is conventionally placed; the pairing is a convention, not part of the ICS chart."
         }
+      ],
+      "milestones": [
+        {
+          "id": "early-life",
+          "label": "Earliest signs of life on land",
+          "short": "Early life",
+          "t": {
+            "est": "3480 Ma"
+          },
+          "when": "ca. 3.48 billion years ago, as the paper gives it (no error range)",
+          "note": "Microbial traces in ancient hot-spring deposits of the Dresser Formation, Western Australia, reported by Djokic et al. (2017). This is one published claim about some of the earliest evidence of life, not a settled date for the origin of life. Older claims exist and are disputed.",
+          "cite": "Djokic et al. 2017, Earliest signs of life on land preserved in ca. 3.5 Ga hot spring deposits, Nature Communications 8:15263 (PMC5436104; read 2026-11-21)",
+          "src": [
+            "djokic2017"
+          ]
+        },
+        {
+          "id": "goe",
+          "label": "Great Oxidation Event",
+          "short": "Oxygen rises",
+          "t0": {
+            "lo": "2460 Ma",
+            "hi": "2426 Ma"
+          },
+          "t1": {
+            "lo": "2250 Ma",
+            "hi": "2240 Ma"
+          },
+          "when": "onset between ca. 2,460 and 2,426 million years ago; oscillations may have continued until 2,250–2,240 million years ago or later",
+          "note": "The first lasting build-up of oxygen in the atmosphere, dated by Gumsley et al. (2017). The paper places its onset between about 2,460 and 2,426 million years ago, and says the rise was not steady but oscillated, possibly until 2,250–2,240 million years ago. The faded ends span those ranges.",
+          "cite": "Gumsley et al. 2017, Timing and tempo of the Great Oxidation Event, PNAS 114(8):1811-1816, doi:10.1073/pnas.1608824114 (PMC5338422; read 2026-11-21)",
+          "src": [
+            "gumsley2017"
+          ]
+        },
+        {
+          "id": "multicellular",
+          "label": "Oldest multicellular eukaryotes",
+          "short": "Complex cells",
+          "t": {
+            "est": "1635 Ma",
+            "lo": "1641.7 Ma",
+            "hi": "1627.9 Ma"
+          },
+          "when": "about 1,635 million years ago; an ash bed 40 m above the fossils is dated 1,634.8 ± 6.9 million years, so the fossils are a little older",
+          "note": "Filaments of cells (Qingshania magnifica) from the Chuanlinggou Formation, North China, described by Miao et al. (2024) as the oldest convincing multicellular eukaryotes, the group that includes animals, plants and fungi. The fade spans the error on the ash-bed date above the fossils.",
+          "cite": "Miao et al. 2024, 1.63-billion-year-old multicellular eukaryotes from the Chuanlinggou Formation in North China, Science Advances 10:eadk3208, doi:10.1126/sciadv.adk3208 (PMC10807817; read 2026-11-21)",
+          "src": [
+            "miao2024"
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "id": "metazoa",
+          "label": "Animals (crown Metazoa)",
+          "short": "Animals",
+          "t": {
+            "lo": "833 Ma",
+            "hi": "550.25 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 550.25 million years ago; soft maximum: 833 million years ago",
+          "asGiven": "Minimum Age 550.25 Ma; Soft Maximum Age 833 Ma (node 1)"
+        },
+        {
+          "id": "bilateria",
+          "label": "Bilaterians (crown Bilateria)",
+          "short": "Bilaterians",
+          "t": {
+            "lo": "636.1 Ma",
+            "hi": "550.25 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 550.25 million years ago; soft maximum: 636.1 million years ago",
+          "asGiven": "Minimum Age 550.25 Ma; Soft Maximum Age 636.1 Ma (node 4)"
+        },
+        {
+          "id": "arthropoda",
+          "label": "Arthropods (crown Arthropoda)",
+          "short": "Arthropods",
+          "t": {
+            "lo": "636.1 Ma",
+            "hi": "514 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 514 million years ago; soft maximum: 636.1 million years ago",
+          "asGiven": "Minimum Age 514 Ma; Soft Maximum Age 636.1 Ma (node 8)"
+        },
+        {
+          "id": "mollusca",
+          "label": "Molluscs (crown Mollusca)",
+          "short": "Molluscs",
+          "t": {
+            "lo": "549 Ma",
+            "hi": "532 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 532 million years ago; soft maximum: 549 million years ago",
+          "asGiven": "Minimum Age 532 Ma; Soft Maximum Age 549 Ma (node 10)"
+        },
+        {
+          "id": "vertebrata",
+          "label": "Vertebrates (crown Vertebrata-Craniata)",
+          "short": "Vertebrates",
+          "t": {
+            "lo": "636.1 Ma",
+            "hi": "457.5 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 457.5 million years ago; soft maximum: 636.1 million years ago",
+          "asGiven": "Minimum Age 457.5 Ma; Soft Maximum Age 636.1 Ma (node 18)"
+        },
+        {
+          "id": "gnathostomata",
+          "label": "Jawed vertebrates (crown Gnathostomata)",
+          "short": "Jawed vertebrates",
+          "t": {
+            "lo": "468.4 Ma",
+            "hi": "420.7 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 420.7 million years ago; soft maximum: 468.4 million years ago",
+          "asGiven": "Minimum Age 420.7 Ma; Soft Maximum Age 468.4 Ma (node 20)"
+        },
+        {
+          "id": "tetrapoda",
+          "label": "Tetrapods (crown Tetrapoda)",
+          "short": "Tetrapods",
+          "t": {
+            "lo": "351 Ma",
+            "hi": "337 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 337 million years ago; soft maximum: 351 million years ago",
+          "asGiven": "Minimum Age 337 Ma; Soft Maximum Age 351 Ma (node 41)"
+        },
+        {
+          "id": "amniota",
+          "label": "Amniotes (crown Amniota)",
+          "short": "Amniotes",
+          "t": {
+            "lo": "332.9 Ma",
+            "hi": "318 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 318 million years ago; soft maximum: 332.9 million years ago",
+          "asGiven": "Minimum Age 318 Ma; Soft Maximum Age 332.9 Ma (node 47)"
+        },
+        {
+          "id": "mammalia",
+          "label": "Mammals (crown Mammalia)",
+          "short": "Mammals",
+          "t": {
+            "lo": "201.5 Ma",
+            "hi": "164.9 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 164.9 million years ago; soft maximum: 201.5 million years ago",
+          "asGiven": "Minimum Age 164.9 Ma; Soft Maximum Age 201.5 Ma (node 57)"
+        },
+        {
+          "id": "neornithes",
+          "label": "Modern birds (crown Neornithes)",
+          "short": "Modern birds",
+          "t": {
+            "lo": "86.8 Ma",
+            "hi": "66.0 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 66.0 million years ago; soft maximum: 86.8 million years ago",
+          "asGiven": "Minimum Age 66.0 Ma; Soft Maximum Age 86.8 Ma (node 53)"
+        },
+        {
+          "id": "primates",
+          "label": "Primates (crown Primates)",
+          "short": "Primates",
+          "t": {
+            "lo": "66 Ma",
+            "hi": "56 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 56 million years ago; soft maximum: 66 million years ago",
+          "asGiven": "Minimum Age 56 Ma; Soft Maximum Age 66 Ma (node 81)"
+        },
+        {
+          "id": "chimp-human",
+          "label": "Chimpanzee-human split",
+          "short": "Chimpanzee–human split",
+          "t": {
+            "lo": "10 Ma",
+            "hi": "6.5 Ma"
+          },
+          "when": "oldest fossil firmly in the group: 6.5 million years ago; soft maximum: 10 million years ago",
+          "asGiven": "Minimum Age 6.5 Ma; Soft Maximum Age 10 Ma (node 87)"
+        }
+      ],
+      "groupsNote": "When the living members of each group last shared a common ancestor, from Benton et al. (2015, Palaeontologia Electronica). The solid end of each bar is the minimum age: the oldest fossil that firmly belongs to the living group. The fade runs back to the soft maximum: the oldest date the authors consider plausible, based on rocks where the group would be expected but is not found. These are 'crown groups', so they start later than the group's earliest relatives: crown mammals, for example, start in the Jurassic, although mammal-like animals are older. From the minimum age to now, the thin line marks the group as still living. (data/reference/life_milestones.csv)",
+      "groupsCite": "Benton et al. 2015, Constraints on the timescale of animal evolutionary history, Palaeontologia Electronica 18.1.1FC, doi:10.26879/424 (read 2026-11-21)",
+      "groupsSrc": [
+        "benton2015"
       ]
     }
   },
