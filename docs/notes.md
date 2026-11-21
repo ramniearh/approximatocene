@@ -31,7 +31,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 
 ## Data status
 
-- **Most values are placeholders** written from memory to make the page work. The exceptions are geology, hominin species and population from 10,000 BCE (see "Sourced data on the page").
+- **Most values are placeholders** written from memory to make the page work. The exceptions are geology, hominin species, population from 10,000 BCE, and the Full atlas climate and CO₂ lanes (see "Sourced data on the page").
 - Fixed: the population list had two samples at the same date ("5000 b2k" and "3000 BCE" are the same year). The first was moved to 7000 b2k (5000 BCE), which seemed to be the intent. This needs confirming when real figures go in.
 - Some lanes in the Full atlas are invented outright and labelled that way. Energy per person has made-up numbers (temperature was sine waves until Nov 2026; it is now sourced). The political-forms lane is a speculative impression.
 - Sources to start with, when real data goes in: Our World in Data or HYDE 3.3 for population, the International Chronostratigraphic Chart for geological dates, and the Smithsonian Human Origins pages for hominin species. Candidate sources are listed in `docs/reference/SOURCES.md` and in `data/atlas.json` under `sources`.
