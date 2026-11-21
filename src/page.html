@@ -153,7 +153,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 
 <header class="top">
-  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, the climate and CO₂ records and the largest polity now sourced</p>
+  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, the climate and CO₂ records, and polity size and population now sourced</p>
   <h1>Deep time, <b>to scale</b></h1>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
@@ -216,7 +216,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
   </details>
   <div class="stage">
     <div class="zoombtns"><button id="a-zin" aria-label="Zoom in">+</button><button id="a-zout" aria-label="Zoom out">−</button></div>
-    <canvas class="chart" id="a-cv" role="img" aria-label="Deep time atlas chart with geological, climate, carbon dioxide, hominin, population, energy, largest polity, regional, periodisation and evidence lanes"></canvas>
+    <canvas class="chart" id="a-cv" role="img" aria-label="Deep time atlas chart with geological, climate, carbon dioxide, hominin, population, energy, largest polity, polity population, regional, periodisation and evidence lanes"></canvas>
   </div>
   <div class="readout" id="a-readout" aria-live="polite"><p class="empty">Tap anything on the chart for its dates, how firm they are, and where the real figure would come from.</p></div>
   <p class="dataline" id="a-status"></p>
@@ -257,7 +257,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
+      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
@@ -403,6 +403,7 @@ Object.values(DS).forEach(ds => {
     const pad = (hi - lo) * .06; s._lo = lo - pad; s._hi = hi + pad;
   });
   if (ds.kind === "co2") [ds.ice, ds.mlo, ds.proxies].forEach(prepSeries);
+  if (ds.kind === "polity-pop"){ prepSeries(ds); ds._T1 = ds.rows.map(r => AGE.CE(r[1])); prepSeries(ds.un); }
   if (ds.kind === "largest-polity"){
     prepSeries(ds);
     /* consecutive years with the same largest polity, oldest first */
@@ -520,6 +521,7 @@ function createView(o){
     if (l.encoding === "grouped-intervals"){ const n = groups().length; return n ? 15 + n * 23 : 0; }
     if (l.encoding === "strips"){ const n = stripsOn(DS[l.dataset]).length; return n ? n * STRIP_H : 0; }
     if (l.encoding === "co2") return covPx(DS.co2.proxies._T[0], NOW) >= 40 ? l.height : 0;
+    if (l.encoding === "polity-pop") return covPx(DS[l.dataset]._T[0], NOW) >= 40 ? l.height : 0;
     if (l.encoding === "largest-polity"){ const T = DS[l.dataset]._T; return covPx(T[0], T[T.length - 1]) >= 40 ? l.height : 0; }
     return l.height;
   }
@@ -684,6 +686,51 @@ function createView(o){
       lab(ds.names[q.name], x0, x1, barY, barH, PAL.barink, 9.5);
     });
     st.hit.push({ x0: 0, x1: W, y0: top, y1: barY + barH, ds, at: x => info(nearest(T, tAtX(x))) });
+  };
+
+  /* polity population: every Seshat estimate as published (a sample of polities, not all), plus the most populous country from 1950 */
+  const fmtPpl = v => v >= 1e9 ? (v / 1e9) + "B" : v >= 1e6 ? (v / 1e6) + "M" : v >= 1e3 ? (v / 1e3) + "k" : String(v);
+  E["polity-pop"] = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · people, log · Seshat's sample of polities, not all of them · bars: published ranges · dark line: most populous country (UN, from 1950)", y);
+    const top = y + 13, bh = h - 15, [lo, hi] = ds.yDomain, L0 = Math.log10(lo), L1 = Math.log10(hi);
+    const fy = v => top + bh - Math.max(0, Math.min(1, (Math.log10(Math.max(v, lo)) - L0) / (L1 - L0))) * bh;
+    noData(-1, X(ds._T[0]), top, bh);
+    yTicks(ds.ticks, fy, "", fmtPpl);
+    const R = ds.rows, U = ds.un;
+    st.hit.push({ x0: X(U._T[0]) - 3, x1: W, y0: top, y1: top + bh, ds, at: x => {
+      const k = nearest(U._T, tAtX(x)), r = U.rows[k];
+      return { label: U.countries[r[2]] + " · " + r[1].toLocaleString("en") + " people", _rangeText: fmtY(r[0]) + " · most populous country" + NEAREST, note: ds.note, conf: U.conf, src: U.src };
+    } });
+    const info = i => {
+      const r = R[i], p = ds.polities[r[4]];
+      const when = r[5] ? (r[0] === r[1] ? fmtY(r[0]) : fmtY(r[0]) + " – " + fmtY(r[1])) : "for the polity as a whole, " + fmtY(p[2]) + " – " + fmtY(p[3]) + " (no year given)";
+      const flag = (r[6] & 1 ? " Seshat marks this estimate as disputed." : "") + (r[6] & 2 ? " Seshat marks this estimate as uncertain." : "");
+      return { label: p[0] + " · " + (r[2] === r[3] ? r[2].toLocaleString("en") : r[2].toLocaleString("en") + " to " + r[3].toLocaleString("en")) + " people",
+               _rangeText: when + " · " + p[1], note: ds.note + flag, conf: r[6] & 1 ? "disputed" : "estimated", src: ds.src };
+    };
+    /* undated estimates first, as faint bars across the polity's dates; then dated ones on top */
+    ctx.save();
+    [0, 1].forEach(pass => R.forEach((r, i) => {
+      if (r[5] !== pass) return;
+      const x0 = cx(X(ds._T[i])), x1 = cx(X(ds._T1[i]));
+      if (x1 < -3 || x0 > W + 3) return;
+      const yHi = fy(r[3]), yLo = fy(r[2]), col = r[6] & 1 ? PAL.disp : PAL.ink2;
+      if (!pass){
+        ctx.fillStyle = alpha(col, .16); ctx.fillRect(x0, yHi - 1, Math.max(x1 - x0, 1), Math.max(yLo - yHi, 0) + 2);
+        if (r[6] & 1){ ctx.fillStyle = hatch; ctx.fillRect(x0, yHi - 1, Math.max(x1 - x0, 1), Math.max(yLo - yHi, 0) + 2); }
+        st.hit.push({ x0, x1, y0: yHi - 3, y1: yLo + 3, ds, at: () => info(i) });
+      } else {
+        const xm = (x0 + x1) / 2;
+        ctx.fillStyle = alpha(col, .8); ctx.strokeStyle = alpha(col, .8); ctx.lineWidth = 1.2;
+        if (yLo - yHi < 2.5){ ctx.beginPath(); ctx.arc(xm, yHi, 2, 0, 2 * Math.PI); ctx.fill(); }
+        else { ctx.fillRect(x0 - 1, yHi, Math.max(x1 - x0, 0) + 2, yLo - yHi); }
+        st.hit.push({ x0: x0 - 3, x1: x1 + 3, y0: yHi - 3, y1: yLo + 3, ds, at: () => info(i) });
+      }
+    }));
+    const [ua, ub] = visIdx(U._T);
+    ctx.strokeStyle = PAL.ink; ctx.lineWidth = 1.8; ctx.lineJoin = "round";
+    seriesPath(U._T, i => U.rows[i][1], fy, ua, ub); ctx.stroke();
+    ctx.restore();
   };
   E["grouped-intervals"] = (ds, y, h, sp, lane) => {
     cap(lane.label + " · conveniences of description, not entities", y);
