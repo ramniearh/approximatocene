@@ -33,7 +33,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 
 - **Most values are placeholders** written from memory to make the page work. The exceptions are geology, hominin species and population from 10,000 BCE (see "Sourced data on the page").
 - Fixed: the population list had two samples at the same date ("5000 b2k" and "3000 BCE" are the same year). The first was moved to 7000 b2k (5000 BCE), which seemed to be the intent. This needs confirming when real figures go in.
-- Some lanes in the Full atlas are invented outright and labelled that way. Temperature is sine waves and energy per person has made-up numbers. The political-forms lane is a speculative impression.
+- Some lanes in the Full atlas are invented outright and labelled that way. Energy per person has made-up numbers (temperature was sine waves until Nov 2026; it is now sourced). The political-forms lane is a speculative impression.
 - Sources to start with, when real data goes in: Our World in Data or HYDE 3.3 for population, the International Chronostratigraphic Chart for geological dates, and the Smithsonian Human Origins pages for hominin species. Candidate sources are listed in `docs/reference/SOURCES.md` and in `data/atlas.json` under `sources`.
 
 ## Reference datasets
@@ -80,14 +80,20 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - Wording for the unsourced stretches (Eduardo's, deliberately vague for now): 300,000 years ago to 10,000 BCE is "probably a range of guesses (not sourced)"; before 300,000 years ago it's "not estimated. Presumably there were some humans here and there". The old "thousands to tens of thousands" text is gone. The faint dotted line is still drawn at the same low height, though, so it still hints at a size.
   - OWID's year 0 is entered as "0 CE", so its BCE years are read at face value (−1000 → 1000 BCE). At this scale a one-year shift wouldn't show.
 
+- **Climate and CO₂ (Nov 2026, Full atlas only).** The sine-wave "Temperature" lane is gone. In its place are two lanes, with data in `climate` and `co2` in `data/atlas.json`, copied from the reference CSVs. Large series are stored as compact `rows` with one `ageUnit` per block, and `build.py` stops if a block has no unit.
+  - **Climate** is a set of separate strips, one per record, each on its own fixed vertical scale. They are not joined (Eduardo's choice). The strips are CENOGRID deep-sea δ¹⁸O (the source's LOESS line, flipped so up = warmer or less ice, and captioned "not a temperature"), EPICA Dome C Antarctic temperature, and PAGES 2k global temperature (the source's 31-year smoothed median with its 95% range, plus the yearly instrumental line to 2017). A strip shows only when at least 40 px of its time span is in view. Outside a record's span the strip is greyed "no data — not zero". LR04 is not drawn because it overlaps CENOGRID.
+  - **Carbon dioxide** is on a log ppm scale. CenCO2PIP proxy estimates appear as dots with their published uncertainty bars: filled for category 1, hollow for category 2. Category 3, superseded and quarantined estimates are not shown (Eduardo's choice), which leaves 3,712 of 6,088. The Bereiter ice-core composite is a line, and Mauna Loa (1959–2023) is a darker line. Proxy CO₂ is rounded to 0.1 ppm on the page. Proxy ages in ka are read as before 2000; the 50-year offset can't show.
+  - Hovering shows the nearest published value and its source, not an interpolated value. When fewer than about 40 samples are in view, each sample is marked with a dot, so a straight stretch of line isn't read as data.
+  - Long series are drawn as one min–max column per pixel, so no peaks are dropped. The data makes the page about 836 KB, up from about 155 KB.
+  - LR04, the Human time tab and Stories are unchanged. On phones the lane captions are cut short, but tapping a lane gives the full explanation.
+
 ## Open questions (Eduardo's call)
 
 - Should the political-forms lane stay? Nobody has these numbers. The options are to keep it as a clearly labelled impression, to replace it with something countable (such as the size of the largest polity over time), or to drop it. A sourced "largest polity over time" now exists in `data/reference/` (from Cliopatria), so the countable option is ready if wanted.
 - Population: Our World in Data is now on the page (Nov 2026). Still open: whether to add rival reconstructions to show where they disagree and to give the line a range, and what source (if any) to use for 300,000 years ago to 10,000 BCE, where the placeholder haze remains.
 - **To revisit: population before 10,000 BCE.** Both unsourced stretches are left vague on purpose for now. Decide later (1) whether the "range of guesses" from 300,000 years ago to 10,000 BCE gets a real source (for example published Palaeolithic population estimates or effective-population-size studies, which measure something different), stays as an openly labelled guess, or is removed, and (2) whether the dotted line before 300,000 years ago should go, since its height still suggests a size.
 
-- **Temperature lane: how to show four records.** They measure different things (deep-sea δ¹⁸O, Antarctic temperature, global temperature) in different units. Options: separate stacked strips, or one lane that switches record by zoom with the handover marked. Either way, the joins should be visible, not smoothed.
-- **Carbon before 800 ka:** decided (Nov 2026), use CenCO2PIP's individual proxy points, not a curve. Still open: which categories to show (probably 1–2 only), and whether category 3 appears faded or not at all.
+- Climate and CO₂: should the "People and the ice" or Anthropocene stories use the new lanes? And should category 3 CO₂ estimates ever be shown, for example faded?
 
 ## Ideas, not yet done
 

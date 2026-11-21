@@ -153,7 +153,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 
 <header class="top">
-  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates and population since 10,000 BCE now sourced</p>
+  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, and the climate and CO₂ records now sourced</p>
   <h1>Deep time, <b>to scale</b></h1>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
@@ -216,7 +216,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
   </details>
   <div class="stage">
     <div class="zoombtns"><button id="a-zin" aria-label="Zoom in">+</button><button id="a-zout" aria-label="Zoom out">−</button></div>
-    <canvas class="chart" id="a-cv" role="img" aria-label="Deep time atlas chart with geological, climate, hominin, population, energy, political, regional, periodisation and evidence lanes"></canvas>
+    <canvas class="chart" id="a-cv" role="img" aria-label="Deep time atlas chart with geological, climate, carbon dioxide, hominin, population, energy, political, regional, periodisation and evidence lanes"></canvas>
   </div>
   <div class="readout" id="a-readout" aria-live="polite"><p class="empty">Tap anything on the chart for its dates, how firm they are, and where the real figure would come from.</p></div>
   <p class="dataline" id="a-status"></p>
@@ -257,7 +257,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
+      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
@@ -383,6 +383,27 @@ Object.values(DS).forEach(ds => {
 });
 ATLAS.overlays.highlights.forEach(norm);
 ATLAS.overlays.presets.forEach(p => { p._t0 = parseTime(p.t0); p._t1 = parseTime(p.t1); });
+/* compact series: [age, value, ...] rows with one age unit per block. Ages are converted once (same rules as parseTime) and sorted oldest first */
+const AGE = { Ga: x => x * 1e9, Ma: x => x * 1e6, ka: x => x * 1e3, b2k: x => x, BP: x => x + 50, BCE: x => 2000 + x, CE: x => 2000 - x, yr: x => x };
+function prepSeries(b){
+  const f = AGE[b.ageUnit];
+  if (!f){ errors.push("series without an age unit: " + (b.label || b.id || "?")); b.rows = []; b._T = []; return; }
+  const pr = b.rows.map(r => [f(r[0]), r]).sort((a, c) => c[0] - a[0]);
+  b._T = pr.map(p => p[0]); b.rows = pr.map(p => p[1]);
+}
+Object.values(DS).forEach(ds => {
+  if (ds.strips) ds.strips.forEach(s => {
+    prepSeries(s);
+    if (s.instrumental){ s._instr = { ageUnit: s.ageUnit, rows: s.instrumental, label: s.label }; prepSeries(s._instr); }
+    /* each strip's vertical scale is fixed from its own data, not from the view */
+    let lo = Infinity, hi = -Infinity;
+    const see = v => { if (v != null){ if (v < lo) lo = v; if (v > hi) hi = v; } };
+    s.rows.forEach(r => { for (let i = 1; i < r.length; i++) see(r[i]); });
+    if (s._instr) s._instr.rows.forEach(r => see(r[1]));
+    const pad = (hi - lo) * .06; s._lo = lo - pad; s._hi = hi + pad;
+  });
+  if (ds.kind === "co2") [ds.ice, ds.mlo, ds.proxies].forEach(prepSeries);
+});
 if (errors.length) console.warn("Atlas normalisation problems:", errors);
 const CONF = {}; ATLAS.vocab.confidence.forEach(c => CONF[c.id] = c);
 const REGION = {}; ATLAS.vocab.regions.forEach(r => REGION[r.id] = r.label);
@@ -488,6 +509,8 @@ function createView(o){
     if (l.encoding === "scheme"){ const n = DS.schemes.items[st.scheme].rows.length; return n ? 20 + n * 24 : 0; }
     if (l.encoding === "intervals"){ const n = visRecs(DS[l.dataset].records).length; return n ? 15 + n * 11 : 0; }
     if (l.encoding === "grouped-intervals"){ const n = groups().length; return n ? 15 + n * 23 : 0; }
+    if (l.encoding === "strips"){ const n = stripsOn(DS[l.dataset]).length; return n ? n * STRIP_H : 0; }
+    if (l.encoding === "co2") return covPx(DS.co2.proxies._T[0], NOW) >= 40 ? l.height : 0;
     return l.height;
   }
   function resize(){
@@ -709,19 +732,164 @@ function createView(o){
     });
     laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "whole axis" }, ds);
   };
-  E.curve = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · schematic sine waves, not data", y);
-    const top = y + 13, bh = h - 15;
-    ctx.save(); ctx.strokeStyle = PAL.ink3; ctx.lineWidth = 1.1; ctx.setLineDash([4, 3]); ctx.beginPath();
-    for (let px = 0; px <= W; px += 2){
-      const t = Math.max(tAtX(px), 0);
-      const gl = Math.sin(t / 41000 * 2 * Math.PI) * .35 + Math.sin(t / 100000 * 2 * Math.PI) * .75 + Math.sin(t / 23000 * 2 * Math.PI) * .2;
-      const env = 1 / (1 + Math.pow(t / 3.0e6, 1.2)), lt = Math.sin(t / 1.4e7) * .5 + Math.cos(t / 5.5e7) * .6;
-      let v = gl * env + lt * (1 - env) * .9; if (t < 300) v += (300 - t) / 300 * 1.15;
-      const yy = top + bh / 2 - v * (bh / 2 - 3); px ? ctx.lineTo(px, yy) : ctx.moveTo(px, yy);
+  /* ---- long sourced series (climate strips, CO2) ---- */
+  /* index range of a series (ages sorted oldest first) inside the view, with one point of padding each side */
+  function visIdx(T){
+    const tL = left(), tR = right(); let lo = 0, hi = T.length;
+    while (lo < hi){ const m = (lo + hi) >> 1; if (T[m] > tL) lo = m + 1; else hi = m; }
+    const a = Math.max(0, lo - 1); lo = a; hi = T.length;
+    while (lo < hi){ const m = (lo + hi) >> 1; if (T[m] >= tR) lo = m + 1; else hi = m; }
+    return [a, Math.min(T.length - 1, lo)];
+  }
+  function nearest(T, t){
+    let lo = 0, hi = T.length - 1;
+    while (hi - lo > 1){ const m = (lo + hi) >> 1; if (T[m] > t) lo = m; else hi = m; }
+    return Math.abs(T[lo] - t) <= Math.abs(T[hi] - t) ? lo : hi;
+  }
+  /* visible width in px of the stretch between two ages */
+  const covPx = (tOld, tYoung) => Math.min(W, X(tYoung)) - Math.max(0, X(tOld));
+  /* a line through every visible point; where several fall in one pixel column it draws their full min-max, so nothing is dropped */
+  function seriesPath(T, get, fy, a, b){
+    ctx.beginPath();
+    let col = null, y0, mn, mx, y1, started = false;
+    const flush = () => {
+      if (col === null) return;
+      if (started) ctx.lineTo(col, y0); else { ctx.moveTo(col, y0); started = true; }
+      if (mx - mn > .5){ ctx.lineTo(col, mn); ctx.lineTo(col, mx); }
+      ctx.lineTo(col, y1);
+    };
+    for (let i = a; i <= b; i++){
+      const v = get(i); if (v == null) continue;
+      const x = Math.round(cx(X(T[i]))), y = fy(v);
+      if (x === col){ if (y < mn) mn = y; if (y > mx) mx = y; y1 = y; }
+      else { flush(); col = x; y0 = mn = mx = y1 = y; }
     }
-    ctx.stroke(); ctx.restore();
-    laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "whole axis" }, ds);
+    flush();
+  }
+  /* when only a few samples are in view, mark each one, so a straight stretch of line is not mistaken for data */
+  function sampleDots(T, get, fy, a, b, color){
+    if (b - a > 40) return;
+    ctx.save(); ctx.fillStyle = color; ctx.beginPath();
+    for (let i = a; i <= b; i++){ const v = get(i); if (v == null) continue; const x = cx(X(T[i])), y = fy(v); ctx.moveTo(x + 2.2, y); ctx.arc(x, y, 2.2, 0, 2 * Math.PI); }
+    ctx.fill(); ctx.restore();
+  }
+  function noData(x0, x1, top, bh){
+    x0 = Math.max(0, x0); x1 = Math.min(W, x1); if (x1 - x0 < 1) return;
+    ctx.save(); ctx.fillStyle = alpha(PAL.rule2, .92); ctx.fillRect(x0, top, x1 - x0, bh);
+    ctx.strokeStyle = PAL.ink4; ctx.setLineDash([2, 4]); ctx.beginPath();
+    [x0, x1].forEach(x => { if (x > 0 && x < W){ ctx.moveTo(x, top); ctx.lineTo(x, top + bh); } });
+    ctx.stroke(); ctx.setLineDash([]);
+    if (x1 - x0 > 120){ ctx.font = '400 10px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "middle"; ctx.fillText("no data — not zero", x0 + 6, top + bh / 2); }
+    ctx.restore();
+  }
+  function yTicks(ticks, fy, unit){
+    ctx.save(); ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    ticks.forEach(v => {
+      const yy = Math.round(fy(v)) + .5;
+      ctx.strokeStyle = v === 0 ? PAL.rule : PAL.rule2; ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W, yy); ctx.stroke();
+      ctx.fillStyle = PAL.ink3; ctx.fillText(v.toLocaleString("en") + unit, W - 4, yy);
+    });
+    ctx.restore();
+  }
+  const fmtV = v => Math.abs(v) >= 100 ? Math.round(v).toLocaleString("en") : v.toFixed(2);
+  const NEAREST = " · nearest value in the source, not interpolated";
+
+  /* climate: one strip per record, each on its own scale; a strip shows when at least 40 px of its span is in view */
+  const STRIP_H = 64;
+  const stripsOn = ds => ds.strips.filter(s => s._T.length && covPx(s._T[0], Math.min(s._T[s._T.length - 1], s._instr ? s._instr._T[s._instr._T.length - 1] : Infinity)) >= 40);
+  E.strips = (ds, y, h, sp, lane) => {
+    stripsOn(ds).forEach((s, i) => {
+      const sy = y + i * STRIP_H, top = sy + 13, bh = STRIP_H - 18;
+      cap(s.caption, sy);
+      const fy = v => { let k = (v - s._lo) / (s._hi - s._lo); if (s.invert) k = 1 - k; return top + bh - k * bh; };
+      const T = s._T, [a, b] = visIdx(T);
+      const tYoung = Math.min(T[T.length - 1], s._instr ? s._instr._T[s._instr._T.length - 1] : Infinity);
+      noData(-1, X(T[0]), top, bh); noData(X(tYoung), W + 1, top, bh);
+      yTicks(s.ticks || [], fy, s.unit === "‰" ? "‰" : "°");
+      ctx.save();
+      if (s.rows[0].length >= 4){
+        /* the source's uncertainty range as a band */
+        ctx.beginPath();
+        for (let i = a; i <= b; i++){ const x = cx(X(T[i])), yy = fy(s.rows[i][3]); i > a ? ctx.lineTo(x, yy) : ctx.moveTo(x, yy); }
+        for (let i = b; i >= a; i--) ctx.lineTo(cx(X(T[i])), fy(s.rows[i][2]));
+        ctx.closePath(); ctx.fillStyle = alpha(PAL.accent, .2); ctx.fill();
+      }
+      ctx.strokeStyle = PAL.accent; ctx.lineWidth = 1.3; ctx.lineJoin = "round";
+      seriesPath(T, i => s.rows[i][1], fy, a, b); ctx.stroke();
+      sampleDots(T, i => s.rows[i][1], fy, a, b, PAL.accent);
+      if (s._instr){
+        const I = s._instr, [ia, ib] = visIdx(I._T);
+        ctx.strokeStyle = PAL.ink2; ctx.lineWidth = 1;
+        seriesPath(I._T, i => I.rows[i][1], fy, ia, ib); ctx.stroke();
+      }
+      ctx.restore();
+      st.hit.push({ x0: 0, x1: W, y0: top, y1: top + bh, ds, at: x => {
+        const t = tAtX(x);
+        if (s._instr && t < T[T.length - 1]){
+          const I = s._instr, k = nearest(I._T, t);
+          return { label: s.label + " (instruments) · " + fmtV(I.rows[k][1]) + " " + s.unit, _rangeText: fmtT(I._T[k]) + NEAREST, note: s.note, conf: "measured", src: s.src };
+        }
+        const k = nearest(T, t), r = s.rows[k];
+        const val = fmtV(r[1]) + " " + s.unit + (r.length >= 4 ? " (95% range " + fmtV(r[2]) + " to " + fmtV(r[3]) + ")" : "");
+        return { label: s.label + " · " + val, _rangeText: fmtT(T[k]) + NEAREST, note: s.note, conf: s.conf, src: s.src };
+      } });
+    });
+  };
+
+  /* carbon dioxide: proxy estimates as dots with their uncertainty, ice cores and Mauna Loa as lines */
+  E.co2 = (ds, y, h, sp, lane) => {
+    cap("Carbon dioxide · ppm, log · dots: proxy estimates (filled: category 1, hollow: 2) · line: ice cores · dark line: Mauna Loa", y);
+    const top = y + 13, bh = h - 15, [lo, hi] = ds.yDomain, L0 = Math.log10(lo), L1 = Math.log10(hi);
+    const fy = v => top + bh - Math.max(0, Math.min(1, (Math.log10(Math.max(v, lo)) - L0) / (L1 - L0))) * bh;
+    const P = ds.proxies, I = ds.ice, M = ds.mlo;
+    noData(-1, X(P._T[0]), top, bh);
+    yTicks(ds.ticks, fy, "");
+    /* hover on the lines (dots, pushed later, take precedence) */
+    st.hit.push({ x0: 0, x1: W, y0: top, y1: top + bh, ds, at: x => {
+      const t = tAtX(x);
+      if (t < AGE.CE(1958.5)){
+        const k = nearest(M._T, t), r = M.rows[k];
+        return { label: M.label + " · " + fmtV(r[1]) + " ppm (± " + r[2] + ")", _rangeText: fmtT(M._T[k]) + NEAREST, note: M.note, conf: M.conf, src: M.src };
+      }
+      if (t <= I._T[0]){
+        const k = nearest(I._T, t), r = I.rows[k];
+        return { label: I.label + " · " + fmtV(r[1]) + " ppm (1σ " + r[2] + ")", _rangeText: fmtT(I._T[k]) + " · " + I.records[r[3]] + NEAREST, note: I.note, conf: I.conf, src: I.src };
+      }
+      return { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "Before the ice cores: point at a dot for one estimate", src: P.src };
+    } });
+    const [a, b] = visIdx(P._T);
+    ctx.save();
+    ctx.strokeStyle = alpha(PAL.ink3, .22); ctx.lineWidth = 1; ctx.beginPath();
+    for (let i = a; i <= b; i++){
+      const r = P.rows[i]; if (r[2] == null && r[3] == null) continue;
+      const x = Math.round(cx(X(P._T[i]))) + .5;
+      ctx.moveTo(x, fy(r[1] + (r[2] || 0))); ctx.lineTo(x, fy(r[1] - (r[3] || 0)));
+    }
+    ctx.stroke();
+    const dots = [new Path2D(), new Path2D()];
+    for (let i = a; i <= b; i++){
+      const r = P.rows[i], x = cx(X(P._T[i])), yy = fy(r[1]);
+      if (x < -3 || x > W + 3) continue;
+      const p = dots[r[4] === 1 ? 0 : 1]; p.moveTo(x + 2, yy); p.arc(x, yy, 2, 0, 2 * Math.PI);
+      st.hit.push({ x0: x - 3, x1: x + 3, y0: yy - 4, y1: yy + 4, ds, at: () => {
+        const sd = P.studies[r[6]], c1 = r[4] === 1;
+        return {
+          label: "CO₂ about " + fmtV(r[1]) + " ppm" + (r[2] != null ? " (+" + fmtV(r[2]) + " / −" + fmtV(r[3] || 0) + ")" : " (no uncertainty given)"),
+          _rangeText: fmtT(P._T[i]) + " · " + P.types[r[5]] + " · " + sd[0] + " " + sd[1],
+          note: "One proxy estimate from " + sd[0] + " (" + sd[1] + "), as vetted by the CenCO2PIP Consortium: category " + r[4] + ", " + (c1 ? "high quality with the uncertainty fully worked out." : "high quality but the uncertainty is not yet fully constrained.") + " The bar is the published uncertainty.",
+          conf: P.conf, src: P.src };
+      } });
+    }
+    ctx.fillStyle = alpha(PAL.ink2, .75); ctx.fill(dots[0]);
+    ctx.strokeStyle = alpha(PAL.ink2, .75); ctx.lineWidth = 1; ctx.stroke(dots[1]);
+    const [ia, ib] = visIdx(I._T);
+    ctx.strokeStyle = PAL.accent; ctx.lineWidth = 1.5; ctx.lineJoin = "round";
+    seriesPath(I._T, i => I.rows[i][1], fy, ia, ib); ctx.stroke();
+    sampleDots(I._T, i => I.rows[i][1], fy, ia, ib, PAL.accent);
+    const [ma, mb] = visIdx(M._T);
+    ctx.strokeStyle = PAL.ink; ctx.lineWidth = 1.8;
+    seriesPath(M._T, i => M.rows[i][1], fy, ma, mb); ctx.stroke();
+    ctx.restore();
   };
 
   function ticks(){
@@ -873,7 +1041,7 @@ function createView(o){
     let f = null;
     for (let i = st.hit.length - 1; i >= 0; i--){ const h = st.hit[i]; if (x >= h.x0 - 2 && x <= h.x1 + 2 && y >= h.y0 && y <= h.y1){ f = h; break; } }
     if (!f){ if (tap) o.readout.innerHTML = '<p class="empty">Nothing there. Try a bar, a band or a period.</p>'; return; }
-    showInfo(o.readout, f.info, f.ds, f.extra);
+    showInfo(o.readout, f.at ? f.at(x, y) : f.info, f.ds, f.extra);
   }
   const ro = new ResizeObserver(() => { if (cv.clientWidth !== W || (mm && mm.clientWidth !== MW)){ resize(); schedule(); } });
   ro.observe(cv); if (mm) ro.observe(mm);

@@ -29,7 +29,11 @@ def check(node, where, problems):
     if isinstance(node, dict):
         for k, v in node.items():
             here = f"{where}.{k}"
-            if k in ("t", "t0", "t1"):
+            if k == "rows" and isinstance(v, list) and v and isinstance(v[0], list):
+                # compact series: [age, value, ...] rows need one stated unit for the whole block
+                if node.get("ageUnit") not in ("Ga", "Ma", "ka", "b2k", "BP", "BCE", "CE", "yr"):
+                    problems.append(f"{where}.ageUnit = {node.get('ageUnit')!r} (rows need an age unit)")
+            elif k in ("t", "t0", "t1"):
                 if isinstance(v, dict):
                     for part in ("est", "lo", "hi"):
                         if part in v and not ok_time(v[part]):
