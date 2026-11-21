@@ -120,6 +120,12 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - Confidence tags corrected: extinctions and the Benton groups are now "estimated" (they had been tagged "dated"), and the milestones "inferred" (also previously "dated"), with a note that each is one paper's dating.
   - The UN line's note says India has held no census since 2011, so the 2022 crossover with China is uncertain.
   - Lanes that already draw a published range (PAGES 2k, CO₂ proxies, Seshat ranges, Benton soft maxima) are unchanged.
+  - **Applied everywhere (Nov 2026, Eduardo).**
+    - The population line on all three chart tabs is faded throughout, because OWID gives no range. It is still dashed where HYDE's figures are model reconstructions. This replaces the earlier "solid from 1800".
+    - Species bars on both tabs: the fixed 12 px fade now straddles each Smithsonian date (it starts 12 px outside and reaches full strength 6 px inside), instead of starting at the date. The Smithsonian gives no range for these dates.
+    - Faded: Seshat estimates given as a single figure, CO₂ proxy estimates published with no uncertainty, and the PAGES 2k instrumental line.
+    - Geology is unchanged. Every boundary the ICS chart marks as approximate (~) also has a ± range, which the page already fades across. The rest are boundaries the chart gives as defined values.
+    - Placeholder lanes (energy, regions, periodisation, evidence, highlights, Human time markers) are unchanged; they are already labelled as unsourced.
 
 ## Open questions (Eduardo's call)
 

@@ -182,7 +182,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     </div>
   </div>
   <div class="legend-line">
-    <span><i class="sw" style="height:3px;background:var(--accent)"></i>Population, Our World in Data (1800 on)</span>
+    <span><i class="sw" style="height:3px;background:color-mix(in srgb,var(--accent) 60%,transparent)"></i>Population, Our World in Data (1800 on; faded: no range given)</span>
     <span><i class="sw" style="height:3px;background:repeating-linear-gradient(90deg,var(--accent) 0 7px,transparent 7px 11px)"></i>Model reconstruction, HYDE 3.3 (10,000 BCE–1790)</span>
     <span><i class="sw" style="background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--accent) 30%,transparent),transparent)"></i>Probably a range of guesses (not sourced)</span>
     <span><i class="sw" style="height:2px;background:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 7px)"></i>Not estimated</span>
@@ -192,7 +192,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <canvas class="chart" id="h-cv" role="img" aria-label="World population over the last million years, with markers for fire, language, dispersal out of Africa, the end of the last ice age, farming, writing and industrialisation, and strips for geological time and hominin species"></canvas>
   </div>
   <div class="readout" id="h-readout" aria-live="polite"><p class="empty">Hover or tap the chart to read the population estimate at that moment. Tap a marker name, a geological period or a species for its dates and how firm they are.</p></div>
-  <p class="dataline"><b>Partly placeholder data.</b> Sourced: the geological strip (ICS chart, v2024/12), the species dates (Smithsonian Human Origins Program; Denisovans, H. antecessor and H. luzonensis are still placeholders) and world population from 10,000 BCE to 2023 (Our World in Data, which joins HYDE 3.3, Gapminder and the UN). That source gives one figure per year and no range; before 1800 its figures are model reconstructions, so the line is dashed there. The shaded range from 300,000 years ago to 10,000 BCE is probably a range of guesses (an unsourced placeholder), and before 300,000 years ago there is no estimate at all. "Now" on this page is 2023, the last year in the population data. Marker dates have not been checked against a source yet.</p>
+  <p class="dataline"><b>Partly placeholder data.</b> Sourced: the geological strip (ICS chart, v2024/12), the species dates (Smithsonian Human Origins Program; Denisovans, H. antecessor and H. luzonensis are still placeholders) and world population from 10,000 BCE to 2023 (Our World in Data, which joins HYDE 3.3, Gapminder and the UN). That source gives one figure per year and no range; before 1800 its figures are model reconstructions, so the line is dashed there, and after 1800 it is faded because no range is given. The shaded range from 300,000 years ago to 10,000 BCE is probably a range of guesses (an unsourced placeholder), and before 300,000 years ago there is no estimate at all. "Now" on this page is 2023, the last year in the population data. Marker dates have not been checked against a source yet.</p>
 </section>
 
 <!-- ============ FULL ATLAS ============ -->
@@ -257,13 +257,13 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800); the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life lane counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The lane also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. Above the bars are three early milestones, each dated by one paper: signs of life in 3.48-billion-year-old hot-spring deposits (Djokic et al. 2017), the Great Oxidation Event (Gumsley et al. 2017) and the oldest multicellular eukaryotes (Miao et al. 2024). Below them, twelve living animal groups each show when their living members last shared a common ancestor, between the oldest fossil firmly in the group and the oldest plausible date (Benton et al. 2015). The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
+      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800) and faded after that; the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life lane counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The lane also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. Above the bars are three early milestones, each dated by one paper: signs of life in 3.48-billion-year-old hot-spring deposits (Djokic et al. 2017), the Great Oxidation Event (Gumsley et al. 2017) and the oldest multicellular eukaryotes (Miao et al. 2024). Below them, twelve living animal groups each show when their living members last shared a common ancestor, between the oldest fossil firmly in the group and the oldest plausible date (Benton et al. 2015). The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
       <div class="lgrow"><i class="sw" style="background:var(--accent)"></i>Firm dates have hard edges</div>
       <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--accent) 38%,var(--accent) 62%,transparent)"></i>Uncertain ends fade across the plausible range</div>
-      <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--bar) 30%,var(--bar) 70%,transparent)"></i>Species bars: a short fixed fade past the first and last fossils, as a reminder that species outlive their fossils; the fade's width is not data</div>
+      <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--bar) 30%,var(--bar) 70%,transparent)"></i>Species bars: a short fixed fade around the first and last fossil dates, because the source gives no range for them and species outlive their fossils; the fade's width is not data</div>
       <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(45deg,var(--bar) 0 3px,var(--disp) 3px 5px)"></i>Disputed category, or a scheme that does not apply</div>
       <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(90deg,var(--ink-4) 0 3px,transparent 3px 7px)"></i>No data, which is not the same as zero</div>
       <div class="lgrow"><i class="sw" style="background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 20%,transparent),var(--accent)),repeating-linear-gradient(90deg,var(--accent) 0 5px,transparent 5px 8px)"></i>Dashed lines, faded lines and soft-topped bars: the source gives no uncertainty for these values, which is not the same as certain</div>
@@ -435,10 +435,11 @@ function srcOf(rec, ds){
   return "No source yet. Placeholder.";
 }
 
-/* population line from single-figure samples (newest last); HYDE figures are reconstructions, so those stretches are dashed */
+/* population line from single-figure samples (newest last); HYDE figures are reconstructions, so those stretches are dashed.
+   No figure has a stated range, so the rest is drawn faded rather than as a firm line */
 const modelled = s => /^HYDE/.test(s.src || "");
 function srcLine(ctx, pts, fx, fy, lw){
-  ctx.save(); ctx.strokeStyle = PAL.accent; ctx.lineWidth = lw; ctx.lineJoin = "round"; ctx.lineCap = "butt";
+  ctx.save(); ctx.strokeStyle = alpha(PAL.accent, .6); ctx.lineWidth = lw; ctx.lineJoin = "round"; ctx.lineCap = "butt";
   let i = 0;
   while (i < pts.length - 1){
     const dash = modelled(pts[i]); let j = i;
@@ -552,13 +553,13 @@ function createView(o){
   function iv(p0, p1, y, h, color, opt){
     if (!p0 || !p1) return null;
     if (opt && opt.open){
-      /* soft open ends: solid between the source's dates, then a fixed-width fade outside them (not data) */
-      const F = 12, xs = cx(X(p0.est)), xe = cx(X(p1.est)), fr = Math.abs(p1.est - NOW) < 1.5 ? 0 : F;
+      /* soft ends: a fixed-width fade straddling each of the source's dates (the source gives no range, and species outlive their fossils; the width is not data) */
+      const F = 12, H2 = F / 2, xs = cx(X(p0.est)), xe = cx(X(p1.est)), fr = Math.abs(p1.est - NOW) < 1.5 ? 0 : F;
       const L = xs - F, R = xe + fr, w = R - L, a = opt.a || 1;
       if (R < -20 || L > W + 20) return null;
-      const g = ctx.createLinearGradient(L, 0, R, 0);
-      g.addColorStop(0, alpha(color, 0)); g.addColorStop(F / w, alpha(color, a));
-      g.addColorStop(Math.max(F / w, (xe - L) / w), alpha(color, a)); g.addColorStop(1, alpha(color, fr ? 0 : a));
+      const g = ctx.createLinearGradient(L, 0, R, 0), s1 = Math.min((F + H2) / w, .5), s2 = fr ? Math.max(1 - (fr + H2) / w, s1) : 1;
+      g.addColorStop(0, alpha(color, 0)); g.addColorStop(s1, alpha(color, a));
+      g.addColorStop(s2, alpha(color, a)); g.addColorStop(1, alpha(color, fr ? 0 : a));
       ctx.save(); ctx.fillStyle = g; ctx.fillRect(L, y, w, h);
       if (opt.hatch && w > 6){ ctx.fillStyle = hatch; ctx.fillRect(L, y, w, h); }
       ctx.restore();
@@ -659,7 +660,7 @@ function createView(o){
     return sc;
   }
   E.band = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · " + ds.unit + " · log · " + (ds._ph ? "shaded: guesses, not sourced · line: Our World in Data, dashed where modelled" : "band is the uncertainty"), y);
+    cap(lane.label + " · " + ds.unit + " · log · " + (ds._ph ? "shaded: guesses, not sourced · line: Our World in Data, dashed where modelled, faded elsewhere (no range given)" : "band is the uncertainty"), y);
     const top = y + 13, bh = h - 14, sc = bandLane(ds, top, bh);
     if (ds.unit === "people"){
       ctx.save(); ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textAlign = "right";
@@ -812,7 +813,9 @@ function createView(o){
         st.hit.push({ x0, x1, y0: yHi - 3, y1: yLo + 3, ds, at: () => info(i) });
       } else {
         const xm = (x0 + x1) / 2;
-        ctx.fillStyle = alpha(col, .8); ctx.strokeStyle = alpha(col, .8); ctx.lineWidth = 1.2;
+        /* a single figure with no low-high range is drawn faded: no stated uncertainty is not the same as certain */
+        const op = r[2] === r[3] ? .4 : .8;
+        ctx.fillStyle = alpha(col, op); ctx.strokeStyle = alpha(col, op); ctx.lineWidth = 1.2;
         if (yLo - yHi < 2.5){ ctx.beginPath(); ctx.arc(xm, yHi, 2, 0, 2 * Math.PI); ctx.fill(); }
         else { ctx.fillRect(x0 - 1, yHi, Math.max(x1 - x0, 0) + 2, yLo - yHi); }
         st.hit.push({ x0: x0 - 3, x1: x1 + 3, y0: yHi - 3, y1: yLo + 3, ds, at: () => info(i) });
@@ -961,7 +964,7 @@ function createView(o){
       sampleDots(T, i => s.rows[i][1], fy, a, b, banded ? PAL.accent : alpha(PAL.accent, .6));
       if (s._instr){
         const I = s._instr, [ia, ib] = visIdx(I._T);
-        ctx.strokeStyle = PAL.ink2; ctx.lineWidth = 1;
+        ctx.strokeStyle = alpha(PAL.ink2, .6); ctx.lineWidth = 1;   /* the file gives no uncertainty for the instrumental values: faded */
         seriesPath(I._T, i => I.rows[i][1], fy, ia, ib); ctx.stroke();
       }
       ctx.restore();
@@ -1008,11 +1011,11 @@ function createView(o){
       ctx.moveTo(x, fy(r[1] + (r[2] || 0))); ctx.lineTo(x, fy(r[1] - (r[3] || 0)));
     }
     ctx.stroke();
-    const dots = [new Path2D(), new Path2D()];
+    const dots = [new Path2D(), new Path2D(), new Path2D()];
     for (let i = a; i <= b; i++){
       const r = P.rows[i], x = cx(X(P._T[i])), yy = fy(r[1]);
       if (x < -3 || x > W + 3) continue;
-      const p = dots[r[4] === 1 ? 0 : 1]; p.moveTo(x + 2, yy); p.arc(x, yy, 2, 0, 2 * Math.PI);
+      const p = dots[r[2] == null && r[3] == null ? 2 : r[4] === 1 ? 0 : 1]; p.moveTo(x + 2, yy); p.arc(x, yy, 2, 0, 2 * Math.PI);
       st.hit.push({ x0: x - 3, x1: x + 3, y0: yy - 4, y1: yy + 4, ds, at: () => {
         const sd = P.studies[r[6]], c1 = r[4] === 1;
         return {
@@ -1024,6 +1027,7 @@ function createView(o){
     }
     ctx.fillStyle = alpha(PAL.ink2, .75); ctx.fill(dots[0]);
     ctx.strokeStyle = alpha(PAL.ink2, .75); ctx.lineWidth = 1; ctx.stroke(dots[1]);
+    ctx.fillStyle = alpha(PAL.ink2, .3); ctx.fill(dots[2]);   /* estimates published with no uncertainty: faded */
     const [ia, ib] = visIdx(I._T);
     ctx.strokeStyle = PAL.accent; ctx.lineWidth = 1.5; ctx.lineJoin = "round";
     seriesPath(I._T, i => I.rows[i][1], fy, ia, ib); ctx.stroke();
@@ -1328,13 +1332,13 @@ const HV = (() => {
     ctx.fillStyle = g; ctx.fillRect(L, y, R - L, h);
     return { x0: L, x1: R };
   }
-  /* soft open ends: solid between the source's dates, then a fixed-width fade outside them (not data) */
+  /* soft ends: a fixed-width fade straddling each of the source's dates (the source gives no range, and species outlive their fossils; the width is not data) */
   function openRect(p0, p1, y, h, a, color){
-    const F = 12, xs = X(p0.est), xe = X(p1.est), fr = Math.abs(p1.est - NOW) < 1.5 ? 0 : F;
+    const F = 12, H2 = F / 2, xs = X(p0.est), xe = X(p1.est), fr = Math.abs(p1.est - NOW) < 1.5 ? 0 : F;
     const L0 = xs - F, R0 = xe + fr, L = Math.max(ML, L0), R = Math.min(ML + pw(), R0); if (R - L < .3) return null;
-    const w = R0 - L0, g = ctx.createLinearGradient(L0, 0, R0, 0);
-    g.addColorStop(0, alpha(color, 0)); g.addColorStop(F / w, alpha(color, a));
-    g.addColorStop(Math.max(F / w, (xe - L0) / w), alpha(color, a)); g.addColorStop(1, alpha(color, fr ? 0 : a));
+    const w = R0 - L0, g = ctx.createLinearGradient(L0, 0, R0, 0), s1 = Math.min((F + H2) / w, .5), s2 = fr ? Math.max(1 - (fr + H2) / w, s1) : 1;
+    g.addColorStop(0, alpha(color, 0)); g.addColorStop(s1, alpha(color, a));
+    g.addColorStop(s2, alpha(color, a)); g.addColorStop(1, alpha(color, fr ? 0 : a));
     ctx.fillStyle = g; ctx.fillRect(L, y, R - L, h);
     return { x0: L, x1: R };
   }
