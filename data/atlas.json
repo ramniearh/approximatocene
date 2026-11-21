@@ -190,9 +190,9 @@
     "pbdb": {
       "title": "Paleobiology Database",
       "url": "https://paleobiodb.org",
-      "license": "CC BY",
-      "format": "REST API",
-      "status": "not yet ingested"
+      "license": "CC0 (data service)",
+      "format": "CSV from the data service (animal genus counts per stage copied to data/reference/animal_genus_diversity_pbdb.csv)",
+      "status": "ingested"
     },
     "seshat": {
       "title": "Seshat Global History Databank",
@@ -293,6 +293,15 @@
       "dataset": "co2",
       "encoding": "co2",
       "height": 96,
+      "minSpan": 0,
+      "maxSpan": null
+    },
+    {
+      "id": "life",
+      "label": "Life",
+      "dataset": "life",
+      "encoding": "life",
+      "height": 104,
       "minSpan": 0,
       "maxSpan": null
     },
@@ -47351,6 +47360,204 @@
           [2023,1438069597,1]
         ]
       }
+    },
+    "life": {
+      "kind": "life",
+      "conf": "estimated",
+      "src": [
+        "pbdb"
+      ],
+      "ageUnit": "Ma",
+      "yMax": 8000,
+      "ticks": [
+        2000,
+        4000,
+        6000
+      ],
+      "note": "Bars: the number of animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool (data/reference/animal_genus_diversity_pbdb.csv). Each bar counts every genus whose known fossil range covers the stage (the sum of PBDB's four range-through fields; Foote 2000). It counts genera found as fossils and entered in the database, so it reflects how much has been dug up and recorded as well as how much life there was: stages with few records look poorer than they were. The tiny counts in the last stages come from very few Holocene records in the database. Shaded marks: the five largest mass extinctions, at ICS dates.",
+      "cols": [
+        "max_ma",
+        "min_ma",
+        "genera_range_through",
+        "genera_sampled",
+        "occurrences",
+        "stage"
+      ],
+      "rows": [
+        [0.0117,0.0082,1,1,1,"Greenlandian"],
+        [0.129,0.0117,3640,3640,40861,"Late Pleistocene"],
+        [0.774,0.129,3467,2304,15408,"Chibanian"],
+        [1.8,0.774,3870,2651,21191,"Calabrian"],
+        [2.58,1.8,3726,1215,5734,"Gelasian"],
+        [3.6,2.58,4280,2680,20266,"Piacenzian"],
+        [5.333,3.6,4738,3283,23492,"Zanclean"],
+        [7.246,5.333,4631,2213,12774,"Messinian"],
+        [11.63,7.246,5456,3862,31968,"Tortonian"],
+        [13.82,11.63,5400,3537,25929,"Serravallian"],
+        [15.98,13.82,5019,2136,12821,"Langhian"],
+        [20.45,15.98,6794,5315,37547,"Burdigalian"],
+        [23.04,20.45,4543,1317,4442,"Aquitanian"],
+        [27.3,23.04,5250,3071,15087,"Chattian"],
+        [33.9,27.3,5069,2989,20762,"Rupelian"],
+        [37.71,33.9,7693,6205,29627,"Priabonian"],
+        [41.03,37.71,4345,2298,21236,"Bartonian"],
+        [48.07,41.03,4824,3358,23258,"Lutetian"],
+        [56.0,48.07,5026,3813,30872,"Ypresian"],
+        [59.24,56.0,2955,1460,9647,"Thanetian"],
+        [61.66,59.24,2630,774,2904,"Selandian"],
+        [66.0,61.66,2811,1770,12212,"Danian"],
+        [72.2,66.0,3508,2652,46628,"Maastrichtian"],
+        [83.6,72.2,3788,2898,31097,"Campanian"],
+        [85.7,83.6,2780,1242,6288,"Santonian"],
+        [89.8,85.7,2510,796,3867,"Coniacian"],
+        [93.9,89.8,2848,1456,10824,"Turonian"],
+        [100.5,93.9,4872,3906,21516,"Cenomanian"],
+        [113.2,100.5,3209,2315,15480,"Albian"],
+        [121.4,113.2,3753,2862,14166,"Aptian"],
+        [125.77,121.4,3180,2022,7728,"Barremian"],
+        [132.6,125.77,2193,924,6564,"Hauterivian"],
+        [137.05,132.6,2120,850,7816,"Valanginian"],
+        [143.1,137.05,2209,936,5085,"Berriasian"],
+        [149.2,143.1,2608,1684,12871,"Tithonian"],
+        [154.8,149.2,2573,1677,11114,"Kimmeridgian"],
+        [161.5,154.8,2669,1921,16050,"Oxfordian"],
+        [165.3,161.5,2010,1062,11806,"Callovian"],
+        [168.2,165.3,1921,1140,9742,"Bathonian"],
+        [170.9,168.2,1630,739,5810,"Bajocian"],
+        [174.7,170.9,1431,485,3741,"Aalenian"],
+        [184.2,174.7,1963,1292,18365,"Toarcian"],
+        [192.9,184.2,1534,881,19848,"Pliensbachian"],
+        [199.5,192.9,1535,912,9575,"Sinemurian"],
+        [201.4,199.5,1236,599,4372,"Hettangian"],
+        [205.7,201.4,1394,861,6907,"Rhaetian"],
+        [227.3,205.7,2269,1851,15549,"Norian"],
+        [237.0,227.3,2084,1638,12897,"Carnian"],
+        [241.464,237.0,1867,1276,7402,"Ladinian"],
+        [247.0,241.464,1835,1455,17205,"Anisian"],
+        [250.8,247.0,1379,897,12102,"Olenekian"],
+        [251.902,250.8,1026,499,8122,"Induan"],
+        [254.14,251.902,1636,1213,15266,"Changhsingian"],
+        [259.857,254.14,2129,1670,21953,"Wuchiapingian"],
+        [264.28,259.857,2111,1311,9570,"Capitanian"],
+        [266.9,264.28,2107,1323,10195,"Wordian"],
+        [274.4,266.9,2309,1605,14683,"Roadian"],
+        [283.3,274.4,2459,1727,16156,"Kungurian"],
+        [290.1,283.3,2205,1378,8949,"Artinskian"],
+        [293.52,290.1,1822,893,6898,"Sakmarian"],
+        [298.9,293.52,1906,1144,6354,"Asselian"],
+        [303.7,298.9,1772,983,8485,"Gzhelian"],
+        [307.0,303.7,1496,572,3810,"Kasimovian"],
+        [315.2,307.0,2029,1382,7950,"Moscovian"],
+        [323.4,315.2,1661,1018,5095,"Bashkirian"],
+        [330.3,323.4,1470,882,7229,"Serpukhovian"],
+        [346.7,330.3,1698,1334,15462,"Visean"],
+        [358.86,346.7,1488,1077,9123,"Tournaisian"],
+        [372.15,358.86,1540,1088,9832,"Famennian"],
+        [382.31,372.15,1572,1043,14147,"Frasnian"],
+        [387.95,382.31,2006,1625,27566,"Givetian"],
+        [393.47,387.95,1846,1194,9008,"Eifelian"],
+        [410.62,393.47,2516,2068,14931,"Emsian"],
+        [413.02,410.62,1843,1122,6396,"Pragian"],
+        [419.62,413.02,1838,1321,11041,"Lochkovian"],
+        [425.0,422.7,1815,1438,16092,"Ludfordian"],
+        [426.7,425.0,1402,526,2631,"Gorstian"],
+        [430.6,426.7,1662,1153,11398,"Homerian"],
+        [432.9,430.6,1400,666,4788,"Sheinwoodian"],
+        [438.6,432.9,1673,1245,13038,"Telychian"],
+        [440.5,438.6,1256,570,3395,"Aeronian"],
+        [443.1,440.5,1160,540,6502,"Rhuddanian"],
+        [445.2,443.1,1231,638,3839,"Hirnantian"],
+        [452.8,445.2,2261,2107,38474,"Katian"],
+        [458.2,452.8,2068,1859,28674,"Sandbian"],
+        [469.4,458.2,2026,1893,19452,"Darriwilian"],
+        [471.3,469.4,1042,484,3359,"Dapingian"],
+        [477.1,471.3,1242,1074,8034,"Floian"],
+        [486.85,477.1,1140,1083,11078,"Tremadocian"],
+        [491.0,486.85,497,396,2506,"Stage 10"],
+        [494.2,491.0,401,262,2328,"Jiangshanian"],
+        [497.0,494.2,394,301,2680,"Paibian"],
+        [500.5,497.0,460,358,3032,"Guzhangian"],
+        [504.5,500.5,602,545,3464,"Drumian"],
+        [506.5,504.5,569,447,2409,"Wuliuan"],
+        [514.5,506.5,1164,1146,10592,"Stage 4"],
+        [521.0,514.5,856,832,7456,"Stage 3"],
+        [529.0,521.0,323,314,3503,"Stage 2"],
+        [538.8,529.0,140,140,1041,"Fortunian"]
+      ],
+      "extinctions": [
+        {
+          "id": "end-ordovician",
+          "label": "End-Ordovician extinction",
+          "short": "End-Ordovician",
+          "t0": {
+            "est": "445.2 Ma",
+            "lo": "446.1 Ma",
+            "hi": "444.3 Ma"
+          },
+          "t1": {
+            "est": "443.1 Ma",
+            "lo": "444.1 Ma",
+            "hi": "442.1 Ma"
+          },
+          "note": "One of the five largest mass extinctions in the fossil record. It came in pulses during the Hirnantian, the last stage of the Ordovician, so the band spans that whole stage; its ends are the ICS dates for the stage. Placing the extinction in this stage is a standard convention, not part of the ICS chart."
+        },
+        {
+          "id": "late-devonian",
+          "label": "Late Devonian extinction",
+          "short": "Late Devonian",
+          "t0": {
+            "est": "372.15 Ma",
+            "lo": "372.61 Ma",
+            "hi": "371.69 Ma"
+          },
+          "t1": {
+            "est": "372.15 Ma",
+            "lo": "372.61 Ma",
+            "hi": "371.69 Ma"
+          },
+          "note": "One of the five largest mass extinctions in the fossil record. It was a drawn-out series of crises; the mark is at the Frasnian–Famennian boundary, where the largest pulse is conventionally placed, with the ICS date for that boundary. The pairing with the boundary is a convention, not part of the ICS chart."
+        },
+        {
+          "id": "end-permian",
+          "label": "End-Permian extinction",
+          "short": "End-Permian",
+          "t0": {
+            "est": "251.902 Ma",
+            "lo": "251.926 Ma",
+            "hi": "251.878 Ma"
+          },
+          "t1": {
+            "est": "251.902 Ma",
+            "lo": "251.926 Ma",
+            "hi": "251.878 Ma"
+          },
+          "note": "The largest of the five mass extinctions in the fossil record. The mark is the ICS date for the Permian–Triassic boundary, where the extinction is conventionally placed; the pairing is a convention, not part of the ICS chart."
+        },
+        {
+          "id": "end-triassic",
+          "label": "End-Triassic extinction",
+          "short": "End-Triassic",
+          "t0": {
+            "est": "201.4 Ma",
+            "lo": "201.6 Ma",
+            "hi": "201.2 Ma"
+          },
+          "t1": {
+            "est": "201.4 Ma",
+            "lo": "201.6 Ma",
+            "hi": "201.2 Ma"
+          },
+          "note": "One of the five largest mass extinctions in the fossil record. The mark is the ICS date for the Triassic–Jurassic boundary, where the extinction is conventionally placed; the pairing is a convention, not part of the ICS chart."
+        },
+        {
+          "id": "end-cretaceous",
+          "label": "End-Cretaceous extinction",
+          "short": "End-Cretaceous",
+          "t0": "66.00 Ma",
+          "t1": "66.00 Ma",
+          "note": "One of the five largest mass extinctions in the fossil record, which ended the non-bird dinosaurs. The mark is the ICS date for the Cretaceous–Paleogene boundary, where the extinction is conventionally placed; the pairing is a convention, not part of the ICS chart."
+        }
+      ]
     }
   },
   "overlays": {
