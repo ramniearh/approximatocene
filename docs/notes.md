@@ -74,6 +74,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - Bars are solid between the Smithsonian's dates and then fade over a fixed 12 pixels past each end (none at "now"). This is a reminder that species outlive their fossils, not data; the About legend and each details box say so.
   - Earlier "disputed" flags (hatching) were kept for *Sahelanthropus*, *H. habilis* and *H. heidelbergensis*. They are editorial judgments, not from the source.
   - Denisovans, *H. antecessor* and *H. luzonensis* keep their placeholder dates and say "No source yet. Placeholder."
+  - *Ar. ramidus*, *K. platyops* and *Au. garhi* are tagged "estimated", not "dated" (Nov 2026). The Smithsonian gives each a single date with no range, and "dated" means a stated interval.
 - **Population (Nov 2026):** from 10,000 BCE to 2023 the population line (`population` in `data/atlas.json`, used by all three chart tabs) is the OWID series from `world_population_owid.csv`, all 261 rows, each tagged with its underlying source. OWID gives no range, so there is no haze over that stretch. Instead the line is **dashed where the figures are HYDE 3.3 model reconstructions (to 1790) and solid from 1800** (Gapminder, then UN). Both choices were Eduardo's.
   - Hovering shows the nearest published figure and its year and source, not an interpolated value.
   - In the About sources table HYDE 3.3 shows as "used via Our World in Data", since its figures reach the page only through OWID.

@@ -32439,8 +32439,8 @@
           "t0": "4.4 Ma",
           "t1": "4.4 Ma",
           "openEnds": true,
-          "conf": "dated",
-          "note": "Smithsonian: “About 4.4 million years ago” (a single date, not a span). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+          "conf": "estimated",
+          "note": "Smithsonian: “About 4.4 million years ago” (a single date, not a span, with no range given). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "au-anamensis",
@@ -32470,8 +32470,8 @@
           "t0": "3.5 Ma",
           "t1": "3.5 Ma",
           "openEnds": true,
-          "conf": "dated",
-          "note": "Smithsonian: “About 3.5 million years ago” (a single date, not a span). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+          "conf": "estimated",
+          "note": "Smithsonian: “About 3.5 million years ago” (a single date, not a span, with no range given). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "au-africanus",
@@ -32500,8 +32500,8 @@
           "t0": "2.5 Ma",
           "t1": "2.5 Ma",
           "openEnds": true,
-          "conf": "dated",
-          "note": "Smithsonian: “About 2.5 million years ago” (a single date, not a span). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
+          "conf": "estimated",
+          "note": "Smithsonian: “About 2.5 million years ago” (a single date, not a span, with no range given). The ends fade because the species probably lived before and after its first and last known fossils; how far the fade reaches is not from any source."
         },
         {
           "id": "h-habilis",
