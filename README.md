@@ -2,7 +2,7 @@
 
 An interactive timeline of human history and deep time, from the formation of the Earth to now, built around one idea: **uncertainty is drawn, not hidden.** Uncertain dates fade across their plausible range, disputed categories are hatched, and "no data" is drawn differently from zero.
 
-**Status:** early working version (v0.3). The structure works, and part of the data is now sourced: geological dates, hominin species, world population since 10,000 BCE, the climate and CO₂ records, animal fossil diversity, and polity size and population. Everything else is still a placeholder that hasn't been checked against a source, and the page says which is which.
+**Status:** early working version (v0.3). The structure works, and part of the data is now sourced: geological dates, hominin species, world population since 10,000 BCE, the climate and CO₂ records, animal fossil diversity, polity size and population, and world energy use per person since 1800. Everything else is still a placeholder that hasn't been checked against a source, and the page says which is which.
 
 ## View it
 

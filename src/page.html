@@ -157,7 +157,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 
 <header class="top">
-  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, the climate and CO₂ records, animal diversity, and polity size and population now sourced</p>
+  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, the climate and CO₂ records, animal diversity, polity size and population, and energy use since 1800 now sourced</p>
   <h1>Deep time, <b>to scale</b></h1>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
@@ -262,7 +262,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800) and faded after that; the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life lane counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The lane also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. Above the bars are three early milestones, each dated by one paper: signs of life in 3.48-billion-year-old hot-spring deposits (Djokic et al. 2017), the Great Oxidation Event (Gumsley et al. 2017) and the oldest multicellular eukaryotes (Miao et al. 2024). Below them, twelve living animal groups each show when their living members last shared a common ancestor, between the oldest fossil firmly in the group and the oldest plausible date (Benton et al. 2015). The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
+      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800) and faded after that; the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life lane counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The lane also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. Above the bars are three early milestones, each dated by one paper: signs of life in 3.48-billion-year-old hot-spring deposits (Djokic et al. 2017), the Great Oxidation Event (Gumsley et al. 2017) and the oldest multicellular eukaryotes (Miao et al. 2024). Below them, twelve living animal groups each show when their living members last shared a common ancestor, between the oldest fossil firmly in the group and the oldest plausible date (Benton et al. 2015). The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. The energy lane shows world energy use per person from 1800, calculated here by dividing Our World in Data's world energy use (Vaclav Smil's estimates before 1965, the Energy Institute's Statistical Review after) by its world population. It includes wood and other traditional fuels but not food, and before 1800 it shows no data. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
@@ -444,7 +444,7 @@ function srcOf(rec, ds){
 
 /* population line from single-figure samples (newest last); HYDE figures are reconstructions, so those stretches are dashed.
    No figure has a stated range, so the rest is drawn faded rather than as a firm line */
-const modelled = s => /^HYDE/.test(s.src || "");
+const modelled = s => /^(HYDE|Smil)/.test(s.src || "");
 function srcLine(ctx, pts, fx, fy, lw){
   ctx.save(); ctx.strokeStyle = alpha(PAL.accent, .6); ctx.lineWidth = lw; ctx.lineJoin = "round"; ctx.lineCap = "butt";
   let i = 0;
@@ -537,6 +537,7 @@ function createView(o){
     if (l.encoding === "co2") return covPx(DS.co2.proxies._T[0], NOW) >= 40 ? l.height : 0;
     if (l.encoding === "life"){ const L = DS[l.dataset], old = Math.max(L._T[0], ...L.milestones.map(m => (m._t || m._t0).older)); return covPx(old, NOW) >= 40 ? l.height : 0; }
     if (l.encoding === "polity-pop") return covPx(DS[l.dataset]._T[0], NOW) >= 40 ? l.height : 0;
+    if (l.encoding === "energy") return covPx(DS[l.dataset]._cov0, NOW) >= 40 ? l.height : 0;
     if (l.encoding === "largest-polity"){ const T = DS[l.dataset]._T; return covPx(T[0], T[T.length - 1]) >= 40 ? l.height : 0; }
     return l.height;
   }
@@ -675,6 +676,23 @@ function createView(o){
       ctx.restore();
     }
     laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: fmtT(ds._cov0) + "  →  now" }, ds);
+  };
+  /* energy per person (calculated from OWID energy and population): one faded line, dashed where the figures are Smil's estimates; no range is given */
+  E.energy = (ds, y, h, sp, lane) => {
+    cap(lane.label + " · " + ds.unit + " · log · includes wood and other traditional fuels · not food · dashed: Smil's estimates · faded: no range given", y);
+    const top = y + 13, bh = h - 15;
+    const [lo, hi] = ds.yDomain, L0 = Math.log10(lo), L1 = Math.log10(hi);
+    const fy = v => top + bh - Math.max(0, Math.min(1, (Math.log10(v) - L0) / (L1 - L0))) * bh;
+    const P = ds._sorted, T = P.map(p => p._t);
+    noData(-1, X(ds._cov0), top, bh);
+    yTicks([5000, 10000, 20000], fy, "", v => (v / 1000) + "k");
+    srcLine(ctx, P, p => cx(X(p._t)), p => fy(p.v), 1.6);
+    const [a, b] = visIdx(T);
+    sampleDots(T, i => P[i].v, fy, a, b, alpha(PAL.accent, .6));
+    st.hit.push({ x0: X(T[0]) - 3, x1: W, y0: top, y1: top + bh, ds, at: x => {
+      const p = P[nearest(T, tAtX(x))];
+      return { label: lane.label + " · about " + p.v.toLocaleString("en") + " kWh", _rangeText: p.t + " · " + p.src + " · nearest calculated figure, not interpolated", note: ds.note, conf: ds.conf, src: ds.src };
+    } });
   };
   /* largest polity by mapped area, every year (Cliopatria): a line, and beneath it which polity held the lead */
   const fmtKm = v => v >= 1e6 ? (v / 1e6) + "M" : v >= 1e3 ? (v / 1e3) + "k" : String(v);
@@ -1690,7 +1708,7 @@ const STORIES = [
     { t0: "500 ka", t1: "now", lanes: ["hominins"], text: "Faded ends mark uncertainty. Each species bar runs between its first and last known fossils, as given by the Smithsonian, and then fades a little past both ends: in a sparse fossil record, species probably lived longer than their fossils show. The fade is a reminder, not a measurement. Five well-established species are labelled; the faint bars are the rest." },
     { t0: "800 ka", t1: "100 ka", lanes: ["hominins"], text: "Hatching marks a disputed category. Homo heidelbergensis is increasingly treated as a label of convenience rather than a species, and Denisovans are defined mostly from DNA. Tap any bar for its dates, how firm they are, and where a real figure would come from." },
     { t0: "1.0 Ma", t1: "now", mode: "log", lanes: ["pop", "evidence"], text: "Pale grey with a dashed edge means no data. The population lane starts 300,000 years ago; further left the value is unknown, which is not the same as zero. The strip below it is not about the past at all: it shows how much can be said about each era." },
-    { t0: "12 ka", t1: "now", lanes: ["energy", "pop"], text: "Some lanes carry far more uncertainty than others. The energy-per-person lane is still invented: its numbers are placeholders, so only its general shape should be read. Population since 10,000 BCE comes from a published series, but before 1800 even that is a model reconstruction, which is why the line is dashed there. A smooth, finished-looking lane can still overstate what is known." }
+    { t0: "12 ka", t1: "now", lanes: ["regions", "pop"], text: "Some lanes carry far more uncertainty than others. The regions lane is still a placeholder: its dates were written from memory and have not been checked, so only its general shape should be read. Population since 10,000 BCE comes from a published series, but before 1800 even that is a model reconstruction, which is why the line is dashed there. A smooth, finished-looking lane can still overstate what is known." }
   ]},
   { id: "periods", title: "Same label, different worlds", dek: "Periodisation schemes cut the same millennia in incompatible ways.", scenes: [
     { t0: "12 ka", t1: "now", scheme: "threeage", lanes: ["scheme", "regions"], text: "The Stone, Bronze and Iron Age sequence was devised in Denmark in the 1830s to arrange a museum collection. It was later stretched into a world history it was never designed to be." },
@@ -1743,8 +1761,8 @@ function scene(k){
   $("#s-next").textContent = k === s.scenes.length - 1 && cur.s < STORIES.length - 1 ? "Next story →" : "Next →";
   const flagged = sc.lanes.map(id => LANE[id]).filter(l => l && DS[l.dataset] && ["fabricated", "speculative"].includes(DS[l.dataset].conf))
     .map(l => l.label + (DS[l.dataset].conf === "fabricated" ? " is invented; read its shape only" : " is a speculative impression"));
-  const srcd = [sc.lanes.includes("geo") && "geological dates are from the ICS chart", sc.lanes.includes("hominins") && "species dates are from the Smithsonian (except Denisovans)", sc.lanes.includes("pop") && "population from 10,000 BCE is from Our World in Data"].filter(Boolean);
-  $("#s-data").innerHTML = (srcd.length ? "<b>Mostly not researched.</b> Here, " + srcd.join(" and ") + "; all other values in this view are unsourced placeholders." : "<b>Not researched.</b> All values in this view are unsourced placeholders.") + (flagged.length ? " " + flagged.join("; ") + "." : "");
+  const srcd = [sc.lanes.includes("geo") && "geological dates are from the ICS chart", sc.lanes.includes("hominins") && "species dates are from the Smithsonian (except Denisovans)", sc.lanes.includes("pop") && "population from 10,000 BCE is from Our World in Data", sc.lanes.includes("energy") && "energy per person since 1800 is calculated from Our World in Data's energy and population series"].filter(Boolean);
+  $("#s-data").innerHTML = (srcd.length ? "<b>Mostly not researched.</b> Here, " + (srcd.length > 1 ? srcd.slice(0, -1).join(", ") + " and " + srcd[srcd.length - 1] : srcd[0]) + "; all other values in this view are unsourced placeholders." : "<b>Not researched.</b> All values in this view are unsourced placeholders.") + (flagged.length ? " " + flagged.join("; ") + "." : "");
   $("#s-readout").innerHTML = '<p class="empty">Tap a bar or band for details. Arrow keys step through the story.</p>';
 }
 function setStoryHash(){ try { history.replaceState(null, "", "#story-" + STORIES[cur.s].id); } catch (e){} }

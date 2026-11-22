@@ -130,7 +130,7 @@
       "license": "CC BY 4.0",
       "format": "CSV (long-run world population copied to data/reference/world_population_owid.csv)",
       "status": "ingested",
-      "note": "World population 10,000 BCE–2023, joining HYDE 3.3, Gapminder v7 and UN WPP 2024. Last updated by OWID 2024-07-15, read 2026-11-20."
+      "note": "World population 10,000 BCE–2023, joining HYDE 3.3, Gapminder v7 and UN WPP 2024. Last updated by OWID 2024-07-15, read 2026-11-20. Also world energy use by source 1800–2025 (Energy Institute Statistical Review 2026; Smil 2017, Energy Transitions), last updated by OWID 2026-06-30, read 2026-11-22, copied to data/reference/world_energy_owid.csv."
     },
     "westerhold": {
       "title": "CENOGRID — astronomically dated benthic record",
@@ -365,10 +365,10 @@
       "id": "energy",
       "label": "Energy per person",
       "dataset": "energy",
-      "encoding": "band",
+      "encoding": "energy",
       "height": 58,
       "minSpan": 0,
-      "maxSpan": 1200000.0
+      "maxSpan": null
     },
     {
       "id": "polity",
@@ -34012,93 +34012,403 @@
     },
     "energy": {
       "kind": "series",
-      "unit": "kcal per person per day",
+      "unit": "kWh per person per year",
       "yScale": "log",
       "yDomain": [
         3000,
-        300000
+        30000
       ],
       "coverage": [
         [
-          "300 ka",
+          "1800 CE",
           "now"
         ]
       ],
-      "conf": "fabricated",
+      "conf": "estimated",
       "src": [
-        "placeholder"
-      ],
-      "wouldUse": [
-        "morris",
-        "smil",
         "owid"
       ],
-      "note": "Follows the general shape of Ian Morris's energy-capture index. The numbers are invented. This is the lane that makes the fossil-fuel discontinuity visible as something other than a date.",
+      "note": "World energy use per person: fuels and electricity, including traditional biomass (wood, charcoal, crop residues and dung), divided by world population. Calculated here from two Our World in Data series (energy by source, and population), not a figure either publishes. Before 1965 the energy figures are Vaclav Smil's historical estimates at ten-year steps (dashed). Traditional biomass is a World-only estimate by Smil, which OWID holds at its 2015 value from 2016 on. No range is given, so the line is faded. Food and animal feed are not counted, so this is not total energy capture in Ian Morris's sense. Before 1800 there is no data, which is not zero.",
       "samples": [
         {
-          "t": "300 ka",
-          "lo": 4000,
-          "hi": 6000
-        },
-        {
-          "t": "50 ka",
-          "lo": 4500,
-          "hi": 7000
-        },
-        {
-          "t": "12 ka",
-          "lo": 5000,
-          "hi": 9000
-        },
-        {
-          "t": "8000 b2k",
-          "lo": 9000,
-          "hi": 16000
-        },
-        {
-          "t": "3000 BCE",
-          "lo": 12000,
-          "hi": 22000
-        },
-        {
-          "t": "1 CE",
-          "lo": 18000,
-          "hi": 32000
-        },
-        {
-          "t": "1000 CE",
-          "lo": 18000,
-          "hi": 30000
-        },
-        {
-          "t": "1500 CE",
-          "lo": 20000,
-          "hi": 38000
-        },
-        {
           "t": "1800 CE",
-          "lo": 26000,
-          "hi": 45000
+          "v": 5750,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1810 CE",
+          "v": 5843,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1820 CE",
+          "v": 5749,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1830 CE",
+          "v": 5723,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1840 CE",
+          "v": 5985,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1850 CE",
+          "v": 6108,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1860 CE",
+          "v": 6167,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1870 CE",
+          "v": 6411,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1880 CE",
+          "v": 6729,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1890 CE",
+          "v": 7008,
+          "src": "Smil 2017"
         },
         {
           "t": "1900 CE",
-          "lo": 60000,
-          "hi": 110000
+          "v": 7436,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1910 CE",
+          "v": 8836,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1920 CE",
+          "v": 9477,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1930 CE",
+          "v": 9575,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1940 CE",
+          "v": 9829,
+          "src": "Smil 2017"
         },
         {
           "t": "1950 CE",
-          "lo": 90000,
-          "hi": 160000
+          "v": 11220,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1960 CE",
+          "v": 13460,
+          "src": "Smil 2017"
+        },
+        {
+          "t": "1965 CE",
+          "v": 15218,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1966 CE",
+          "v": 15586,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1967 CE",
+          "v": 15762,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1968 CE",
+          "v": 16230,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1969 CE",
+          "v": 16834,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1970 CE",
+          "v": 17421,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1971 CE",
+          "v": 17662,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1972 CE",
+          "v": 18155,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1973 CE",
+          "v": 18739,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1974 CE",
+          "v": 18430,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1975 CE",
+          "v": 18220,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1976 CE",
+          "v": 18783,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1977 CE",
+          "v": 19058,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1978 CE",
+          "v": 19358,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1979 CE",
+          "v": 19578,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1980 CE",
+          "v": 19078,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1981 CE",
+          "v": 18675,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1982 CE",
+          "v": 18264,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1983 CE",
+          "v": 18217,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1984 CE",
+          "v": 18641,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1985 CE",
+          "v": 18780,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1986 CE",
+          "v": 18840,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1987 CE",
+          "v": 19135,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1988 CE",
+          "v": 19444,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1989 CE",
+          "v": 19482,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1990 CE",
+          "v": 19356,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1991 CE",
+          "v": 19181,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1992 CE",
+          "v": 19010,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1993 CE",
+          "v": 18840,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1994 CE",
+          "v": 18806,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1995 CE",
+          "v": 18886,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1996 CE",
+          "v": 19134,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1997 CE",
+          "v": 19049,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1998 CE",
+          "v": 18910,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "1999 CE",
+          "v": 18983,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
         },
         {
           "t": "2000 CE",
-          "lo": 180000,
-          "hi": 240000
+          "v": 19198,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
         },
         {
-          "t": "now",
-          "lo": 210000,
-          "hi": 260000
+          "t": "2001 CE",
+          "v": 19154,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2002 CE",
+          "v": 19282,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2003 CE",
+          "v": 19635,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2004 CE",
+          "v": 20227,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2005 CE",
+          "v": 20561,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2006 CE",
+          "v": 20830,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2007 CE",
+          "v": 21142,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2008 CE",
+          "v": 21039,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2009 CE",
+          "v": 20435,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2010 CE",
+          "v": 21065,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2011 CE",
+          "v": 21215,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2012 CE",
+          "v": 21167,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2013 CE",
+          "v": 21181,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2014 CE",
+          "v": 21083,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2015 CE",
+          "v": 20964,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017)"
+        },
+        {
+          "t": "2016 CE",
+          "v": 20904,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
+        },
+        {
+          "t": "2017 CE",
+          "v": 21037,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
+        },
+        {
+          "t": "2018 CE",
+          "v": 21311,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
+        },
+        {
+          "t": "2019 CE",
+          "v": 21230,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
+        },
+        {
+          "t": "2020 CE",
+          "v": 20184,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
+        },
+        {
+          "t": "2021 CE",
+          "v": 20968,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
+        },
+        {
+          "t": "2022 CE",
+          "v": 21091,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
+        },
+        {
+          "t": "2023 CE",
+          "v": 21269,
+          "src": "Energy Institute 2026 (traditional biomass: Smil 2017, held at its 2015 value by OWID)"
         }
       ]
     },
