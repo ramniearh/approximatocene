@@ -4,8 +4,8 @@
     "version": "0.3.0",
     "canonicalScale": "b2k",
     "canonicalNote": "All times are internally normalised to years before 2000 CE. Positive is past. The present is a negative number, which is deliberate: it keeps the origin fixed so the file does not silently change meaning next year.",
-    "dataStatus": "PLACEHOLDER",
-    "dataStatusNote": "Values in this file are rough figures written from memory to prove the schema. Every record carries a src array that is currently either empty or points at the source that SHOULD supply it. Nothing here has been checked."
+    "dataStatus": "MIXED",
+    "dataStatusNote": "Some datasets are sourced and some are still placeholders. Sourced values are copied from the files in data/reference/ and name their source (a source with status 'ingested'). Everything else is a rough figure written from memory, points at the source that SHOULD supply it, and has not been checked."
   },
   "vocab": {
     "confidence": [
@@ -111,8 +111,8 @@
       "url": "https://doi.org/10.17026/dans-25g-gez",
       "license": "CC BY 4.0",
       "format": "NetCDF / ASCII grids",
-      "status": "not yet ingested",
-      "note": "Standard source for gridded population and land use from 10,000 BCE."
+      "status": "used via Our World in Data",
+      "note": "Standard source for gridded population and land use from 10,000 BCE. Its world totals to 1790 reach the page through OWID's long-run population series; HYDE's own files have not been read."
     },
     "maddison": {
       "title": "Maddison Project Database 2023",
@@ -189,6 +189,7 @@
     },
     "pbdb": {
       "title": "Paleobiology Database",
+      "org": "Paleobiology Database, data service 1.2",
       "url": "https://paleobiodb.org",
       "license": "CC0 (data service)",
       "format": "CSV from the data service (animal genus counts per stage copied to data/reference/animal_genus_diversity_pbdb.csv)",
@@ -196,6 +197,7 @@
     },
     "seshat": {
       "title": "Seshat Global History Databank",
+      "org": "Seshat Global History Databank, Polaris2026 release",
       "url": "https://github.com/Seshat-Global-History-Databank/build_polaris_dataset",
       "license": "CC BY-SA 4.0 (public data)",
       "format": "XLSX, Polaris2026 release (population estimates copied to data/reference/polity_population_seshat.csv)",
