@@ -21,6 +21,10 @@ Open `index.html` in any browser, or visit the GitHub Pages site for this reposi
 
 The page is a single self-contained HTML file. It uses no libraries; it loads only web fonts.
 
+## Licence
+
+Data and text: CC BY-SA 4.0 (required by the Seshat data). Code: MIT. See `LICENSE`. Each source keeps its own terms; they are credited on the About tab.
+
 ---
 
 *This README and the page's explanatory text were drafted with AI assistance (Claude).*
