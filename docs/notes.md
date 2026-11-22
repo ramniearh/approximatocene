@@ -11,7 +11,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 ## History in brief
 
 - **v0.1–v0.2 (Aug 2026):** a structural pilot, a single page that draws everything from one data file. A review found real bugs (the time axis showed only one label, a source was cited that had never been loaded, and some lanes were invented without saying so) and produced a long technical plan. Most of that plan has been set aside. The original data-format and sources notes are in `docs/reference/` for background.
-- **v0.3 (Nov 2026):** the current page, which became the project's home page. It has four tabs:
+- **v0.3 (Nov 2026):** the current page, which became the project's home page. It follows the browser's light or dark setting; a ◐ button at the right of the tab row switches it, and the browser remembers the choice. It has four tabs:
   - **Human time** (opens first): the last million years. One population line with a fuzzy range around it; markers for fire, language, out of Africa, the end of the last ice age, farming, first cities, writing and the industrial revolution; strips for geological time and hominin species underneath.
   - **Full atlas:** every lane of the pilot, from the formation of the Earth to now.
   - **Stories:** five short step-through stories for class (how to read the chart, periodisation schemes, other human species, people and the ice, the Anthropocene vote). They have arrow-key navigation and a full-screen button.
@@ -136,6 +136,32 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - **To revisit: population before 10,000 BCE.** Both unsourced stretches are left vague on purpose for now. Decide later (1) whether the "range of guesses" from 300,000 years ago to 10,000 BCE gets a real source (for example published Palaeolithic population estimates or effective-population-size studies, which measure something different), stays as an openly labelled guess, or is removed, and (2) whether the dotted line before 300,000 years ago should go, since its height still suggests a size.
 
 - Climate and CO₂: should the "People and the ice" or Anthropocene stories use the new lanes? And should category 3 CO₂ estimates ever be shown, for example faded?
+
+## Candidate sources, not yet approved (found Nov 2026)
+
+Found by web search from abstracts and summaries, not full papers. Check each paper's own wording before entering any number, and get Eduardo's OK first.
+
+- *H. luzonensis*: Détroit et al. 2019, *Nature* 568:181–186. Callao Cave fossils, 50,000–67,000 years ago.
+- *H. antecessor*: Duval et al. 2018, *Quaternary Geochronology* 47:120–137 (doi:10.1016/j.quageo.2018.05.001). TD6 tooth, 772,000–949,000 years ago (ESR plus palaeomagnetism). The current placeholder reaches back to 1.2 million years, which this does not support.
+- Denisovans: Douka et al. 2019, *Nature*. Oldest Denisova Cave fossil about 195,000 years ago; youngest 52,000–76,000. (Jacobs et al. 2019, same issue, dates the cave sediments rather than the fossils.)
+- Anthropocene: rejected by the Subcommission on Quaternary Stratigraphy in March 2024 (reported as 12 against, 4 for, 2 abstaining), part of the International Union of Geological Sciences (IUGS); the proposed start was 1952 (Crawford Lake). Still need the IUGS's own statement rather than news reports.
+- Control of fire: Berna et al. 2012, *PNAS* 109:E1215 (Wonderwerk Cave, burning about 1.0 million years ago); Roebroeks & Villa 2011, *PNAS* 108:5209 (habitual use in Europe from about 400,000–300,000 years ago). Contested by Sandgathe et al. 2011, who argue for much later habitual use.
+- Out of Africa: Bergström et al. 2021, *Nature* 590:229 (review). Worldwide spread about 60,000–40,000 years ago.
+- End of the last ice age: Clark et al. 2009, *Science* 325:710. Ice sheets at their maximum 26,500 to 20,000–19,000 years ago, retreat from 20,000–19,000. The Holocene start (11,700 b2k) is already in the ICS file.
+- Writing: the Cuneiform Digital Library Initiative (CDLI) dates the Uruk IV period, the first phase of proto-cuneiform, to about 3350–3200 BCE.
+- Industrial revolution: Britannica gives 1760–1830 as the conventional span; other accounts run to about 1840 (Toynbee) or start in the 1780s (Hobsbawm).
+- Farming: Larson et al. 2014, *PNAS* 111:6139 looks right but its dates weren't confirmed from the abstract. First cities: no source found yet.
+- Language: no source gives a defensible date. Keep it hatched as disputed with no line.
+
+## Ways to show unknowns (ideas, Nov 2026)
+
+The page already draws the first layer: a published range fades, and where no uncertainty is given the mark is dashed, faded or soft. Ideas for the deeper layers:
+- **Dates moving over time (Eduardo likes this one).** Faint "ghost" marks where something used to be dated, such as Out of Africa or *H. antecessor*, to show that today's figures are this decade's estimates. It needs sourced past estimates too (which paper, which year, which date), so it is a sourcing job as much as a drawing one.
+- Disagreement between sources: rival estimates side by side, such as several population reconstructions. The spread shows how far any one source's stated error can be trusted.
+- How much evidence there is: a strip of dated archaeological sites per millennium (p3k14c; see the evidence lane).
+- What kind of knowledge each mark is: a small coloured tick for measured, dated, estimated, guessed or placeholder.
+
+Small fix noted: the life lane's fossil bars stop about 8,200 years ago (the end of PBDB's data), and the lane goes blank after that instead of saying "no data — not zero".
 
 ## Ideas, not yet done
 

@@ -31,7 +31,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 "IBM Plex 
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-header.top{padding:26px 0 0}
+header.top{padding:26px 0 0;position:relative}
+.theme-btn{position:absolute;right:0;bottom:4px;width:40px;height:40px;border:1px solid var(--rule);border-radius:999px;background:var(--card);color:var(--ink-2);cursor:pointer;font-size:18px;line-height:1}
+.theme-btn:hover{color:var(--ink);border-color:var(--ink-4)}
+header.top .tabs{padding-right:48px}
 .pilot{margin:0;font-size:13px;color:var(--ink-3)}
 .pilot b{color:var(--mark);font-weight:500}
 h1{font-weight:300;font-size:clamp(32px,5.6vw,48px);line-height:1.05;letter-spacing:-.022em;margin:.2em 0 .5em;text-wrap:balance}
@@ -148,6 +151,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+<script>try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e){}</script>
 </head>
 <body>
 <div class="wrap">
@@ -161,6 +165,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <a role="tab" id="t-stories" href="#stories" aria-controls="p-stories">Stories</a>
     <a role="tab" id="t-about" href="#about" aria-controls="p-about">About</a>
   </nav>
+  <button type="button" class="theme-btn" id="theme-btn">◐</button>
 </header>
 
 <!-- ============ HUMAN TIME ============ -->
@@ -1812,6 +1817,19 @@ route();
 const redraw = () => { readPal(); HV.schedule(); A.schedule(); S.schedule(); };
 new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
+/* light/dark button: starts from the browser's setting, remembers a manual choice */
+(function(){
+  const btn = $("#theme-btn"), root = document.documentElement;
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const label = () => { const t = isDark() ? "Switch to light" : "Switch to dark"; btn.title = t; btn.setAttribute("aria-label", t); };
+  btn.addEventListener("click", () => {
+    root.dataset.theme = isDark() ? "light" : "dark";
+    try { localStorage.setItem("theme", root.dataset.theme); } catch (e){}
+    label();
+  });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", label);
+  label();
+})();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
 }
 </script>
