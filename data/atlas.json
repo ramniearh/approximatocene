@@ -140,7 +140,7 @@
       "license": "CC BY 4.0",
       "format": "PANGAEA tab file (copied to data/reference/benthic_d18o_cenogrid.csv)",
       "status": "ingested",
-      "note": "66 Myr of climate. The backbone of the deep-time climate lane."
+      "note": "66 Myr of climate. The backbone of the deep-time climate row."
     },
     "lr04": {
       "title": "LR04 benthic d18O stack",
@@ -177,7 +177,7 @@
       "license": "CC BY 4.0",
       "format": "CSV",
       "status": "not yet ingested",
-      "note": "About 180,000 dates. The obvious basis for an evidence-density lane that is computed rather than asserted."
+      "note": "About 180,000 dates. The obvious basis for an evidence-density row that is computed rather than asserted."
     },
     "smithsonian": {
       "title": "Human Origins species database",
@@ -300,6 +300,103 @@
       "format": "article (12 group ages copied to data/reference/life_milestones.csv)",
       "status": "ingested"
     },
+    "douka2019": {
+      "title": "Age estimates for hominin fossils and the onset of the Upper Palaeolithic at Denisova Cave",
+      "authors": "Douka et al.",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41586-018-0870-z",
+      "license": "article (Nature)",
+      "format": "dates read from the abstract and summaries",
+      "status": "ingested"
+    },
+    "duval2018": {
+      "title": "The first direct ESR dating of a hominin tooth from Atapuerca Gran Dolina TD-6",
+      "authors": "Duval et al.",
+      "year": 2018,
+      "url": "https://doi.org/10.1016/j.quageo.2018.05.001",
+      "license": "article (Quaternary Geochronology)",
+      "format": "date range read from the abstract",
+      "status": "ingested"
+    },
+    "detroit2019": {
+      "title": "A new species of Homo from the Late Pleistocene of the Philippines",
+      "authors": "Détroit et al.",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41586-019-1067-9",
+      "license": "article (Nature)",
+      "format": "minimum ages read from summaries of the paper",
+      "status": "ingested"
+    },
+    "berna2012": {
+      "title": "Microstratigraphic evidence of in situ fire in the Acheulean strata of Wonderwerk Cave",
+      "authors": "Berna et al.",
+      "year": 2012,
+      "url": "https://doi.org/10.1073/pnas.1117620109",
+      "license": "article (PNAS)",
+      "format": "date read from the abstract",
+      "status": "ingested"
+    },
+    "roebroeks2011": {
+      "title": "On the earliest evidence for habitual use of fire in Europe",
+      "authors": "Roebroeks and Villa",
+      "year": 2011,
+      "url": "https://doi.org/10.1073/pnas.1018116108",
+      "license": "article (PNAS, open access)",
+      "format": "dates read from the paper",
+      "status": "ingested"
+    },
+    "bergstrom2021": {
+      "title": "Origins of modern human ancestry",
+      "authors": "Bergström et al.",
+      "year": 2021,
+      "url": "https://doi.org/10.1038/s41586-021-03244-5",
+      "license": "article (Nature)",
+      "format": "date window read from the abstract",
+      "status": "ingested"
+    },
+    "clark2009": {
+      "title": "The Last Glacial Maximum",
+      "authors": "Clark et al.",
+      "year": 2009,
+      "url": "https://doi.org/10.1126/science.1172873",
+      "license": "article (Science)",
+      "format": "dates read from the abstract",
+      "status": "ingested"
+    },
+    "cdli": {
+      "title": "Cuneiform Digital Library Initiative: Uruk IV period",
+      "org": "CDLI",
+      "url": "https://cdli.earth/periods/3",
+      "license": "web page",
+      "format": "period dates read from the page",
+      "status": "ingested"
+    },
+    "britannica": {
+      "title": "Industrial Revolution: the first Industrial Revolution",
+      "org": "Encyclopaedia Britannica",
+      "url": "https://www.britannica.com/event/Industrial-Revolution/The-first-Industrial-Revolution",
+      "license": "web page",
+      "format": "conventional dates read from the page",
+      "status": "ingested"
+    },
+    "iugs2024": {
+      "title": "The Anthropocene: IUGS-ICS statement",
+      "org": "International Union of Geological Sciences",
+      "year": 2024,
+      "url": "https://www.iugs.org/the-anthropocene-iugs-ics-statement/",
+      "license": "web page",
+      "format": "statement of 20 March 2024; the proposed 1952 start is from news reports of the proposal",
+      "status": "ingested"
+    },
+    "openai2022": {
+      "title": "Introducing ChatGPT",
+      "org": "OpenAI",
+      "year": 2022,
+      "url": "https://openai.com/index/chatgpt/",
+      "license": "web page",
+      "format": "release date, 30 November 2022",
+      "status": "ingested"
+    },
     "placeholder": {
       "title": "No source — placeholder",
       "note": "Written from memory during pilot construction. Must be replaced.",
@@ -419,7 +516,7 @@
   "datasets": {
     "geo": {
       "kind": "intervals",
-      "note": "The only lane here with an international standards body behind it.",
+      "note": "The only row here with an international standards body behind it.",
       "defaultSrc": [
         "ics"
       ],
@@ -764,9 +861,9 @@
           "color": "#e0a08c",
           "status": "rejected",
           "conf": "disputed",
-          "note": "Proposed as a formal epoch and voted down in 2024. Kept on the chart because the argument is real: proposed start dates have ranged from the Neolithic to the 1960s.",
+          "note": "Proposed as a formal epoch beginning in 1952, and rejected: the vote of the ICS Subcommission on Quaternary Stratigraphy against it was approved by the IUGS on 20 March 2024. Kept on the chart, hatched, because the argument is real: proposed start dates have ranged from the Neolithic to the 1950s.",
           "src": [
-            "placeholder"
+            "iugs2024"
           ]
         }
       ]
@@ -32613,20 +32710,18 @@
           "id": "denisovans",
           "label": "Denisovans",
           "t0": {
-            "est": "300 ka",
-            "lo": "400 ka",
-            "hi": "250 ka"
+            "lo": "194.4 ka",
+            "hi": "122.7 ka"
           },
           "t1": {
-            "est": "50 ka",
-            "lo": "80 ka",
-            "hi": "30 ka"
+            "lo": "76 ka",
+            "hi": "52 ka"
           },
           "status": "disputed",
-          "conf": "inferred",
-          "note": "Defined largely from DNA plus a handful of fragments. The range is close to a guess.",
+          "conf": "dated",
+          "note": "Denisova Cave, Siberia: the oldest Denisovan fossil (Denisova 2) is modelled at 194,400–122,700 years old, and the youngest at 76,000–52,000 (Douka et al. 2019; Bayesian model of radiocarbon, optical and uranium-series dates). Both ends fade across those ranges. Denisovans are known mostly from DNA and a handful of fragments; finds in China and Laos add more, and are not drawn here.",
           "src": [
-            "placeholder"
+            "douka2019"
           ]
         },
         {
@@ -34419,7 +34514,7 @@
       "src": [
         "placeholder"
       ],
-      "note": "Regional labels are conveniences of description, not entities that existed. They are also anachronistic before roughly 50 ka and misleading before 2 Ma, which is why this lane does not exist at those scales.",
+      "note": "Regional labels are conveniences of description, not entities that existed. They are also anachronistic before roughly 50 ka and misleading before 2 Ma, which is why this row does not exist at those scales.",
       "records": [
         {
           "region": "africa",
@@ -34843,7 +34938,7 @@
     },
     "schemes": {
       "kind": "schemes",
-      "note": "The point of this lane is disagreement. Switching schemes cuts the same millennia in incompatible ways, and one of them refuses to apply at all.",
+      "note": "The point of this row is disagreement. Switching schemes cuts the same millennia in incompatible ways, and one of them refuses to apply at all.",
       "items": {
         "none": {
           "label": "None",
@@ -35144,7 +35239,7 @@
       "wouldUse": [
         "p3k14c"
       ],
-      "note": "This lane is not about the past. It is about us: how much we can actually say, era by era. Currently hand-asserted step values. It should be computed — dated archaeological sites per millennium from p3k14c is the obvious candidate, which would make it an observation rather than an opinion.",
+      "note": "This row is not about the past. It is about us: how much we can actually say, era by era. Currently hand-asserted step values. It should be computed — dated archaeological sites per millennium from p3k14c is the obvious candidate, which would make it an observation rather than an opinion.",
       "steps": [
         {
           "t": "now",

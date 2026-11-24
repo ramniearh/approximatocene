@@ -93,6 +93,7 @@ details.ctrl>summary::-webkit-details-marker{display:none}
 details.ctrl>summary::after{content:"+";font-size:18px}
 details.ctrl[open]>summary::after{content:"–"}
 .grp{margin-bottom:12px}
+.chips-label{font-size:13px;color:var(--ink-3);margin-right:2px}
 .grp-label{font-size:12.5px;color:var(--ink-3);margin-bottom:6px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .toggles{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:2px 14px}
@@ -157,11 +158,11 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 
 <header class="top">
-  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>mostly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, the climate and CO₂ records, animal diversity, polity size and population, and energy use since 1800 now sourced</p>
+  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>partly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, the climate and CO₂ records, animal diversity, polity size and population, and energy use since 1800 now sourced</p>
   <h1>Deep time, <b>to scale</b></h1>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
-    <a role="tab" id="t-atlas" href="#atlas" aria-controls="p-atlas">Full atlas</a>
+    <a role="tab" id="t-atlas" href="#atlas" aria-controls="p-atlas">Deep time</a>
     <a role="tab" id="t-stories" href="#stories" aria-controls="p-stories">Stories</a>
     <a role="tab" id="t-about" href="#about" aria-controls="p-about">About</a>
   </nav>
@@ -172,7 +173,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <section id="p-human" role="tabpanel" aria-labelledby="t-human">
   <div class="ph">
     <h2>The last million years</h2>
-    <p>Drag to move. Scroll, pinch or use + and − to zoom in. Click a marker to see from that point to the present. Hover or tap for population at any moment; click a period or species for details.</p>
+    <p>Drag to move. Scroll, pinch or use + and − to zoom in. The buttons below jump to the whole million years, or from just before a turning point to the present. Hover or tap for population at any moment; click a period or species for details.</p>
   </div>
   <div class="bar-row" id="h-chips"></div>
   <div class="bar-row">
@@ -180,7 +181,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
       <button id="h-log" class="on">Time: logarithmic</button><button id="h-lin">Linear</button>
     </div>
     <div class="seg" role="group" aria-label="Population axis">
-      <button id="h-ylog" class="on">Population: logarithmic</button><button id="h-ylin">Linear</button>
+      <button id="h-ylog">Population: logarithmic</button><button id="h-ylin" class="on">Linear</button>
     </div>
     <div class="seg" role="group" aria-label="Zoom">
       <button id="h-zin" aria-label="Zoom in">+</button><button id="h-zout" aria-label="Zoom out">−</button>
@@ -197,14 +198,14 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <canvas class="chart" id="h-cv" role="img" aria-label="World population over the last million years, with markers for fire, language, dispersal out of Africa, the end of the last ice age, farming, writing and industrialisation, and strips for geological time and hominin species"></canvas>
   </div>
   <div class="readout" id="h-readout" aria-live="polite"><p class="empty">Hover or tap the chart to read the population estimate at that moment. Tap a marker name, a geological period or a species for its dates and how firm they are.</p></div>
-  <p class="dataline"><b>Partly placeholder data.</b> Sourced: the geological strip (ICS chart, v2024/12), the species dates (Smithsonian Human Origins Program; Denisovans, H. antecessor and H. luzonensis are still placeholders) and world population from 10,000 BCE to 2023 (Our World in Data, which joins HYDE 3.3, Gapminder and the UN). That source gives one figure per year and no range; before 1800 its figures are model reconstructions, so the line is dashed there, and after 1800 it is faded because no range is given. The shaded range from 300,000 years ago to 10,000 BCE is probably a range of guesses (an unsourced placeholder), and before 300,000 years ago there is no estimate at all. "Now" on this page is 2023, the last year in the population data. Marker dates have not been checked against a source yet.</p>
+  <p class="dataline"><b>Partly placeholder data.</b> Sourced: the geological strip (ICS chart, v2024/12), the species dates (Smithsonian Human Origins Program; Denisovans from Douka et al. 2019, H. antecessor from Duval et al. 2018, H. luzonensis from Détroit et al. 2019) and world population from 10,000 BCE to 2023 (Our World in Data, which joins HYDE 3.3, Gapminder and the UN). That source gives one figure per year and no range; before 1800 its figures are model reconstructions, so the line is dashed there, and after 1800 it is faded because no range is given. The shaded range from 300,000 years ago to 10,000 BCE is probably a range of guesses (an unsourced placeholder), and before 300,000 years ago there is no estimate at all. "Now" on this page is 2023, the last year in the population data. Most turning points now cite a source (tap one to see it); farming and first cities are still placeholders, and language has no defensible date at all.</p>
 </section>
 
 <!-- ============ FULL ATLAS ============ -->
 <section id="p-atlas" role="tabpanel" aria-labelledby="t-atlas" hidden>
   <div class="ph">
-    <h2>Every lane, all of time</h2>
-    <p>Every lane, from the formation of the Earth to now. Drag to move, scroll or pinch to zoom. Lanes appear and disappear with scale, because most of them mean nothing outside their own era.</p>
+    <h2>The last 4.6 billion years</h2>
+    <p>From the formation of the Earth to now, one kind of record per row: rocks, climate, carbon dioxide, life, human species, population, energy, states. Drag to move. Scroll, pinch or use + and − to zoom. A row shows up only at the time scales where it has something to say. Tap anything for its dates, how firm they are and where they come from.</p>
   </div>
   <div class="sticky">
     <div class="mmlabel">Whole of time, logarithmic. Drag the bracket to move.</div>
@@ -217,11 +218,11 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div class="grp"><div class="grp-label">Main axis</div><div class="chips"><button class="chip" id="a-lin">Linear · true durations</button><button class="chip" id="a-log">Logarithmic</button></div></div>
     <div class="grp"><div class="grp-label">Periodisation scheme</div><div class="chips" id="a-schemes"></div></div>
     <div class="grp"><div class="grp-label">Highlight</div><div class="chips" id="a-hl"></div></div>
-    <div class="grp"><div class="grp-label">Lanes</div><div class="toggles" id="a-lanes"></div></div>
+    <div class="grp"><div class="grp-label">Rows</div><div class="toggles" id="a-lanes"></div></div>
   </details>
   <div class="stage">
     <div class="zoombtns"><button id="a-zin" aria-label="Zoom in">+</button><button id="a-zout" aria-label="Zoom out">−</button></div>
-    <canvas class="chart" id="a-cv" role="img" aria-label="Deep time atlas chart with geological, climate, carbon dioxide, life, hominin, population, energy, largest polity, polity population, regional, periodisation and evidence lanes"></canvas>
+    <canvas class="chart" id="a-cv" role="img" aria-label="Deep time atlas chart with geological, climate, carbon dioxide, life, hominin, population, energy, largest polity, polity population, regional, periodisation and evidence rows"></canvas>
   </div>
   <div class="readout" id="a-readout" aria-live="polite"><p class="empty">Tap anything on the chart for its dates, how firm they are, and where the real figure would come from.</p></div>
   <p class="dataline" id="a-status"></p>
@@ -240,7 +241,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
         <div class="dots" id="s-dots"></div>
         <button class="btn primary" id="s-next">Next →</button>
         <span class="sp"></span>
-        <button class="btn" id="s-open">Open in full atlas</button>
+        <button class="btn" id="s-open">Open in Deep time</button>
         <button class="btn" id="s-full">Full screen</button>
       </div>
       <canvas class="mm" id="s-mm"></canvas>
@@ -262,7 +263,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <div>
       <h3>What this is</h3>
       <p>A single-page, dependency-free timeline of deep time, built around one commitment: uncertainty is drawn, not hidden. "No data" is shown differently from zero, disputed categories are hatched, and every value says where a real figure would come from.</p>
-      <p>This is an early working version. The structure is in place; most of the data is not. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program (except Denisovans, H. antecessor and H. luzonensis). World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800) and faded after that; the shaded range before 10,000 BCE is still a placeholder. In the Full atlas, the climate lane shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide lane shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life lane counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The lane also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. Above the bars are three early milestones, each dated by one paper: signs of life in 3.48-billion-year-old hot-spring deposits (Djokic et al. 2017), the Great Oxidation Event (Gumsley et al. 2017) and the oldest multicellular eukaryotes (Miao et al. 2024). Below them, twelve living animal groups each show when their living members last shared a common ancestor, between the oldest fossil firmly in the group and the oldest plausible date (Benton et al. 2015). The largest-polity lane shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population lane next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. The energy lane shows world energy use per person from 1800, calculated here by dividing Our World in Data's world energy use (Vaclav Smil's estimates before 1965, the Energy Institute's Statistical Review after) by its world population. It includes wood and other traditional fuels but not food, and before 1800 it shows no data. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
+      <p>This is an early working version. Much of the data is now sourced, and what is not is marked as a placeholder. Geological dates now come from the International Chronostratigraphic Chart (v2024/12), and hominin species dates from the Smithsonian Human Origins Program, with Denisovans, H. antecessor and H. luzonensis from one dating paper each. The turning points on the Human time tab cite their sources too, except farming and first cities, which are still placeholders, and language, which no source dates. World population from 10,000 BCE to 2023 comes from Our World in Data's long-run series, which joins HYDE 3.3 (to 1790), Gapminder (1800–1949) and the UN World Population Prospects 2024 (from 1950). It gives a single figure per year with no range, so the line is dashed where the figures are model reconstructions (before 1800) and faded after that; the shaded range before 10,000 BCE is still a placeholder. On the Deep time tab, the climate row shows three records as separate strips, because they measure different things: deep-sea oxygen isotopes over 67 million years (CENOGRID, Westerhold et al. 2020; not a temperature), Antarctic temperature over 800,000 years (EPICA Dome C, Jouzel et al. 2007) and global temperature for the last 2,000 years (PAGES 2k, 2019). The carbon dioxide row shows individual proxy estimates (CenCO2PIP Consortium 2023, its categories 1 and 2 only), the Antarctic ice-core record (Bereiter et al. 2015) and Mauna Loa measurements from 1959. The life row counts the animal genera known from fossils in each geological stage, from the Paleobiology Database's own diversity tool. That count reflects how much has been found and recorded as well as how much life there was. The row also marks the five largest mass extinctions at the ICS dates of the boundaries where they are conventionally placed. Above the bars are three early milestones, each dated by one paper: signs of life in 3.48-billion-year-old hot-spring deposits (Djokic et al. 2017), the Great Oxidation Event (Gumsley et al. 2017) and the oldest multicellular eukaryotes (Miao et al. 2024). Below them, twelve living animal groups each show when their living members last shared a common ancestor, between the oldest fossil firmly in the group and the oldest plausible date (Benton et al. 2015). The largest-polity row shows, for every year from 3400 BCE, the polity with the largest mapped area in Cliopatria (Seshat Global History Databank, v0.2.1). It measures area on a map, not population, and Cliopatria notes that its borders are one version among disputed ones. The polity-population row next to it shows every population estimate in the Seshat Global History Databank (Polaris2026 release, CC BY-SA 4.0) as published, with its low and high figures. Seshat covers a sample of polities in 41 regions, not all of them, so the highest mark in a period is the largest polity in that sample. From 1950 a line shows the most populous country, from the UN World Population Prospects 2024. The energy row shows world energy use per person from 1800, calculated here by dividing Our World in Data's world energy use (Vaclav Smil's estimates before 1965, the Energy Institute's Statistical Review after) by its world population. It includes wood and other traditional fuels but not food, and before 1800 it shows no data. Which five species are labelled and which are drawn faintly is an editorial choice, not the source's. Every other number is still a placeholder written from memory and has not been checked against a source.</p>
     </div>
     <div>
       <h3>How certainty is drawn</h3>
@@ -270,12 +271,12 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
       <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--accent) 38%,var(--accent) 62%,transparent)"></i>Uncertain ends fade across the plausible range</div>
       <div class="lgrow"><i class="sw" style="background:linear-gradient(90deg,transparent,var(--bar) 30%,var(--bar) 70%,transparent)"></i>Species bars: a short fixed fade around the first and last fossil dates, because the source gives no range for them and species outlive their fossils; the fade's width is not data</div>
       <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(45deg,var(--bar) 0 3px,var(--disp) 3px 5px)"></i>Disputed category, or a scheme that does not apply</div>
-      <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(90deg,var(--ink-4) 0 3px,transparent 3px 7px)"></i>No data, which is not the same as zero</div>
+      <div class="lgrow"><i class="sw" style="background:repeating-linear-gradient(90deg,var(--ink-4) 0 3px,transparent 3px 7px)"></i>No data: hard to say, but some number for sure, so not zero</div>
       <div class="lgrow"><i class="sw" style="background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 20%,transparent),var(--accent)),repeating-linear-gradient(90deg,var(--accent) 0 5px,transparent 5px 8px)"></i>Dashed lines, faded lines and soft-topped bars: the source gives no uncertainty for these values, which is not the same as certain</div>
     </div>
     <div>
       <h3>Time base</h3>
-      <p>All dates normalise to years before 2000 CE. "Now" is fixed at 2023, the last year in the population data, so "years ago" counts back from 2023. Source values carry explicit units (4.6 Ga, 11700 b2k, 3300 BCE, 1760 CE) and are converted in one place, so no lane can silently disagree with another about what a date means.</p>
+      <p>All dates normalise to years before 2000 CE. "Now" is fixed at 2023, the last year in the population data, so "years ago" counts back from 2023. Source values carry explicit units (4.6 Ga, 11700 b2k, 3300 BCE, 1760 CE) and are converted in one place, so no row can silently disagree with another about what a date means.</p>
     </div>
     <div>
       <h3>About the text</h3>
@@ -288,7 +289,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
   <div class="scroll"><table class="stack" id="src-table"><thead><tr><th>Source</th><th>By</th><th>Licence</th><th>Status</th></tr></thead><tbody></tbody></table></div>
 </section>
 
-<footer>Deep Time Atlas · v0.3 · early working version · some lanes sourced, the rest still placeholders.</footer>
+<footer>Deep Time Atlas · v0.3 · early working version · some rows sourced, the rest still placeholders.</footer>
 </div>
 
 <script type="application/json" id="atlas-data">/*__ATLAS__*/</script>
@@ -327,7 +328,8 @@ function parsePoint(v){
   const t = parseTime(v);
   return { est: t, older: t, younger: t, certain: true };
 }
-const fmtY = y => y < 0 ? (-y).toLocaleString("en") + " BCE" : y.toLocaleString("en") + " CE";
+/* calendar years: no thousands comma below 10,000 (1760 CE, not 1,760 CE) */
+const fmtY = y => { const a = Math.abs(y), s = a < 10000 ? String(a) : a.toLocaleString("en"); return y < 0 ? s + " BCE" : s + " CE"; };
 function fmtT(t){
   if (Math.abs(t - NOW) < 1.5) return "now";
   if (t >= 5e8) return (t / 1e9).toFixed(2) + " Ga";
@@ -348,7 +350,9 @@ function fmtAgo(t){
   return fmtY(Math.round(2000 - t));
 }
 function fmtPointRange(p0, p1){
-  let s = (p0 ? fmtT(p0.est) : "?") + "  →  " + (p1 ? fmtT(p1.est) : "?");
+  /* a date given only as a range has no central figure: show the range instead of inventing one */
+  const one = p => !p ? "?" : p.est != null ? fmtT(p.est) : fmtT(p.older) + "–" + fmtT(p.younger);
+  let s = one(p0) + "  →  " + one(p1);
   const bits = [];
   if (p0 && !p0.certain) bits.push("start " + fmtT(p0.older) + "–" + fmtT(p0.younger));
   if (p1 && !p1.certain) bits.push("end " + fmtT(p1.older) + "–" + fmtT(p1.younger));
@@ -457,6 +461,9 @@ function srcLine(ctx, pts, fx, fy, lw){
   }
   ctx.restore();
 }
+
+/* where a record has nothing: there was some value, it is just not known */
+const NODATA = "hard to say — some number, for sure";
 
 /* ================= THEME ================= */
 const PAL = {};
@@ -662,7 +669,8 @@ function createView(o){
       ctx.fillStyle = alpha(PAL.rule2, .92); ctx.fillRect(0, y, xo, h);
       ctx.strokeStyle = PAL.ink4; ctx.setLineDash([2, 4]);
       ctx.beginPath(); ctx.moveTo(xo, y); ctx.lineTo(xo, y + h); ctx.stroke(); ctx.setLineDash([]);
-      if (xo > 120){ ctx.font = '400 10px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "middle"; ctx.fillText("no data — not zero", 6, y + h / 2); }
+      ctx.font = '400 10px "IBM Plex Mono", monospace';
+      if (xo > ctx.measureText(NODATA).width + 14){ ctx.fillStyle = PAL.ink3; ctx.textBaseline = "middle"; ctx.fillText(NODATA, 6, y + h / 2); }
     }
     ctx.restore();
     return sc;
@@ -949,7 +957,8 @@ function createView(o){
     ctx.strokeStyle = PAL.ink4; ctx.setLineDash([2, 4]); ctx.beginPath();
     [x0, x1].forEach(x => { if (x > 0 && x < W){ ctx.moveTo(x, top); ctx.lineTo(x, top + bh); } });
     ctx.stroke(); ctx.setLineDash([]);
-    if (x1 - x0 > 120){ ctx.font = '400 10px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "middle"; ctx.fillText("no data — not zero", x0 + 6, top + bh / 2); }
+    ctx.font = '400 10px "IBM Plex Mono", monospace';
+    if (x1 - x0 > ctx.measureText(NODATA).width + 14){ ctx.fillStyle = PAL.ink3; ctx.textBaseline = "middle"; ctx.fillText(NODATA, x0 + 6, top + bh / 2); }
     ctx.restore();
   }
   function yTicks(ticks, fy, unit, fmt){
@@ -1240,22 +1249,24 @@ function createView(o){
 
 /* ================= HUMAN TIME VIEW ================= */
 const MARKERS = [
-  { id: "fire", short: "Fire", label: "Control of fire", kind: "threshold", t: { est: "400 ka", lo: "1.0 Ma", hi: "300 ka" }, conf: "inferred",
-    note: "Burnt bone and sediment at a few African sites point to fire around a million years ago, but whether people controlled it is argued over. Regular, habitual use is clearer from roughly 400,000 years ago. The line marks that later date; the shading runs back to the earliest claims." },
+  { id: "fire", short: "Fire use", label: "Habitual use of fire", kind: "threshold", t: { est: "400 ka", lo: "1.0 Ma", hi: "300 ka" }, conf: "inferred", src: ["berna2012", "roebroeks2011"],
+    note: "Burnt bone and plant ash in Wonderwerk Cave, South Africa, show burning in the cave about a million years ago (Berna et al. 2012), the left edge of the shading. Whether people were in control of it is another matter. In Europe, evidence of habitual fire use is essentially absent until about 400,000–300,000 years ago (Roebroeks and Villa 2011): the line and the right edge. Others argue habitual use came much later still (Sandgathe et al. 2011)." },
   { id: "language", short: "Language", label: "Language", kind: "threshold", t: { lo: "500 ka", hi: "50 ka" }, conf: "disputed",
-    note: "Speech leaves no direct trace. Proposals for when fully modern language emerged run from before the split with Neanderthals, about half a million years ago, to around 50,000 years ago. The hatched band is the spread of serious proposals; no single date is drawn because none is supported." },
-  { id: "ooa", short: "Out of Africa", label: "Out of Africa", kind: "span", t0: { est: "70 ka", lo: "90 ka", hi: "60 ka" }, t1: { est: "45 ka", lo: "55 ka", hi: "40 ka" }, conf: "estimated",
-    note: "The main dispersal of Homo sapiens out of Africa and across Eurasia and into Sahul. Earlier excursions are attested but seem to have left little genetic trace. The dates keep moving as new sites and genomes are studied." },
-  { id: "ice", short: "Ice age ends", label: "End of the last ice age", kind: "span", t0: { est: "19 ka", lo: "20 ka", hi: "18 ka" }, t1: "11700 b2k", conf: "dated",
-    note: "Ice sheets began to retreat after the Last Glacial Maximum, around 19,000 years ago. The Holocene, the present warm interval, formally begins 11,700 years before 2000 CE, a boundary fixed to a layer in a Greenland ice core: the solid line." },
-  { id: "farming", short: "Farming", label: "Agricultural revolution", kind: "span", t0: { est: "12 ka", lo: "13 ka", hi: "11 ka" }, t1: { est: "5000 b2k", lo: "6000 b2k", hi: "4000 b2k" }, conf: "estimated",
-    note: "Not one event and not one place: plants and animals were domesticated in at least seven independent centres over several thousand years, all within the Holocene. The word revolution compresses a slow and scattered process." },
-  { id: "cities", short: "Cities", label: "First cities", kind: "threshold", t: { est: "3500 BCE", lo: "4000 BCE", hi: "3100 BCE" }, conf: "estimated",
-    note: "Uruk, in southern Mesopotamia, grows into a city of tens of thousands during the fourth millennium BCE. Older large settlements such as Çatalhöyük exist; whether they count as cities depends on the definition used." },
-  { id: "writing", short: "Writing", label: "Writing", kind: "threshold", t: { est: "3300 BCE", lo: "3500 BCE", hi: "3100 BCE" }, conf: "dated",
-    note: "The earliest writing appears in Mesopotamia, with independent inventions later in Egypt, China and Mesoamerica. It is the sharpest single change in how much can be known about the past." },
-  { id: "industry", short: "Industry", label: "Industrial revolution", kind: "threshold", t: { est: "1760 CE", lo: "1700 CE", hi: "1830 CE" }, conf: "recorded",
-    note: "Coal had been burned for centuries; what changes from the late eighteenth century, starting in Britain, is sustained growth powered by fossil fuels. Population and energy use per person begin to rise together and have not stopped." }
+    note: "Speech leaves no direct trace. Proposals for when fully modern language emerged run from before the split with Neanderthals, about half a million years ago, to around 50,000 years ago. The hatched band is the spread of serious proposals; no single date is drawn because none is supported. No source is cited here yet, and no single source could settle it." },
+  { id: "ooa", short: "Out of Africa", label: "Out of Africa", kind: "threshold", t: { lo: "60 ka", hi: "40 ka" }, conf: "estimated", src: ["bergstrom2021"],
+    note: "The worldwide spread of Homo sapiens out of Africa, about 60,000–40,000 years ago (Bergström et al. 2021, a review of genetic and fossil evidence). Earlier excursions are attested but seem to have left little trace in living people. No single date is drawn: the review gives a window, not a moment, and the window keeps moving as new sites and genomes are studied." },
+  { id: "ice", short: "Last glacial ends", label: "End of the last glacial period", kind: "span", t0: { lo: "20 ka", hi: "19 ka" }, t1: "11700 b2k", conf: "dated", src: ["clark2009", "ics"],
+    note: "Ice sheets started to retreat from their maximum 20,000–19,000 years ago (Clark et al. 2009). The Holocene, the present warm interval, formally begins 11,700 years before 2000 CE (ICS chart), a boundary tied to a layer in a Greenland ice core: the solid line. Strictly, the ice age has not ended: Greenland and Antarctica are still covered in ice. What ended was the last glacial period of it." },
+  { id: "farming", short: "Farming", label: "Origins of farming", kind: "span", t0: { est: "12 ka", lo: "13 ka", hi: "11 ka" }, t1: { est: "5000 b2k", lo: "6000 b2k", hi: "4000 b2k" }, conf: "estimated",
+    note: "Not one event and not one place: plants and animals were domesticated in several independent centres over thousands of years, all within the Holocene. 'Neolithic revolution' compresses a slow and scattered process. These dates are still placeholders: no source is cited yet." },
+  { id: "cities", short: "First cities", label: "First cities", kind: "threshold", t: { est: "3500 BCE", lo: "4000 BCE", hi: "3100 BCE" }, conf: "estimated",
+    note: "Uruk, in southern Mesopotamia, grows into a city of tens of thousands during the fourth millennium BCE. Older large settlements such as Çatalhöyük exist; whether they count as cities depends on the definition used. These dates are still placeholders: no source is cited yet." },
+  { id: "writing", short: "Writing", label: "Writing (proto-cuneiform)", kind: "threshold", t: { lo: "3350 BCE", hi: "3200 BCE" }, conf: "estimated", src: ["cdli"],
+    note: "The earliest known writing, proto-cuneiform from Uruk, belongs to the Uruk IV period, about 3350–3200 BCE (Cuneiform Digital Library Initiative). Writing was invented again, independently, in China and Mesoamerica, and perhaps in Egypt. It is the sharpest single change in how much can be known about the past." },
+  { id: "industry", short: "Industrial revolution", label: "Industrial revolution", kind: "threshold", t: { lo: "1760 CE", hi: "1830 CE" }, conf: "estimated", src: ["britannica"],
+    note: "The conventional span of the first industrial revolution, 1760–1830, when it was largely confined to Britain (Britannica). Historians draw the edges differently: some run it to 1840, others start it in the 1780s. What changes is sustained growth powered by fossil fuels; population and energy use per person begin to rise together and have not stopped." },
+  { id: "llm", short: "LLMs (this page)", label: "Large language models", kind: "threshold", t: "2022 CE", conf: "recorded", src: ["openai2022"],
+    note: "The latest frontier on this chart, and the least tested. ChatGPT was released to the public on 30 November 2022. Much of the text on this page, this note included, was drafted with one (Claude). Whether this belongs in a row with fire and writing is a question for a later version of the chart." }
 ];
 MARKERS.forEach(m => {
   if (m.kind === "threshold") m._t = parsePoint(m.t); else { m._t0 = parsePoint(m.t0); m._t1 = parsePoint(m.t1); }
@@ -1268,7 +1279,7 @@ MARKERS.forEach(m => {
 const HGEO = [
   { row: 0, label: "Pleistocene", t0: "2.58 Ma", t1: "0.0117 Ma", color: "#f4eea6", conf: "dated", note: "The epoch of repeated glacial cycles." },
   { row: 0, label: "Holocene", t0: "0.0117 Ma", t1: "now", color: "#fdf3cf", conf: "measured", note: "The present warm interval. Its base is defined by a specific layer in the NGRIP ice core from Greenland." },
-  { row: 0, label: "Anthropocene?", t0: "1952 CE", t1: "now", color: "#e0a08c", conf: "disputed", status: "rejected", src: ["placeholder"], note: "Proposed as a formal epoch and rejected. Not on the ICS chart; its start date here is an unsourced placeholder. Kept, hatched, because the question remains open." },
+  { row: 0, label: "Anthropocene?", t0: "1952 CE", t1: "now", color: "#e0a08c", conf: "disputed", status: "rejected", src: ["iugs2024"], note: "Proposed as a formal epoch beginning in 1952, and rejected: the vote of the ICS Subcommission on Quaternary Stratigraphy against it was approved by the IUGS on 20 March 2024. The term stays in wide use, and the hatching stays here, because the underlying question is open." },
   { row: 1, label: "Gelasian", t0: "2.58 Ma", t1: "1.80 Ma", color: "#ece38a", conf: "dated", note: "First stage of the Pleistocene." },
   { row: 1, label: "Calabrian", t0: "1.80 Ma", t1: "0.774 Ma", color: "#efe796", conf: "dated", note: "Ends at the last reversal of Earth's magnetic field." },
   { row: 1, label: "Chibanian", t0: "0.774 Ma", t1: "0.129 Ma", color: "#f4eeb0", conf: "dated", note: "Named for a reference section in Japan. Its base is the Matuyama–Brunhes magnetic reversal." },
@@ -1279,10 +1290,10 @@ const HGEO = [
 ];
 HGEO.forEach(norm);
 const HEXTRA = [
-  { id: "h-antecessor", src: ["placeholder"], label: "H. antecessor", t0: { est: "1.2 Ma", lo: "1.3 Ma", hi: "1.1 Ma" }, t1: { est: "800 ka", lo: "850 ka", hi: "770 ka" }, conf: "dated", status: "disputed", note: "Known from Atapuerca, Spain. Whether it is a separate species, and how it relates to later humans, is debated." },
-  { id: "h-luzonensis", src: ["placeholder"], label: "H. luzonensis", t0: { est: "67 ka", lo: "134 ka", hi: "60 ka" }, t1: { est: "50 ka", lo: "60 ka", hi: "45 ka" }, conf: "dated", note: "Known from a few teeth and bones in Callao Cave, Philippines, described in 2019. The dates are minimum ages." }
+  { id: "h-antecessor", src: ["duval2018"], label: "H. antecessor", t0: "949 ka", t1: "772 ka", openEnds: true, conf: "dated", status: "disputed", note: "Known from Gran Dolina (level TD6) at Atapuerca, Spain. A tooth from TD6 dates to 772,000–949,000 years ago (ESR and palaeomagnetism; Duval et al. 2018). That span is the uncertainty of one level's date, not the life of the species. Whether it is a separate species, and how it relates to later humans, is debated." },
+  { id: "h-luzonensis", src: ["detroit2019"], label: "H. luzonensis", t0: "67 ka", t1: "50 ka", openEnds: true, conf: "dated", note: "Known from a few teeth and bones in Callao Cave, Philippines, named in 2019. The dates are minimum ages: at least 67,000 years for a foot bone and at least 50,000 for a tooth (uranium-series; Détroit et al. 2019). A later re-examination suggests the fossils may be considerably older; that is not drawn here." }
 ];
-const HHOM = DS.hominins.records.concat(HEXTRA.map(norm)).filter(r => r._t0 && r._t1).sort((a, b) => b._t0.est - a._t0.est);
+const HHOM = DS.hominins.records.concat(HEXTRA.map(norm)).filter(r => r._t0 && r._t1).sort((a, b) => (b._t0.est ?? b._t0.older) - (a._t0.est ?? a._t0.older));
 
 const HV = (() => {
   const cv = $("#h-cv"), ctx = cv.getContext("2d"), out = $("#h-readout");
@@ -1290,7 +1301,7 @@ const HV = (() => {
   /* log of (years ago + 30): keeps the last few decades from eating a quarter of the width */
   const P = { log: { c: t => -Math.log10(Math.max(t - NOW, 0) + 30), t: c => Math.pow(10, -c) - 30 + NOW }, linear: PROJ.linear };
   const view = { mode: "log", c0: 0, c1: 1 };
-  let ymode = "log";
+  let ymode = "linear";
   const POP = DS.population, PS = POP._sorted, PH = POP._ph, COV0 = POP._cov0, FIRST = PH[0], YMAXL = 9e9;
   let W = 0, H = 0, DPR = 1, raf = null, tween = null, hov = null, sel = null, labHits = [], stripHits = [], hatch = null, TOP = 40, BOT = 300, rowsReserved = 1;
   const lastRow = {};
@@ -1578,9 +1589,14 @@ const HV = (() => {
     sel = m; syncChips();
     if (!m){ out.innerHTML = EMPTY; schedule(); return; }
     let range;
-    if (m.kind === "threshold") range = m._t.est != null ? fmtAgo(m._t.est) + "   ·   plausible range " + fmtAgo(m._t.older) + " to " + fmtAgo(m._t.younger) : "somewhere between " + fmtAgo(m._t.older) + " and " + fmtAgo(m._t.younger);
-    else range = fmtAgo(m._t0.est) + "  →  " + fmtAgo(m._t1.est);
-    showInfo(out, { label: m.label, note: m.note, conf: m.conf, _rangeText: range }, {}, { src: "No source yet. Placeholder." });
+    if (m.kind === "threshold" && m._t.certain) range = fmtY(Math.round(2000 - m._t.est));
+    else if (m.kind === "threshold") range = m._t.est != null ? fmtAgo(m._t.est) + "   ·   plausible range " + fmtAgo(m._t.older) + " to " + fmtAgo(m._t.younger) : "somewhere between " + fmtAgo(m._t.older) + " and " + fmtAgo(m._t.younger);
+    else {
+      const one = p => p.est != null ? fmtAgo(p.est) : fmtAgo(p.older) + " to " + fmtAgo(p.younger);
+      range = one(m._t0) + "  →  " + one(m._t1);
+    }
+    const cited = (m.src || []).map(i => ATLAS.sources[i]).filter(Boolean).map(s => s.title + (s.authors ? " (" + s.authors + (s.year ? " " + s.year : "") + ")" : ""));
+    showInfo(out, { label: m.label, note: m.note, conf: m.conf, _rangeText: range }, {}, { src: cited.length ? "Source: " + cited.join("; ") : "No source yet. Placeholder." });
     schedule();
   }
   function animateTo(a, b){
@@ -1597,7 +1613,7 @@ const HV = (() => {
 
   /* controls */
   const chipBox = $("#h-chips");
-  chipBox.innerHTML = '<button class="chip" data-id="all">All 1 million years</button>' + MARKERS.map(m => `<button class="chip mk" data-id="${m.id}">${m.label}</button>`).join("");
+  chipBox.innerHTML = '<span class="chips-label">Jump to:</span><button class="chip" data-id="all">The whole million years</button>' + MARKERS.map(m => `<button class="chip mk" data-id="${m.id}">${m.label}</button>`).join("");
   chipBox.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
     if (b.dataset.id === "all"){ animateTo(TMAX, NOW); select(null); return; }
@@ -1701,7 +1717,7 @@ $("#a-zout").onclick = () => A.zoom(1.8);
   const flagged = Object.entries(DS).filter(([, d]) => ["fabricated", "speculative"].includes(d.conf)).map(([k]) => k);
   let n = 0; Object.values(DS).forEach(d => { if (d.records) n += d.records.length; if (d.items) Object.values(d.items).forEach(s => s.rows.forEach(r => n += r.items.length)); });
   const ing = Object.values(ATLAS.sources).filter(s => s.status === "ingested").map(s => s.title);
-  $("#a-status").innerHTML = `<b>Mostly not researched.</b> ${n} intervals and ${Object.keys(ATLAS.sources).length - 1} registered sources; in use so far: ${ing.length ? ing.join(", ") : "none"}. Everything else is placeholder. Lanes that are invented or speculative in their entirety: ${flagged.join(", ")}.`;
+  $("#a-status").innerHTML = `<b>Partly researched.</b> ${n} intervals and ${Object.keys(ATLAS.sources).length - 1} registered sources; in use so far: ${ing.length ? ing.join(", ") : "none"}. Everything else is placeholder. Rows that are invented or speculative in their entirety: ${flagged.join(", ")}.`;
 })();
 
 /* ================= STORIES ================= */
@@ -1709,8 +1725,8 @@ const STORIES = [
   { id: "reading", title: "How to read this chart", dek: "The visual conventions used throughout the atlas.", scenes: [
     { t0: "500 ka", t1: "now", lanes: ["hominins"], text: "Faded ends mark uncertainty. Each species bar runs between its first and last known fossils, as given by the Smithsonian, and then fades a little past both ends: in a sparse fossil record, species probably lived longer than their fossils show. The fade is a reminder, not a measurement. Five well-established species are labelled; the faint bars are the rest." },
     { t0: "800 ka", t1: "100 ka", lanes: ["hominins"], text: "Hatching marks a disputed category. Homo heidelbergensis is increasingly treated as a label of convenience rather than a species, and Denisovans are defined mostly from DNA. Tap any bar for its dates, how firm they are, and where a real figure would come from." },
-    { t0: "1.0 Ma", t1: "now", mode: "log", lanes: ["pop", "evidence"], text: "Pale grey with a dashed edge means no data. The population lane starts 300,000 years ago; further left the value is unknown, which is not the same as zero. The strip below it is not about the past at all: it shows how much can be said about each era." },
-    { t0: "12 ka", t1: "now", lanes: ["regions", "pop"], text: "Some lanes carry far more uncertainty than others. The regions lane is still a placeholder: its dates were written from memory and have not been checked, so only its general shape should be read. Population since 10,000 BCE comes from a published series, but before 1800 even that is a model reconstruction, which is why the line is dashed there. A smooth, finished-looking lane can still overstate what is known." }
+    { t0: "1.0 Ma", t1: "now", mode: "log", lanes: ["pop", "evidence"], text: "Pale grey with a dashed edge means no data. The population row starts 300,000 years ago; further left the value is unknown, which is not the same as zero. The strip below it is not about the past at all: it shows how much can be said about each era." },
+    { t0: "12 ka", t1: "now", lanes: ["regions", "pop"], text: "Some rows carry far more uncertainty than others. The regions row is still a placeholder: its dates were written from memory and have not been checked, so only its general shape should be read. Population since 10,000 BCE comes from a published series, but before 1800 even that is a model reconstruction, which is why the line is dashed there. A smooth, finished-looking row can still overstate what is known." }
   ]},
   { id: "periods", title: "Same label, different worlds", dek: "Periodisation schemes cut the same millennia in incompatible ways.", scenes: [
     { t0: "12 ka", t1: "now", scheme: "threeage", lanes: ["scheme", "regions"], text: "The Stone, Bronze and Iron Age sequence was devised in Denmark in the 1830s to arrange a museum collection. It was later stretched into a world history it was never designed to be." },

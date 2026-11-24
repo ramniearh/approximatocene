@@ -13,7 +13,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - **v0.1–v0.2 (Aug 2026):** a structural pilot, a single page that draws everything from one data file. A review found real bugs (the time axis showed only one label, a source was cited that had never been loaded, and some lanes were invented without saying so) and produced a long technical plan. Most of that plan has been set aside. The original data-format and sources notes are in `docs/reference/` for background.
 - **v0.3 (Nov 2026):** the current page, which became the project's home page. It follows the browser's light or dark setting; a ◐ button at the right of the tab row switches it, and the browser remembers the choice. It has four tabs:
   - **Human time** (opens first): the last million years. One population line with a fuzzy range around it; markers for fire, language, out of Africa, the end of the last ice age, farming, first cities, writing and the industrial revolution; strips for geological time and hominin species underneath.
-  - **Full atlas:** every lane of the pilot, from the formation of the Earth to now.
+  - **Deep time** (called "Full atlas" until Nov 2026): every row of the pilot, from the formation of the Earth to now. In these notes "lane" means a row of that chart; the page itself says "row".
   - **Stories:** five short step-through stories for class (how to read the chart, periodisation schemes, other human species, people and the ice, the Anthropocene vote). They have arrow-key navigation and a full-screen button.
   - **About:** what the page is, how uncertainty is drawn, and the list of sources, saying which are in use.
 - Several bugs from the pilot review were fixed along the way: axis labels, sources no longer claimed before they are loaded, the "no data" region, steadier dragging, and text contrast.
@@ -21,13 +21,15 @@ Background and current state, so a new session (human or Claude) can pick up wit
 ## Decisions so far (Human time tab)
 
 - The view can zoom in freely but never out past about 1 million years.
-- Time axis: logarithmic by default, with a linear option. Population axis: logarithmic by default, with a linear option. On linear the curve goes nearly vertical at the end, which is intended.
+- Time axis: logarithmic by default, with a linear option. Population axis: linear by default since Nov 2026 (Eduardo), with a logarithmic option. On linear the curve goes nearly vertical at the end, which is intended.
 - Clicking a marker shows everything from just before that marker up to the present.
 - Population: the line is Our World in Data's central estimate from 10,000 BCE (dashed while it is a HYDE reconstruction). Before that only a placeholder haze is shown, with no line (see "Sourced data on the page").
 - Before 300,000 years ago there is no population estimate. A faint dotted line runs low there to say "small, thousands to tens of thousands", and the page labels it as not a figure.
 - Geology strip: Pleistocene and Holocene, with the Early, Middle (Chibanian) and Late Pleistocene, the three Holocene ages, and a hatched "Anthropocene?" for the 2024 rejection.
 - The hominin strip shows species (several of them contested), not subspecies. Disputed ones are hatched.
 - Placeholder warnings stay visible until real data replaces them.
+- The marker buttons have a "Jump to:" label, and the first one reads "The whole million years" (Nov 2026).
+- A last, slightly tongue-in-cheek marker, "Large language models" (2022, the public release of ChatGPT), says the page itself was drafted with one (Eduardo's idea, Nov 2026).
 
 ## Data status
 
@@ -145,11 +147,15 @@ Background and current state, so a new session (human or Claude) can pick up wit
 
 - Climate and CO₂: should the "People and the ice" or Anthropocene stories use the new lanes? And should category 3 CO₂ estimates ever be shown, for example faded?
 
-## Candidate sources, not yet approved (found Nov 2026)
+## Markers and extra species: sources (approved by Eduardo, Nov 2026, now on the page)
 
-Found by web search from abstracts and summaries, not full papers. Check each paper's own wording before entering any number, and get Eduardo's OK first.
+Read from abstracts, publisher pages and summaries, not full papers. Each marker and species now cites its source in its details box, and all are registered in `data/atlas.json` under `sources`. Where a source gives a window and no central date (Out of Africa, writing, the industrial revolution, the start of deglaciation), no line is drawn: only the shaded window. Farming and first cities are still placeholders; language still has no source.
 
-- *H. luzonensis*: Détroit et al. 2019, *Nature* 568:181–186. Callao Cave fossils, 50,000–67,000 years ago.
+Changes against the earlier placeholders: Out of Africa is now 60,000–40,000 years ago (was 90,000–40,000); *H. antecessor* is the TD6 tooth's date range, 949,000–772,000 (was 1.3 million–770,000); Denisovans are 194,400–122,700 to 76,000–52,000 (Denisova Cave only); *H. luzonensis* 67,000–50,000 as minimum ages. The IUGS statement of 20 March 2024 (read from its PDF) confirms the rejection; the 1952 start of the proposal is from news reports.
+
+Original list as found:
+
+- *H. luzonensis*: Détroit et al. 2019, *Nature* 568:181–186. Callao Cave fossils, minimum ages of 67,000 (foot bone) and 50,000 (tooth) years, by uranium-series. A later re-examination (reported by the Natural History Museum, London) suggests they may be much older, perhaps 130,000+; not drawn, but a good case for "dates moving over time".
 - *H. antecessor*: Duval et al. 2018, *Quaternary Geochronology* 47:120–137 (doi:10.1016/j.quageo.2018.05.001). TD6 tooth, 772,000–949,000 years ago (ESR plus palaeomagnetism). The current placeholder reaches back to 1.2 million years, which this does not support.
 - Denisovans: Douka et al. 2019, *Nature*. Oldest Denisova Cave fossil about 195,000 years ago; youngest 52,000–76,000. (Jacobs et al. 2019, same issue, dates the cave sediments rather than the fossils.)
 - Anthropocene: rejected by the Subcommission on Quaternary Stratigraphy in March 2024 (reported as 12 against, 4 for, 2 abstaining), part of the International Union of Geological Sciences (IUGS); the proposed start was 1952 (Crawford Lake). Still need the IUGS's own statement rather than news reports.
@@ -170,6 +176,15 @@ The page already draws the first layer: a published range fades, and where no un
 - What kind of knowledge each mark is: a small coloured tick for measured, dated, estimated, guessed or placeholder.
 
 Fixed (Nov 2026): the life lane's fossil bars stop about 8,200 years ago (the end of PBDB's data), and the stretch after that is now drawn as no data instead of blank.
+
+## Wording (Nov 2026, Eduardo)
+
+- Aim: closer to the technical literature, readable at undergraduate or early postgraduate level, with some of the cheeky tone kept.
+- "Lane" is gone from the page: it meant nothing to readers. The chart's parts are "rows".
+- The Deep time tab's heading is "The last 4.6 billion years", and its intro now mirrors the Human time one.
+- "No data — not zero" now reads "hard to say — some number, for sure" (it only shows where it fits).
+- Marker names: "Habitual use of fire", "End of the last glacial period" (strictly, the ice age has not ended), "Origins of farming", "Writing (proto-cuneiform)", "Industrial revolution".
+- Calendar years print without a thousands comma (1760 CE, not 1,760 CE).
 
 ## Ideas, not yet done
 
