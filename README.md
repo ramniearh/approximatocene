@@ -9,7 +9,7 @@ An interactive timeline of human history and deep time, from the formation of th
 Open `index.html` in any browser, or visit the GitHub Pages site for this repository. There are four tabs:
 
 - **Human time:** the last million years, with world population, key thresholds (fire, language, out of Africa, end of the last ice age, farming, cities, writing, industry), geological periods and hominin species.
-- **Full atlas:** every lane, across all of time.
+- **Deep time:** the last 4.6 billion years, one kind of record per row.
 - **Stories:** short step-through views for teaching.
 - **About:** how to read the chart, and the list of sources.
 
