@@ -423,6 +423,7 @@ Object.values(DS).forEach(ds => {
     ds.milestones.forEach(m => { if (m.t) m._t = parsePoint(m.t); else norm(m); });
     ds.groups.forEach(g => g._t = parsePoint(g.t));
   }
+  if (ds.kind === "evidence") prepSeries(ds);
   if (ds.kind === "polity-pop"){ prepSeries(ds); ds._T1 = ds.rows.map(r => AGE.CE(r[1])); prepSeries(ds.un); }
   if (ds.kind === "largest-polity"){
     prepSeries(ds);
@@ -894,24 +895,33 @@ function createView(o){
       });
     });
   };
+  /* archaeological radiocarbon dates per 500 calendar years (p3k14c, calibrated here with IntCal20): a record of archaeology, not of people */
   E.evidence = (ds, y, h, sp, lane) => {
-    cap(lane.label + " · density of evidence, not events", y);
-    const top = y + 13, bh = h - 14, steps = ds.steps;
-    const qAt = t => { for (let i = 0; i < steps.length; i++) if (t <= steps[i]._t) return steps[i].q; return steps[steps.length - 1].q; };
-    for (let px = 0; px < W; px += 2){
-      const q = qAt(tAtX(px));
-      if (q < .25 && Math.floor(px / 6) % 2) continue;
-      const bH = 3 + q * (bh - 3);
-      ctx.fillStyle = alpha(q > .5 ? PAL.accent : q > .2 ? PAL.bar : PAL.ink4, .3 + q * .6);
-      ctx.fillRect(px, top + bh - bH, 2, bH);
-    }
-    steps.forEach(s => {
-      if (!s.label) return;
-      const x = X(s._t); if (x < 12 || x > W - 12) return;
-      ctx.save(); ctx.strokeStyle = PAL.rule; ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, top + bh); ctx.stroke();
-      ctx.font = '400 9.5px "IBM Plex Mono", monospace'; ctx.fillStyle = PAL.ink3; ctx.textBaseline = "top"; ctx.fillText(s.label, x + 3, top + 1); ctx.restore();
+    cap(lane.label + " · archaeological radiocarbon dates per 500 years · p3k14c, calibrated with IntCal20 · log · soft tops: no uncertainty given · a record of archaeology, not of people", y);
+    const top = y + 13, bh = h - 15;
+    const [lo, hi] = ds.yDomain, L0 = Math.log10(lo), L1 = Math.log10(hi);
+    const fy = v => top + bh - Math.max(0, Math.min(1, (Math.log10(Math.max(v, lo)) - L0) / (L1 - L0))) * bh;
+    const T = ds._T, R = ds.rows, bw = ds.binWidth, last = T.length - 1;
+    /* radiocarbon reaches back only about 50,000 years; the bins stop at 1950 */
+    noData(-1, X(T[0] + bw), top, bh);
+    noData(X(T[last]), X(NOW) + 1, top, bh);
+    laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "Radiocarbon covers about the last 50,000 years, up to 1950; outside that, this row says nothing" }, ds);
+    yTicks(ds.ticks, fy, "", v => v >= 1000 ? (v / 1000) + "k" : String(v));
+    ctx.save();
+    R.forEach((r, i) => {
+      const x0 = cx(X(T[i] + bw)), x1 = cx(X(T[i]));
+      if (x1 < 0 || x0 > W || x1 - x0 < .2) return;
+      const yy = fy(r[1]);
+      /* soft tops: an expected count from calibration, with no uncertainty given */
+      const g = ctx.createLinearGradient(0, yy, 0, top + bh); g.addColorStop(0, alpha(PAL.bar, .15)); g.addColorStop(Math.min(.35, 12 / Math.max(top + bh - yy, 1)), alpha(PAL.bar, .8)); g.addColorStop(1, alpha(PAL.bar, .85));
+      ctx.fillStyle = g; ctx.fillRect(x0, yy, Math.max(x1 - x0 - (x1 - x0 > 4 ? 1 : 0), .8), top + bh - yy);
+      st.hit.push({ x0, x1, y0: top, y1: top + bh, ds, at: () => {
+        const shares = ds.continents.map((c, k) => [c, r[k + 2]]).filter(p => p[1] / r[1] >= .01).sort((a, b) => b[1] - a[1])
+          .map(([c, v]) => c + " " + Math.round(100 * v / r[1]) + "%").join(", ");
+        return { label: "about " + Math.round(r[1]).toLocaleString("en") + " radiocarbon dates", _rangeText: fmtT(T[i] + bw) + " – " + fmtT(T[i]) + " · " + shares, note: ds.note, conf: ds.conf, src: ds.src };
+      } });
     });
-    laneHit(top, bh, { label: lane.label, note: ds.note, conf: ds.conf, _rangeText: "whole axis" }, ds);
+    ctx.restore();
   };
   /* ---- long sourced series (climate strips, CO2) ---- */
   /* index range of a series (ages sorted oldest first) inside the view, with one point of padding each side */
@@ -1770,7 +1780,7 @@ const STORIES = [
   { id: "reading", title: "How to read this chart", dek: "The visual conventions used throughout the atlas.", scenes: [
     { t0: "500 ka", t1: "now", lanes: ["hominins"], text: "Faded ends mark uncertainty. Each species bar runs between its first and last known fossils, as given by the Smithsonian, and then fades a little past both ends: in a sparse fossil record, species probably lived longer than their fossils show. The fade is a reminder, not a measurement. Five well-established species are labelled; the faint bars are the rest." },
     { t0: "800 ka", t1: "100 ka", lanes: ["hominins"], text: "Hatching marks a disputed category. Homo heidelbergensis is increasingly treated as a label of convenience rather than a species, and Denisovans are defined mostly from DNA. Tap any bar for its dates, how firm they are, and where a real figure would come from." },
-    { t0: "1.0 Ma", t1: "now", mode: "log", lanes: ["pop", "evidence"], text: "Pale grey with a dashed edge means no data. The population row starts 300,000 years ago; further left the value is unknown, which is not the same as zero. The strip below it is not about the past at all: it shows how much can be said about each era." },
+    { t0: "1.0 Ma", t1: "now", mode: "log", lanes: ["pop", "evidence"], text: "Pale grey with a dashed edge means no data. The population row starts 300,000 years ago; further left the value is unknown, which is not the same as zero. The strip below it is about archaeology rather than the past: how many radiocarbon dates exist for each 500 years. Radiocarbon reaches back only about 50,000 years, so further left it, too, says nothing." },
     { t0: "12 ka", t1: "now", lanes: ["regions", "pop"], text: "Some rows carry far more uncertainty than others. The regions row is still a placeholder: its dates were written from memory and have not been checked, so only its general shape should be read. Population since 10,000 BCE comes from a published series, but before 1800 even that is a model reconstruction, which is why the line is dashed there. A smooth, finished-looking row can still overstate what is known." }
   ]},
   { id: "periods", title: "Same label, different worlds", dek: "Periodisation schemes cut the same millennia in incompatible ways.", scenes: [
@@ -1824,7 +1834,7 @@ function scene(k){
   $("#s-next").textContent = k === s.scenes.length - 1 && cur.s < STORIES.length - 1 ? "Next story →" : "Next →";
   const flagged = sc.lanes.map(id => LANE[id]).filter(l => l && DS[l.dataset] && ["fabricated", "speculative"].includes(DS[l.dataset].conf))
     .map(l => l.label + (DS[l.dataset].conf === "fabricated" ? " is invented; read its shape only" : " is a speculative impression"));
-  const srcd = [sc.lanes.includes("geo") && "geological dates are from the ICS chart", sc.lanes.includes("hominins") && "species dates are from the Smithsonian (except Denisovans)", sc.lanes.includes("pop") && "population from 10,000 BCE is from Our World in Data", sc.lanes.includes("energy") && "energy per person since 1800 is calculated from Our World in Data's energy and population series"].filter(Boolean);
+  const srcd = [sc.lanes.includes("geo") && "geological dates are from the ICS chart", sc.lanes.includes("hominins") && "species dates are from the Smithsonian (except Denisovans)", sc.lanes.includes("pop") && "population from 10,000 BCE is from Our World in Data", sc.lanes.includes("energy") && "energy per person since 1800 is calculated from Our World in Data's energy and population series", sc.lanes.includes("evidence") && "radiocarbon dates per 500 years are counted from p3k14c and calibrated with IntCal20"].filter(Boolean);
   $("#s-data").innerHTML = (srcd.length ? "<b>Mostly not researched.</b> Here, " + (srcd.length > 1 ? srcd.slice(0, -1).join(", ") + " and " + srcd[srcd.length - 1] : srcd[0]) + "; all other values in this view are unsourced placeholders." : "<b>Not researched.</b> All values in this view are unsourced placeholders.") + (flagged.length ? " " + flagged.join("; ") + "." : "");
   $("#s-readout").innerHTML = '<p class="empty">Tap a bar or band for details. Arrow keys step through the story.</p>';
 }

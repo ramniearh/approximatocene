@@ -123,6 +123,16 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - It counts fuels and electricity, not food or animal feed, so it is not "energy capture" in Ian Morris's sense; the caption says so. Before 1800 the lane says "no data — not zero", and the lane shows only when at least 40 px of 1800–2023 is in view.
   - Rough values: about 5,750 kWh in 1800, 7,400 in 1900, 11,200 in 1950 and 21,300 in 2023.
   - The Stories scene that used this lane as its example of an invented lane now uses the regions lane. The energy lane still appears in the Anthropocene story (1720 to now).
+- **Radiocarbon (read 2026-11-24, for the evidence row).** Neither raw input is in the repo.
+  - `radiocarbon_counts_p3k14c.csv` has one row per 500 calendar years, from 0 to 55,000 cal BP (years before 1950). It gives the number of archaeological radiocarbon dates, in total and by continent. It was made by `make_radiocarbon_counts.py`, a plain-Python script, from two inputs:
+    - p3k14c version 2022.01: `p3k14c_scrubbed_fuzzed.csv` (179,689 dates), taken from the authors' Zenodo archive 5597795 (`people3k/p3k14c-1.0.0.zip`, 35.9 MB). It is also on tDAR, but that copy needs a login.
+    - IntCal20, copied as published to `intcal20.csv`.
+  - How dates are calibrated: each date is calibrated on a 5-year grid, with variance equal to lab error² plus curve error². Each date then counts once in total, shared across the bins its calibrated range covers. Counts are expected values, rounded to 0.1.
+  - IntCal20 is used for every date. Strictly, southern-hemisphere dates need SHCal20 and shells need Marine20; at 500-year bins this shifts little.
+  - Skipped: 382 dates younger than the curve (modern) and 31 older than it.
+  - Checks: 10,000 ± 50 radiocarbon years calibrates to a median of about 11,480 cal BP, and 40,000 ± 500 to about 43,270.
+  - Licence: the paper is CC BY 4.0. The archive's licence file covers only its code (MIT), and the tDAR data licence was not checked.
+  - p3k14c has **no Australian dates older than 15,000 radiocarbon years**. Europe and North America hold about 79% of all dates.
 - `highlight_dates.csv` (Nov 2026): one row per Deep time highlight, with the date as the source gives it and the citation (see "Highlights" below).
 - `world_energy_owid.csv` (read 2026-11-22): the 78 World rows (1800–2025) of OWID's `global-energy-substitution` chart, in TWh, ten columns as published, with an `underlying_source` column. OWID's metadata contradicts itself on biomass (the chart note says it is included; the column note says it is not part of "total energy supply"); the World rows do carry it as its own column.
 
@@ -139,6 +149,12 @@ Background and current state, so a new session (human or Claude) can pick up wit
     - Faded: Seshat estimates given as a single figure, CO₂ proxy estimates published with no uncertainty, and the PAGES 2k instrumental line.
     - Geology is unchanged. Every boundary the ICS chart marks as approximate (~) also has a ± range, which the page already fades across. The rest are boundaries the chart gives as defined values.
     - Placeholder lanes (energy, regions, periodisation, evidence, Human time markers) are unchanged; they are already labelled as unsourced. The highlights were sourced later (see below).
+
+- **What has been dated (Nov 2026, Deep time; formerly "What we actually know").** The hand-drawn steps are gone. The row (`evidence` in `data/atlas.json`) now shows archaeological radiocarbon dates per 500 years from `radiocarbon_counts_p3k14c.csv`, calibrated with IntCal20. Eduardo chose calibration (over raw radiocarbon years) and "hard to say" before about 50,000 years (over keeping the hand-drawn steps as labelled opinion).
+  - Drawing: bars on a log scale (10 to 10,000), soft-topped because the counts carry no stated uncertainty. Before 50,000 cal BP and after 1950 the row shows the usual "hard to say" shading. Hover gives the number of dates and each continent's share.
+  - The caption and note say it is a record of archaeology, not of people: it reflects excavation, funding and survival.
+  - The count falls in the last few thousand years because radiocarbon is less needed once there are written records, not because less is known. On a log axis, the stretch from 1950 to now takes up a lot of the row's width as "hard to say".
+  - Also changed: the Writing highlight no longer says the strip "steps up" there; the "How to read this chart" story describes the new row; and the story status line counts it as sourced.
 
 - **Highlights (Nov 2026, Deep time, Eduardo approved the recommended options).** All seven overlays in `overlays.highlights` now cite a source in their details box; values and wording are in `data/reference/highlight_dates.csv`.
   - Holocene: 11700 b2k (ICS). The old unused, unsourced "fuzz: 200 yr" is gone.
@@ -183,7 +199,7 @@ Original list as found:
 The page already draws the first layer: a published range fades, and where no uncertainty is given the mark is dashed, faded or soft. Ideas for the deeper layers:
 - **Dates moving over time (Eduardo likes this one).** Faint "ghost" marks where something used to be dated, such as Out of Africa or *H. antecessor*, to show that today's figures are this decade's estimates. It needs sourced past estimates too (which paper, which year, which date), so it is a sourcing job as much as a drawing one.
 - Disagreement between sources: rival estimates side by side, such as several population reconstructions. The spread shows how far any one source's stated error can be trusted.
-- How much evidence there is: a strip of dated archaeological sites per millennium (p3k14c; see the evidence lane).
+- How much evidence there is: done for radiocarbon (Nov 2026, "What has been dated" row, p3k14c). Other dating methods are not counted.
 - What kind of knowledge each mark is: a small coloured tick for measured, dated, estimated, guessed or placeholder.
 
 Fixed (Nov 2026): the life lane's fossil bars stop about 8,200 years ago (the end of PBDB's data), and the stretch after that is now drawn as no data instead of blank.
@@ -217,6 +233,7 @@ Suggested markers for Human time, held back for now:
 - settlement of Sahul and of the Americas (the Americas date is disputed)
 - money: the unit of account in Mesopotamia versus Lydian coinage. Which date you mark is itself a theoretical choice.
 - the Great Acceleration (about 1950)
+- fossil fuels overtaking traditional biomass, 1900–1910 (Eduardo, Nov 2026: "maybe add to human time too"). The same calculation as the Deep time highlight.
 - a claimed genetic bottleneck about 900,000 years ago. It is contested, and it measures breeding population, not head count, so it belongs as a marker and shouldn't bend the population line.
 
 Other ideas:
