@@ -397,6 +397,42 @@
       "format": "release date, 30 November 2022",
       "status": "ingested"
     },
+    "mangerud1974": {
+      "title": "Quaternary stratigraphy of Norden, a proposal for terminology and classification",
+      "authors": "Mangerud et al.",
+      "year": 1974,
+      "url": "https://doi.org/10.1111/j.1502-3885.1974.tb00669.x",
+      "license": "article (Boreas)",
+      "format": "the 10,000 radiocarbon-year Holocene boundary, as cited in later literature",
+      "status": "ingested"
+    },
+    "crutzen2002": {
+      "title": "Geology of mankind",
+      "authors": "Crutzen",
+      "year": 2002,
+      "url": "https://doi.org/10.1038/415023a",
+      "license": "article (Nature)",
+      "format": "proposed start read from the text",
+      "status": "ingested"
+    },
+    "mcdougall2005": {
+      "title": "Stratigraphic placement and age of modern humans from Kibish, Ethiopia",
+      "authors": "McDougall et al.",
+      "year": 2005,
+      "url": "https://doi.org/10.1038/nature03258",
+      "license": "article (Nature)",
+      "format": "age read from the abstract",
+      "status": "ingested"
+    },
+    "grun2023": {
+      "title": "Direct dating of human fossils and the ever-changing story of human evolution",
+      "authors": "Grün and Stringer",
+      "year": 2023,
+      "url": "https://doi.org/10.1016/j.quascirev.2023.108379",
+      "license": "article (Quaternary Science Reviews)",
+      "format": "minimum age as reported by the Natural History Museum, London; the paper itself not read",
+      "status": "ingested"
+    },
     "placeholder": {
       "title": "No source — placeholder",
       "note": "Written from memory during pilot construction. Must be replaced.",

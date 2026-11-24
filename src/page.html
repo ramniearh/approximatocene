@@ -78,7 +78,8 @@ canvas.chart.pany{touch-action:pan-y}
 .tag{font-size:12.5px;padding:2px 8px;border:1px solid var(--rule);border-radius:3px;color:var(--ink-3)}
 .tag.bad{border-color:color-mix(in srgb,var(--mark) 40%,transparent);color:var(--mark)}
 .empty{color:var(--ink-3);font-size:15px;margin:0}
-.dataline{font-size:13px;color:var(--ink-3);margin:12px 0 0;max-width:80ch}
+.sw.ghost{width:22px;height:9px;background:radial-gradient(circle at 4px 50%,var(--card) 2.4px,var(--ink-3) 2.6px 3.8px,transparent 4px),repeating-linear-gradient(90deg,var(--ink-3) 0 2px,transparent 2px 4px) 0 50%/100% 1px no-repeat}
+.dataline{font-size:13px;color:var(--ink-3);margin:12px 0 0}
 .dataline b{color:var(--mark);font-weight:500}
 
 /* full atlas */
@@ -158,7 +159,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <div class="wrap">
 
 <header class="top">
-  <p class="pilot">Deep Time Atlas · v0.3, early working version · <b>partly placeholder data</b> · geological dates, species dates, population since 10,000 BCE, the climate and CO₂ records, animal diversity, polity size and population, and energy use since 1800 now sourced</p>
+  <p class="pilot">Deep Time Atlas · v0.3</p>
   <h1>Deep time, <b>to scale</b></h1>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
@@ -193,6 +194,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     <span><i class="sw" style="background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--accent) 30%,transparent),transparent)"></i>Probably a range of guesses (not sourced)</span>
     <span><i class="sw" style="height:2px;background:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 7px)"></i>Not estimated</span>
     <span><i class="sw" style="background:color-mix(in srgb,var(--mark) 22%,transparent);border-left:2px solid var(--mark)"></i>Threshold and its plausible range</span>
+    <span><i class="sw ghost"></i>Where another study put the date (tap the ring)</span>
   </div>
   <div class="stage">
     <canvas class="chart" id="h-cv" role="img" aria-label="World population over the last million years, with markers for fire, language, dispersal out of Africa, the end of the last ice age, farming, writing and industrialisation, and strips for geological time and hominin species"></canvas>
@@ -1249,17 +1251,17 @@ function createView(o){
 
 /* ================= HUMAN TIME VIEW ================= */
 const MARKERS = [
-  { id: "fire", short: "Fire use", label: "Habitual use of fire", kind: "threshold", t: { est: "400 ka", lo: "1.0 Ma", hi: "300 ka" }, conf: "inferred", src: ["berna2012", "roebroeks2011"],
+  { id: "fire", short: "Fire", label: "Habitual use of fire", kind: "threshold", t: { est: "400 ka", lo: "1.0 Ma", hi: "300 ka" }, conf: "inferred", src: ["berna2012", "roebroeks2011"],
     note: "Burnt bone and plant ash in Wonderwerk Cave, South Africa, show burning in the cave about a million years ago (Berna et al. 2012), the left edge of the shading. Whether people were in control of it is another matter. In Europe, evidence of habitual fire use is essentially absent until about 400,000–300,000 years ago (Roebroeks and Villa 2011): the line and the right edge. Others argue habitual use came much later still (Sandgathe et al. 2011)." },
   { id: "language", short: "Language", label: "Language", kind: "threshold", t: { lo: "500 ka", hi: "50 ka" }, conf: "disputed",
     note: "Speech leaves no direct trace. Proposals for when fully modern language emerged run from before the split with Neanderthals, about half a million years ago, to around 50,000 years ago. The hatched band is the spread of serious proposals; no single date is drawn because none is supported. No source is cited here yet, and no single source could settle it." },
   { id: "ooa", short: "Out of Africa", label: "Out of Africa", kind: "threshold", t: { lo: "60 ka", hi: "40 ka" }, conf: "estimated", src: ["bergstrom2021"],
     note: "The worldwide spread of Homo sapiens out of Africa, about 60,000–40,000 years ago (Bergström et al. 2021, a review of genetic and fossil evidence). Earlier excursions are attested but seem to have left little trace in living people. No single date is drawn: the review gives a window, not a moment, and the window keeps moving as new sites and genomes are studied." },
-  { id: "ice", short: "Last glacial ends", label: "End of the last glacial period", kind: "span", t0: { lo: "20 ka", hi: "19 ka" }, t1: "11700 b2k", conf: "dated", src: ["clark2009", "ics"],
+  { id: "ice", short: "End of ice age", label: "End of the last glacial period", kind: "span", t0: { lo: "20 ka", hi: "19 ka" }, t1: "11700 b2k", conf: "dated", src: ["clark2009", "ics"],
     note: "Ice sheets started to retreat from their maximum 20,000–19,000 years ago (Clark et al. 2009). The Holocene, the present warm interval, formally begins 11,700 years before 2000 CE (ICS chart), a boundary tied to a layer in a Greenland ice core: the solid line. Strictly, the ice age has not ended: Greenland and Antarctica are still covered in ice. What ended was the last glacial period of it." },
   { id: "farming", short: "Farming", label: "Origins of farming", kind: "span", t0: { est: "12 ka", lo: "13 ka", hi: "11 ka" }, t1: { est: "5000 b2k", lo: "6000 b2k", hi: "4000 b2k" }, conf: "estimated",
     note: "Not one event and not one place: plants and animals were domesticated in several independent centres over thousands of years, all within the Holocene. 'Neolithic revolution' compresses a slow and scattered process. These dates are still placeholders: no source is cited yet." },
-  { id: "cities", short: "First cities", label: "First cities", kind: "threshold", t: { est: "3500 BCE", lo: "4000 BCE", hi: "3100 BCE" }, conf: "estimated",
+  { id: "cities", short: "Cities", label: "First cities", kind: "threshold", t: { est: "3500 BCE", lo: "4000 BCE", hi: "3100 BCE" }, conf: "estimated",
     note: "Uruk, in southern Mesopotamia, grows into a city of tens of thousands during the fourth millennium BCE. Older large settlements such as Çatalhöyük exist; whether they count as cities depends on the definition used. These dates are still placeholders: no source is cited yet." },
   { id: "writing", short: "Writing", label: "Writing (proto-cuneiform)", kind: "threshold", t: { lo: "3350 BCE", hi: "3200 BCE" }, conf: "estimated", src: ["cdli"],
     note: "The earliest known writing, proto-cuneiform from Uruk, belongs to the Uruk IV period, about 3350–3200 BCE (Cuneiform Digital Library Initiative). Writing was invented again, independently, in China and Mesoamerica, and perhaps in Egypt. It is the sharpest single change in how much can be known about the past." },
@@ -1289,6 +1291,20 @@ const HGEO = [
   { row: 1, label: "Meghalayan", t0: "0.0042 Ma", t1: "now", color: "#fbe5b6", conf: "dated", note: "Begins with the 4.2 ka aridity event, defined from a cave formation in Meghalaya, India." }
 ];
 HGEO.forEach(norm);
+/* ghost dates: where a published date used to sit, or where a later study puts it. Each is one published estimate, with its year */
+const GHOSTS = [
+  { on: "Holocene", t: "10000 BP", when: "10,000 radiocarbon years before present", year: "1974", label: "Start of the Holocene, 1974 convention", conf: "estimated", src: ["mangerud1974"],
+    note: "For decades the Holocene was taken to begin 10,000 radiocarbon years before present, following Mangerud et al. (1974). Radiocarbon years are not calendar years; the mark sits where readers of the time put it, about 10,000 years ago. In 2008 the boundary was redefined from a Greenland ice core at 11,700 years before 2000 CE (Walker et al. 2009), the start of the bar." },
+  { on: "Anthropocene?", t: "1784 CE", when: "late 18th century (1784)", year: "2002", label: "Start of the Anthropocene, 2002 proposal", conf: "estimated", src: ["crutzen2002"],
+    note: "Paul Crutzen, who popularised the term, suggested it began in the late eighteenth century, when ice cores show carbon dioxide and methane starting to rise, and pointed to James Watt's steam engine design of 1784 (Crutzen 2002). The later formal proposal moved the start to 1952; that one was rejected in 2024." },
+  { on: "h-sapiens", t: "195 ka", when: "195,000 ± 5,000 years ago", year: "2005", label: "Oldest Homo sapiens fossils, 2005", conf: "dated", src: ["mcdougall2005"],
+    note: "In 2005 the Omo I and II skulls from Kibish, Ethiopia, were dated to 195,000 ± 5,000 years, then the oldest well-dated modern humans (McDougall et al. 2005). The Jebel Irhoud fossils from Morocco, published in 2017 at 315,000 ± 34,000 years (Hublin et al. 2017), pushed the start back; whether they count as Homo sapiens is still argued over." },
+  { on: "h-sapiens", t: "130 ka", when: "about 130,000 years ago", year: "before 2005", label: "Oldest Homo sapiens fossils, before 2005", conf: "estimated", src: ["mcdougall2005"],
+    note: "Before the 2005 re-dating, the Omo skulls were thought to be about 130,000 years old (as reported by McDougall et al. 2005)." },
+  { on: "h-luzonensis", t: "134 ka", when: "at least 134,000 years ago", year: "2023", label: "H. luzonensis, 2023 re-dating", conf: "estimated", src: ["grun2023"],
+    note: "A 2023 review of the dating found that the Callao Cave fossils had probably taken up uranium after burial, which makes uranium-series ages come out too young, and put their minimum age at about 134,000 years (Grün and Stringer 2023, as reported by the Natural History Museum, London). The bar still shows the 2019 minimum ages." }
+];
+GHOSTS.forEach(g => g._t = parseTime(g.t));
 const HEXTRA = [
   { id: "h-antecessor", src: ["duval2018"], label: "H. antecessor", t0: "949 ka", t1: "772 ka", openEnds: true, conf: "dated", status: "disputed", note: "Known from Gran Dolina (level TD6) at Atapuerca, Spain. A tooth from TD6 dates to 772,000–949,000 years ago (ESR and palaeomagnetism; Duval et al. 2018). That span is the uncertainty of one level's date, not the life of the species. Whether it is a separate species, and how it relates to later humans, is debated." },
   { id: "h-luzonensis", src: ["detroit2019"], label: "H. luzonensis", t0: "67 ka", t1: "50 ka", openEnds: true, conf: "dated", note: "Known from a few teeth and bones in Callao Cave, Philippines, named in 2019. The dates are minimum ages: at least 67,000 years for a foot bone and at least 50,000 for a tooth (uranium-series; Détroit et al. 2019). A later re-examination suggests the fossils may be considerably older; that is not drawn here." }
@@ -1528,6 +1544,15 @@ const HV = (() => {
         stripHits.push({ x0: r.x0, x1: r.x1, y0: y, y1: y + ROW, info: g, ds: DS.geo });
       });
     });
+    const ghostAt = (g, y, h, xNow) => {
+      const gx = X(g._t); if (gx < ML - 6 || gx > ML + pw() + 6) return;
+      const my = y + 1;   /* along the top edge, so it never covers a label */
+      ctx.save(); ctx.strokeStyle = alpha(PAL.ink, .75); ctx.lineWidth = 1.2; ctx.setLineDash([2, 2]);
+      ctx.beginPath(); ctx.moveTo(gx, my); ctx.lineTo(Math.max(ML, Math.min(ML + pw(), xNow)), my); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = PAL.card; ctx.beginPath(); ctx.arc(gx, my, 3.6, 0, 2 * Math.PI); ctx.fill(); ctx.stroke(); ctx.restore();
+      stripHits.unshift({ x0: gx - 7, x1: gx + 7, y0: my - 10, y1: my + 7, ds: {}, info: { label: g.label, note: g.note, conf: g.conf, src: g.src, _rangeText: g.when + " · the view in " + g.year } });
+    };
+    HGEO.filter(g => g.row === 0).forEach(g => GHOSTS.filter(q => q.on === g.label).forEach(q => ghostAt(q, GEO_Y + 15, ROW, X(g._t0.older))));
     if (homs.length){
       caption("Hominin species" + (W > 760 ? " · first and last fossils, not existence · labelled: five well-established (editorial pick); faint: the rest" : W > 560 ? " · first and last fossils, not existence" : " · faint: tap for details"), HOM_Y);
       let y = HOM_Y + 15;
@@ -1541,6 +1566,7 @@ const HV = (() => {
           if (m) fitText(r.label, res.x0, res.x1, y + bh / 2, sap ? PAL.onaccent : d ? PAL.dispink : PAL.barink, 10.5);
           stripHits.push({ x0: res.x0, x1: res.x1, y0: y - (m ? 0 : 1), y1: y + bh + (m ? 0 : 1), info: r, ds: DS.hominins });
         }
+        GHOSTS.filter(q => q.on === r.id).forEach(q => ghostAt(q, y, bh, X(r._t0.older)));
         y += rh;
       });
     }

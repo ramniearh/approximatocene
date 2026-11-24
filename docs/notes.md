@@ -177,13 +177,26 @@ The page already draws the first layer: a published range fades, and where no un
 
 Fixed (Nov 2026): the life lane's fossil bars stop about 8,200 years ago (the end of PBDB's data), and the stretch after that is now drawn as no data instead of blank.
 
+## Ghost dates (Nov 2026, Eduardo's pick of four cases)
+
+On the Human time tab, a small hollow ring on the top edge of a row marks where an earlier (or later) study put a date, joined by a dotted line to where the bar starts now. Tapping the ring gives the published figure, the year of that view and its source. The data is `GHOSTS` in `src/page.html`; sources are registered in `data/atlas.json`.
+- Holocene start: 10,000 radiocarbon years BP (Mangerud et al. 1974, as cited in later literature), drawn where readers of the time put it, about 10,000 years ago. Today's boundary is 11,700 b2k (Walker et al. 2009).
+- Anthropocene start: late 18th century, Watt's steam engine of 1784 (Crutzen 2002), against the later 1952 proposal.
+- Oldest *Homo sapiens* fossils: about 130,000 years (Omo, before 2005, as reported by McDougall et al. 2005) and 195,000 ± 5,000 (McDougall et al. 2005). The bar itself starts at the Smithsonian's date; Jebel Irhoud (315,000 ± 34,000, Hublin et al. 2017) is mentioned in the note.
+- *H. luzonensis*: at least 134,000 years (Grün and Stringer 2023, figure as reported by the Natural History Museum; paper not read). Here the ghost is a later, older estimate; the bar still shows the 2019 minimum ages.
+- Not yet on the Deep time tab.
+
+## Human time labels (Nov 2026, Eduardo)
+
+The chart's marker labels went back to the short plain names: Fire, Language, Out of Africa, End of ice age, Farming, Cities, Writing, Industrial revolution (plus LLMs). The buttons above keep the more technical names. The header line is just "Deep Time Atlas · v0.3", and the data note under the chart runs the full width.
+
 ## Wording (Nov 2026, Eduardo)
 
 - Aim: closer to the technical literature, readable at undergraduate or early postgraduate level, with some of the cheeky tone kept.
 - "Lane" is gone from the page: it meant nothing to readers. The chart's parts are "rows".
 - The Deep time tab's heading is "The last 4.6 billion years", and its intro now mirrors the Human time one.
 - "No data — not zero" now reads "hard to say — some number, for sure" (it only shows where it fits).
-- Marker names: "Habitual use of fire", "End of the last glacial period" (strictly, the ice age has not ended), "Origins of farming", "Writing (proto-cuneiform)", "Industrial revolution".
+- Marker button names: "Habitual use of fire", "End of the last glacial period" (strictly, the ice age has not ended), "Origins of farming", "Writing (proto-cuneiform)", "Industrial revolution". The labels on the chart itself stay short (see above).
 - Calendar years print without a thousands comma (1760 CE, not 1,760 CE).
 
 ## Ideas, not yet done
