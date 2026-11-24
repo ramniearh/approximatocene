@@ -325,7 +325,7 @@ function parsePoint(v){
   if (typeof v === "object" && !Array.isArray(v)){
     const est = v.est != null ? parseTime(v.est) : null;
     const a = v.lo != null ? parseTime(v.lo) : est, b = v.hi != null ? parseTime(v.hi) : est;
-    return { est, older: Math.max(a, b), younger: Math.min(a, b), certain: false };
+    return { est, older: Math.max(a, b), younger: Math.min(a, b), certain: false, soft: !!v.soft };
   }
   const t = parseTime(v);
   return { est: t, older: t, younger: t, certain: true };
@@ -356,8 +356,9 @@ function fmtPointRange(p0, p1){
   const one = p => !p ? "?" : p.est != null ? fmtT(p.est) : fmtT(p.older) + "–" + fmtT(p.younger);
   let s = one(p0) + "  →  " + one(p1);
   const bits = [];
-  if (p0 && !p0.certain) bits.push("start " + fmtT(p0.older) + "–" + fmtT(p0.younger));
-  if (p1 && !p1.certain) bits.push("end " + fmtT(p1.older) + "–" + fmtT(p1.younger));
+  if (p0 && !p0.certain && p0.older !== p0.younger) bits.push("start " + fmtT(p0.older) + "–" + fmtT(p0.younger));
+  if (p1 && !p1.certain && p1.older !== p1.younger) bits.push("end " + fmtT(p1.older) + "–" + fmtT(p1.younger));
+  if ((p0 && p0.soft) || (p1 && p1.soft)) bits.push("no range given for " + (p0 && p0.soft ? (p1 && p1.soft ? "either end" : "the start") : "the end"));
   return bits.length ? s + "   ·   " + bits.join("  ·  ") : s;
 }
 const REDUCED = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1104,17 +1105,35 @@ function createView(o){
   function drawHighlights(){
     let k = 0;
     ATLAS.overlays.highlights.filter(h => st.active.has(h.id)).forEach(hl => {
-      const a = cx(X(hl._t0.older)), b = cx(X(hl._t1.younger)); if (b < 0 || a > W) return;
+      const p0 = hl._t0, p1 = hl._t1;
+      /* each end as [outer, inner] pixels: a published range fades across itself; a figure the source gives
+         without a range ("soft") fades over 16 px around it; a defined boundary is crisp */
+      const edge = (p, dir) => {
+        if (p.older !== p.younger) return dir > 0 ? [cx(X(p.older)), cx(X(p.younger))] : [cx(X(p.younger)), cx(X(p.older))];
+        const x = cx(X(p.est)); return p.certain ? [x, x] : [x - 8 * dir, x + 8 * dir];
+      };
+      let [a, ai] = edge(p0, 1), [b, bi] = edge(p1, -1);
+      if (ai > bi){ const m = (ai + bi) / 2; ai = bi = m; }
+      if (b < 0 || a > W) return;
+      if (b - a < 1) b = a + 1;
       const ly = AXIS_H + 4 + k * 14; k++;
       ctx.save();
-      ctx.fillStyle = alpha(PAL.accent, .07); ctx.fillRect(a, AXIS_H, b - a, H - AXIS_H);
+      const full = alpha(PAL.accent, .07), g = ctx.createLinearGradient(a, 0, b, 0), f = x => Math.max(0, Math.min(1, (x - a) / (b - a)));
+      let last = -1;
+      [[0, a < ai ? 0 : 1], [f(ai), 1], [f(bi), 1], [1, b > bi ? 0 : 1]].forEach(([q, on]) => {
+        q = Math.min(Math.max(q, last + 1e-6), 1); last = q; g.addColorStop(q, on ? full : alpha(PAL.accent, 0));
+      });
+      ctx.fillStyle = g; ctx.fillRect(a, AXIS_H, b - a, H - AXIS_H);
+      /* a line only where the source gives a central figure; none for windows or figures with no range */
       ctx.strokeStyle = alpha(PAL.accent, .4); ctx.setLineDash([3, 3]);
-      [X(hl._t0.est), X(hl._t1.est)].forEach(x => { if (x > 0 && x < W){ ctx.beginPath(); ctx.moveTo(x, AXIS_H); ctx.lineTo(x, H); ctx.stroke(); } });
+      [p0, p1].forEach(p => { if (p.est == null || p.soft) return; const x = X(p.est); if (x > 0 && x < W){ ctx.beginPath(); ctx.moveTo(x, AXIS_H); ctx.lineTo(x, H); ctx.stroke(); } });
       ctx.setLineDash([]);
       ctx.font = '500 10px "IBM Plex Sans", sans-serif'; ctx.fillStyle = PAL.accent; ctx.textBaseline = "top";
-      ctx.fillText(hl.label, Math.max(4, Math.min(W - 150, X(hl._t0.est) + 4)), ly);
+      const lx = Math.max(4, Math.min(W - 150, (ai + a) / 2 + 4)), lw = ctx.measureText(hl.label).width;
+      ctx.fillText(hl.label, lx, ly);
       ctx.restore();
-      st.hit.push({ x0: a, x1: b, y0: ly, y1: ly + 13, info: hl, ds: {} });
+      /* the label can be pushed away from a narrow span near the edge, so it stays clickable too */
+      st.hit.push({ x0: Math.min(a, lx), x1: Math.max(b, lx + lw), y0: ly, y1: ly + 13, info: hl, ds: {} });
     });
   }
   const MMP = PROJ.log, MM0 = MMP.c(T_ORIGIN), MM1 = MMP.c(NOW);

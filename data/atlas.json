@@ -371,6 +371,42 @@
       "format": "period dates read from the page",
       "status": "ingested"
     },
+    "larson2014": {
+      "title": "Current perspectives and the future of domestication studies",
+      "authors": "Larson et al.",
+      "year": 2014,
+      "url": "https://doi.org/10.1073/pnas.1323964111",
+      "license": "article (PNAS, open access; PMC4035915)",
+      "format": "dates read from the main text and Fig. 1 caption (data/reference/highlight_dates.csv)",
+      "status": "ingested"
+    },
+    "storey2012": {
+      "title": "Astronomically calibrated 40Ar/39Ar age for the Toba supereruption and global synchronization of late Quaternary records",
+      "authors": "Storey et al.",
+      "year": 2012,
+      "url": "https://doi.org/10.1073/pnas.1208178109",
+      "license": "article (PNAS)",
+      "format": "date and 1σ error read from the abstract (data/reference/highlight_dates.csv)",
+      "status": "ingested"
+    },
+    "mark2014": {
+      "title": "A high-precision 40Ar/39Ar age for the Young Toba Tuff and dating of ultra-distal tephra: Forcing of Quaternary climate and implications for hominin occupation of India",
+      "authors": "Mark et al.",
+      "year": 2014,
+      "url": "https://doi.org/10.1016/j.quageo.2012.12.004",
+      "license": "article (Quaternary Geochronology)",
+      "format": "date and 1σ error read from the abstract, cited in the note only",
+      "status": "ingested"
+    },
+    "smith2018": {
+      "title": "Humans thrived in South Africa through the Toba eruption about 74,000 years ago",
+      "authors": "Smith et al.",
+      "year": 2018,
+      "url": "https://doi.org/10.1038/nature25967",
+      "license": "article (Nature)",
+      "format": "finding read from summaries, cited in the note only",
+      "status": "ingested"
+    },
     "britannica": {
       "title": "Industrial Revolution: the first Industrial Revolution",
       "org": "Encyclopaedia Britannica",
@@ -48236,74 +48272,111 @@
         "label": "The Holocene",
         "t0": "11700 b2k",
         "t1": "now",
-        "fuzz": "200 yr",
-        "note": "A formally defined epoch, and one of the few boundaries on this chart with a ratified date attached to a physical layer in an ice core."
+        "conf": "dated",
+        "src": [
+          "ics"
+        ],
+        "note": "A formally defined epoch, starting 11,700 years before 2000 CE (ICS chart), and one of the few boundaries on this chart tied to a physical layer in an ice core."
       },
       {
         "id": "agriculture",
         "label": "Agricultural revolution",
         "t0": {
-          "est": "12 ka",
-          "lo": "13 ka",
-          "hi": "11 ka"
+          "lo": "12000 BP",
+          "hi": "11000 BP"
         },
         "t1": {
-          "est": "5000 b2k",
-          "lo": "6000 b2k",
-          "hi": "4000 b2k"
+          "est": "4200 BP",
+          "soft": true
         },
-        "note": "Not an event and not one place: at least seven independent centres over several thousand years. The word 'revolution' is doing a great deal of work."
+        "conf": "estimated",
+        "src": [
+          "larson2014"
+        ],
+        "note": "Plants and animals began to be domesticated 12,000–11,000 years ago, in at least 11 independent centres (Larson et al. 2014). The shading runs to 4,200 years before 1950, the end of the paper's second wave of domestications (8,200–4,200 years ago); that is where the paper's grouping stops, not where farming ends, so the right edge is soft. Not an event and not one place: the word 'revolution' is doing a great deal of work."
       },
       {
         "id": "fossil",
         "label": "Fossil fuel era",
         "t0": {
-          "est": "1750 CE",
-          "lo": "1700 CE",
-          "hi": "1800 CE"
+          "lo": "1900 CE",
+          "hi": "1910 CE"
         },
         "t1": "now",
-        "note": "Coal use is far older; sustained fossil-powered growth is roughly 250 years old. At full zoom-out on the linear axis this is thinner than the line drawn to represent it."
+        "conf": "estimated",
+        "src": [
+          "owid"
+        ],
+        "note": "Calculated here, not published: coal, oil and gas together overtook traditional biomass as the world's main energy source between 1900 (5,973 against 6,111 TWh) and 1910 (9,195 against 6,389 TWh), in Vaclav Smil's estimates via Our World in Data, which come in ten-year steps. Coal use is far older. At full zoom-out on the linear axis this is thinner than the line drawn to represent it."
       },
       {
         "id": "ooa",
         "label": "Out of Africa",
         "t0": {
-          "est": "70 ka",
-          "lo": "90 ka",
-          "hi": "60 ka"
+          "est": "60 ka",
+          "soft": true
         },
         "t1": {
-          "est": "45 ka",
-          "lo": "55 ka",
-          "hi": "40 ka"
+          "est": "40 ka",
+          "soft": true
         },
-        "note": "The main dispersal. Earlier excursions are attested but seem to have left little genetic trace. Dates keep moving."
+        "conf": "estimated",
+        "src": [
+          "bergstrom2021"
+        ],
+        "note": "The worldwide spread of Homo sapiens out of Africa, about 60,000–40,000 years ago (Bergström et al. 2021, a review). The review gives a window, not a moment, so no line is drawn and the edges are soft. Earlier excursions are attested but seem to have left little trace in living people. Dates keep moving."
       },
       {
         "id": "lgm",
         "label": "Last Glacial Maximum",
-        "t0": "26.5 ka",
-        "t1": "19 ka",
-        "note": "Ice at maximum, sea level roughly 120 m lower. The coastlines people actually lived on are now underwater, which biases everything we think we know about this period."
+        "t0": {
+          "est": "26.5 ka",
+          "soft": true
+        },
+        "t1": {
+          "lo": "20 ka",
+          "hi": "19 ka"
+        },
+        "conf": "dated",
+        "src": [
+          "clark2009"
+        ],
+        "note": "Nearly all ice sheets were at their largest from 26,500 years ago until 20,000–19,000 years ago (Clark et al. 2009). The paper gives no range for the start, so that edge is soft. Sea level was far lower: the coastlines people actually lived on are now underwater, which biases everything we think we know about this period."
       },
       {
         "id": "toba",
         "label": "Toba eruption",
-        "t0": "74 ka",
-        "t1": "73.8 ka",
-        "note": "The eruption is firmly dated. Its supposed bottleneck effect on human populations is disputed and increasingly doubted."
+        "t0": {
+          "est": "73.88 ka",
+          "lo": "74.2 ka",
+          "hi": "73.56 ka"
+        },
+        "t1": {
+          "est": "73.88 ka",
+          "lo": "74.2 ka",
+          "hi": "73.56 ka"
+        },
+        "conf": "dated",
+        "src": [
+          "storey2012",
+          "mark2014",
+          "smith2018"
+        ],
+        "note": "The youngest Toba supereruption, Sumatra: 73,880 ± 320 years ago (Storey et al. 2012, argon dating, 1σ), the line and fade. Another study of the same deposits gives 75,000 ± 900 (Mark et al. 2014); in a 2015 conference abstract, Storey's group put the gap down to the value used for a calibration standard. Its supposed bottleneck effect on human populations is disputed: people went on living at two South African coastal sites straight through it (Smith et al. 2018)."
       },
       {
         "id": "writing",
         "label": "Writing",
         "t0": {
-          "est": "3300 BCE",
-          "lo": "3500 BCE",
-          "hi": "3100 BCE"
+          "lo": "3350 BCE",
+          "hi": "3200 BCE"
         },
         "t1": "now",
-        "note": "The sharpest single change in evidence quality anywhere on this chart, and the reason the bottom strip steps up here."
+        "conf": "estimated",
+        "src": [
+          "cdli"
+        ],
+        "note": "The earliest known writing, proto-cuneiform from Uruk, belongs to the Uruk IV period, about 3350–3200 BCE (Cuneiform Digital Library Initiative); no single date is drawn. It is the sharpest single change in evidence quality anywhere on this chart, and the reason the bottom strip steps up here."
       }
     ],
     "presets": [

@@ -123,6 +123,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
   - It counts fuels and electricity, not food or animal feed, so it is not "energy capture" in Ian Morris's sense; the caption says so. Before 1800 the lane says "no data — not zero", and the lane shows only when at least 40 px of 1800–2023 is in view.
   - Rough values: about 5,750 kWh in 1800, 7,400 in 1900, 11,200 in 1950 and 21,300 in 2023.
   - The Stories scene that used this lane as its example of an invented lane now uses the regions lane. The energy lane still appears in the Anthropocene story (1720 to now).
+- `highlight_dates.csv` (Nov 2026): one row per Deep time highlight, with the date as the source gives it and the citation (see "Highlights" below).
 - `world_energy_owid.csv` (read 2026-11-22): the 78 World rows (1800–2025) of OWID's `global-energy-substitution` chart, in TWh, ten columns as published, with an `underlying_source` column. OWID's metadata contradicts itself on biomass (the chart note says it is included; the column note says it is not part of "total energy supply"); the World rows do carry it as its own column.
 
 - **No stated uncertainty is not certainty (Nov 2026, Eduardo).** The new lanes had drifted toward false certainty: uncertainty was drawn only where a source published numbers for it. The rule now: where a source gives no uncertainty, the mark is dashed, faded or soft-topped, never crisp. The About legend explains this.
@@ -137,7 +138,17 @@ Background and current state, so a new session (human or Claude) can pick up wit
     - Species bars on both tabs: the fixed 12 px fade now straddles each Smithsonian date (it starts 12 px outside and reaches full strength 6 px inside), instead of starting at the date. The Smithsonian gives no range for these dates.
     - Faded: Seshat estimates given as a single figure, CO₂ proxy estimates published with no uncertainty, and the PAGES 2k instrumental line.
     - Geology is unchanged. Every boundary the ICS chart marks as approximate (~) also has a ± range, which the page already fades across. The rest are boundaries the chart gives as defined values.
-    - Placeholder lanes (energy, regions, periodisation, evidence, highlights, Human time markers) are unchanged; they are already labelled as unsourced.
+    - Placeholder lanes (energy, regions, periodisation, evidence, Human time markers) are unchanged; they are already labelled as unsourced. The highlights were sourced later (see below).
+
+- **Highlights (Nov 2026, Deep time, Eduardo approved the recommended options).** All seven overlays in `overlays.highlights` now cite a source in their details box; values and wording are in `data/reference/highlight_dates.csv`.
+  - Holocene: 11700 b2k (ICS). The old unused, unsourced "fuzz: 200 yr" is gone.
+  - Out of Africa: 60,000–40,000 years ago (Bergström 2021), matching Human time. Soft edges, no line.
+  - Last Glacial Maximum: 26.5 ka (no range given, so soft) to 20–19 ka (Clark 2009). The unsourced "sea level roughly 120 m lower" became "far lower".
+  - Writing: fades in across Uruk IV, 3350–3200 BCE (CDLI), no line, then runs to now.
+  - Agricultural revolution: starts across 12,000–11,000 BP and ends softly at 4,200 BP, the end of the second wave of domestication in Larson et al. 2014, *PNAS* 111:6139 (main text and figure captions read; per-centre dates in the SI not read). It names at least 11 independent centres. The Human time "Farming" marker is still a placeholder; this source could serve it too.
+  - Fossil fuel era: 1900–1910 CE, **calculated here** from `world_energy_owid.csv`: the decade in which coal, oil and gas together passed traditional biomass (Smil's ten-year estimates).
+  - Toba: 73.88 ± 0.32 ka (Storey et al. 2012, *PNAS* 109:18684), with a line at the date and a fade across 1σ. The note cites Mark et al. 2014 (75.0 ± 0.9 ka) and Smith et al. 2018 (*Nature* 555:511: people kept living at two South African coastal sites through it). Not used: a search summary mentions a later Mark et al. 2017 age of 73.7 ± 0.3 ka; unverified.
+  - Drawing: shading now fades across each published range. Where a source gives a figure with no range (`"soft": true` in the data), the edge fades over 16 px. Dashed lines appear only where the source gives a central figure. Labels stay clickable when pushed away from a narrow span at the edge.
 
 ## Open questions (Eduardo's call)
 
