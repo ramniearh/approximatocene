@@ -773,6 +773,8 @@ function createView(o){
     ctx.restore();
     const top = mTop + mH + 4, bh = 82, fy = v => top + bh - Math.min(1, v / ds.yMax) * bh;
     noData(-1, X(ds._T[0]), top, bh);
+    /* PBDB's youngest stage with a row ends 8,200 years ago; after that the database gives nothing */
+    noData(X(ds._T1[ds._T1.length - 1]), X(NOW) + 1, top, bh);
     yTicks(ds.ticks, fy, "");
     const R = ds.rows;
     ctx.save();

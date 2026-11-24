@@ -169,7 +169,7 @@ The page already draws the first layer: a published range fades, and where no un
 - How much evidence there is: a strip of dated archaeological sites per millennium (p3k14c; see the evidence lane).
 - What kind of knowledge each mark is: a small coloured tick for measured, dated, estimated, guessed or placeholder.
 
-Small fix noted: the life lane's fossil bars stop about 8,200 years ago (the end of PBDB's data), and the lane goes blank after that instead of saying "no data — not zero".
+Fixed (Nov 2026): the life lane's fossil bars stop about 8,200 years ago (the end of PBDB's data), and the stretch after that is now drawn as no data instead of blank.
 
 ## Ideas, not yet done
 
