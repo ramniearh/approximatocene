@@ -29,6 +29,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - The hominin strip shows species (several of them contested), not subspecies. Disputed ones are hatched.
 - Placeholder warnings stay visible until real data replaces them.
 - The marker buttons have a "Jump to:" label, and the first one reads "The whole million years" (Nov 2026).
+- A "Fossil fuels" marker (button: "Fossil fuels overtake wood"), 1900–1910, shaded with no line (Eduardo, Nov 2026). Same calculation as the Deep time highlight: the decade in which coal, oil and gas together passed traditional biomass in OWID/Smil's ten-year figures.
 - A last, slightly tongue-in-cheek marker, "Large language models" (2022, the public release of ChatGPT), says the page itself was drafted with one (Eduardo's idea, Nov 2026).
 
 ## Data status
@@ -233,7 +234,6 @@ Suggested markers for Human time, held back for now:
 - settlement of Sahul and of the Americas (the Americas date is disputed)
 - money: the unit of account in Mesopotamia versus Lydian coinage. Which date you mark is itself a theoretical choice.
 - the Great Acceleration (about 1950)
-- fossil fuels overtaking traditional biomass, 1900–1910 (Eduardo, Nov 2026: "maybe add to human time too"). The same calculation as the Deep time highlight.
 - a claimed genetic bottleneck about 900,000 years ago. It is contested, and it measures breeding population, not head count, so it belongs as a marker and shouldn't bend the population line.
 
 Other ideas:
