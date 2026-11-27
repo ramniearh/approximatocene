@@ -39,6 +39,9 @@ header.top .tabs{padding-right:48px}
 .pilot b{color:var(--mark);font-weight:500}
 h1{font-weight:300;font-size:clamp(32px,5.6vw,48px);line-height:1.05;letter-spacing:-.022em;margin:.2em 0 .5em;text-wrap:balance}
 h1 b{font-weight:600}
+.def{font-size:15px;line-height:1.5;color:var(--ink-2);max-width:72ch;margin:-.2em 0 1.1em}
+.def b{font-weight:500;color:var(--ink)}
+.ph p.def{margin-bottom:.8em}
 .tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);overflow-x:auto;scrollbar-width:none}
 .tabs a{flex:none;display:block;padding:12px 16px 11px;color:var(--ink-3);text-decoration:none;font-size:15px;border-bottom:2px solid transparent;margin-bottom:-1px;min-height:44px}
 .tabs a:hover{color:var(--ink)}
@@ -160,7 +163,8 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 
 <header class="top">
   <p class="pilot">Deep Time Atlas · v0.3</p>
-  <h1>Deep time, <b>to scale</b></h1>
+  <h1>Deep <b>history</b></h1>
+  <p class="def"><b>Deep history:</b> the human past told as one story that reaches back into the Palaeolithic, hundreds of thousands of years, instead of starting with the first written records. The older word, "prehistory", quietly implies that none of that counts as history. (The term is associated with the historian Daniel Lord Smail, <i>On Deep History and the Brain</i>, 2008.)</p>
   <nav class="tabs" role="tablist" aria-label="Views">
     <a role="tab" id="t-human" href="#human" aria-controls="p-human">Human time</a>
     <a role="tab" id="t-atlas" href="#atlas" aria-controls="p-atlas">Deep time</a>
@@ -207,6 +211,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
 <section id="p-atlas" role="tabpanel" aria-labelledby="t-atlas" hidden>
   <div class="ph">
     <h2>The last 4.6 billion years</h2>
+    <p class="def"><b>Deep time:</b> geological time, the 4.6 billion years of the Earth's history, against which everything humans have done is a thin sliver at the right-hand edge. (The phrase was introduced by the writer John McPhee in <i>Basin and Range</i>, 1981.)</p>
     <p>From the formation of the Earth to now, one kind of record per row: rocks, climate, carbon dioxide, life, human species, population, energy, states. Drag to move. Scroll, pinch or use + and − to zoom. A row shows up only at the time scales where it has something to say. Tap anything for its dates, how firm they are and where they come from.</p>
   </div>
   <div class="sticky">
@@ -282,7 +287,7 @@ footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);font-si
     </div>
     <div>
       <h3>About the text</h3>
-      <p>Explanatory text on this page, including the stories and marker notes, was drafted with AI (Claude) from the project's data notes and is awaiting review.</p>
+      <p>Explanatory text on this page, including the stories, marker notes and the definitions of deep history and deep time, was drafted with AI (Claude) from the project's data notes and is awaiting review.</p>
       <h3>Licence</h3>
       <p>The data and text are CC BY-SA 4.0, as the Seshat data requires; the code is MIT. Each source below keeps its own terms.</p>
     </div>
@@ -1288,6 +1293,8 @@ const MARKERS = [
     note: "The worldwide spread of Homo sapiens out of Africa, about 60,000–40,000 years ago (Bergström et al. 2021, a review of genetic and fossil evidence). Earlier excursions are attested but seem to have left little trace in living people. No single date is drawn: the review gives a window, not a moment, and the window keeps moving as new sites and genomes are studied." },
   { id: "ice", short: "End of ice age", label: "End of the last glacial period", kind: "span", t0: { lo: "20 ka", hi: "19 ka" }, t1: "11700 b2k", conf: "dated", src: ["clark2009", "ics"],
     note: "Ice sheets started to retreat from their maximum 20,000–19,000 years ago (Clark et al. 2009). The Holocene, the present warm interval, formally begins 11,700 years before 2000 CE (ICS chart), a boundary tied to a layer in a Greenland ice core: the solid line. Strictly, the ice age has not ended: Greenland and Antarctica are still covered in ice. What ended was the last glacial period of it." },
+  { id: "dog", short: "Dog", label: "Domestication of the dog", kind: "threshold", t: { lo: "23 ka", hi: "14223 BP" }, softOlder: true, conf: "inferred", src: ["perri2021", "janssens2018", "bergstrom2020", "larson2014"],
+    note: "The first domestic animal (Bergström et al. 2020). The right edge is the Bonn-Oberkassel dog, a burial in western Germany dated to 14,223 ± 58 years old: some of the oldest undisputed evidence for domestic dogs (Janssens et al. 2018). The soft left edge is a genetic argument, not a find: comparing human and dog lineages 'suggests that dogs were domesticated in Siberia by ∼23,000 y ago' (Perri et al. 2021). By 11,000 years ago dogs had already split into at least five lineages (Bergström et al. 2020). Claims of dogs 30,000 years old or more 'remain contentious' (Larson et al. 2014). Where, and how many times, is still argued over; that the wolf came in from the cold before the wheat did is not." },
   { id: "farming", short: "Farming", label: "Origins of farming", kind: "span", t0: { est: "12 ka", lo: "13 ka", hi: "11 ka" }, t1: { est: "5000 b2k", lo: "6000 b2k", hi: "4000 b2k" }, conf: "estimated",
     note: "Not one event and not one place: plants and animals were domesticated in several independent centres over thousands of years, all within the Holocene. 'Neolithic revolution' compresses a slow and scattered process. These dates are still placeholders: no source is cited yet." },
   { id: "cities", short: "Cities", label: "First cities", kind: "threshold", t: { est: "3500 BCE", lo: "4000 BCE", hi: "3100 BCE" }, conf: "estimated",
@@ -1529,7 +1536,12 @@ const HV = (() => {
     /* marker fills */
     MARKERS.forEach(m => {
       const a = sel === m ? .2 : .1;
-      if (m.kind === "threshold"){
+      if (m.kind === "threshold" && m.softOlder){
+        /* the older edge is an inference with no stated range: fade it over 16 px instead of drawing a crisp edge */
+        const xo = X(m._t.older), xy = X(m._t.younger), L = Math.max(ML, xo - 8), R = Math.min(ML + pw(), xo + 8, xy);
+        if (R > L){ const g = ctx.createLinearGradient(xo - 8, 0, xo + 8, 0); g.addColorStop(0, alpha(PAL.mark, 0)); g.addColorStop(1, alpha(PAL.mark, a)); ctx.fillStyle = g; ctx.fillRect(L, TOP, R - L, BOT - TOP); }
+        if (xy > xo + 8) band(xo + 8, xy, a, PAL.mark);
+      } else if (m.kind === "threshold"){
         band(X(m._t.older), X(m._t.younger), a, PAL.mark);
         if (m.conf === "disputed"){ const L = Math.max(ML, X(m._t.older)), R = Math.min(ML + pw(), X(m._t.younger)); if (R - L > 4){ ctx.fillStyle = hatch; ctx.globalAlpha = .45; ctx.fillRect(L, TOP, R - L, BOT - TOP); ctx.globalAlpha = 1; } }
       } else fuzzyRect(m._t0, m._t1, TOP, BOT - TOP, a, PAL.mark);

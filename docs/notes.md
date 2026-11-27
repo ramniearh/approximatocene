@@ -30,6 +30,7 @@ Background and current state, so a new session (human or Claude) can pick up wit
 - Placeholder warnings stay visible until real data replaces them.
 - The marker buttons have a "Jump to:" label, and the first one reads "The whole million years" (Nov 2026).
 - A "Fossil fuels" marker (button: "Fossil fuels overtake wood"), 1900–1910, shaded with no line (Eduardo, Nov 2026). Same calculation as the Deep time highlight: the decade in which coal, oil and gas together passed traditional biomass in OWID/Smil's ten-year figures.
+- A "Dog" marker (button: "Domestication of the dog"), Eduardo's idea for students, with sources he approved (Nov 2026). It is a window with no line. The firm right edge is the Bonn-Oberkassel burial, "14223 ± 58 years old", "some of the oldest undisputed evidence for domestic dogs" (Janssens et al. 2018, *J. Archaeol. Sci.* 92:126, read from the abstract of the author copy). The soft left edge is about 23,000 years ago, where genetics "suggests that dogs were domesticated in Siberia" (Perri et al. 2021, *PNAS*, abstract). The note also cites Bergström et al. 2020 (*Science*: five lineages "by 11,000 years ago") and Larson et al. 2014 (~30,000-year-old claims "remain contentious"). Janssens gives "years old", entered as BP. Markers can now take `softOlder: true`, which fades the older edge over 16 px. Not used: a reported ~15,800-year-old dog genome from Pınarbaşı, Türkiye (no paper found).
 - A last, slightly tongue-in-cheek marker, "Large language models" (2022, the public release of ChatGPT), says the page itself was drafted with one (Eduardo's idea, Nov 2026).
 
 ## Data status
@@ -215,6 +216,8 @@ On the Human time tab, a small hollow ring on the top edge of a row marks where 
 - Not yet on the Deep time tab.
 
 ## Human time labels (Nov 2026, Eduardo)
+
+Title (Nov 2026, Eduardo): the main heading is now "Deep history" (was "Deep time, to scale"), with a one-line definition under it. The term is associated with Daniel Lord Smail, *On Deep History and the Brain* (2008). The Deep time tab defines "deep time" under its own heading; John McPhee introduced the phrase in *Basin and Range* (1981). The site name "Deep Time Atlas" is unchanged. The About tab lists the definitions as AI-drafted.
 
 The chart's marker labels went back to the short plain names: Fire, Language, Out of Africa, End of ice age, Farming, Cities, Writing, Industrial revolution (plus LLMs). The buttons above keep the more technical names. The header line is just "Deep Time Atlas · v0.3", and the data note under the chart runs the full width.
 

@@ -389,6 +389,33 @@
       "format": "dates read from the main text and Fig. 1 caption (data/reference/highlight_dates.csv)",
       "status": "ingested"
     },
+    "perri2021": {
+      "title": "Dog domestication and the dual dispersal of people and dogs into the Americas",
+      "authors": "Perri et al.",
+      "year": 2021,
+      "url": "https://doi.org/10.1073/pnas.2010083118",
+      "license": "article (PNAS, open access)",
+      "format": "date read from the abstract (via Europe PMC, 2026-11-27)",
+      "status": "ingested"
+    },
+    "janssens2018": {
+      "title": "A new look at an old dog: Bonn-Oberkassel reconsidered",
+      "authors": "Janssens et al.",
+      "year": 2018,
+      "url": "https://doi.org/10.1016/j.jas.2018.01.004",
+      "license": "article (Journal of Archaeological Science; author copy at biblio.ugent.be)",
+      "format": "date read from the abstract of the author copy (2026-11-27)",
+      "status": "ingested"
+    },
+    "bergstrom2020": {
+      "title": "Origins and genetic legacy of prehistoric dogs",
+      "authors": "Bergström et al.",
+      "year": 2020,
+      "url": "https://doi.org/10.1126/science.aba9572",
+      "license": "article (Science)",
+      "format": "finding read from the abstract (via Europe PMC, 2026-11-27), cited in the note only",
+      "status": "ingested"
+    },
     "storey2012": {
       "title": "Astronomically calibrated 40Ar/39Ar age for the Toba supereruption and global synchronization of late Quaternary records",
       "authors": "Storey et al.",
